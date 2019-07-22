@@ -16,6 +16,28 @@ class Sale extends Model
 
     protected $table = 'sales';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'products_quantity',
+        'sell_price',
+        'product_id',
+        'client_id',
+    ];
+
+    /**
+     * Add client ID be default to created sales.
+     *
+     * @return \App\User
+     */
+    public function setClientID()
+    {
+        $this->attributes['client_id'] = currentClient()->id;
+        return $this;
+    }
 
     public function client(){
         return $this->belongsTo(Client::class);

@@ -2,7 +2,12 @@
     <div>
         <div class="row">
             <div class="col-md-8">
-                <h2 class="pb-3">Sales list</h2>
+                <div class="d-flex justify-content-between">
+                    <h2 class="pb-3">Sales list</h2>
+                    <div>
+                        <a href="javascript:void(0)" @click="addSale" class="btn btn-outline-dark">Add sale</a>
+                    </div>
+                </div>
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -10,6 +15,7 @@
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Sell Price</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -18,6 +24,7 @@
                         <td>{{sale.product.name}}</td>
                         <td>{{sale.products_quantity}}</td>
                         <td>{{sale.sell_price}} {{client.currency}} </td>
+                        <td><a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a> </td>
                     </tr>
                     </tbody>
                 </table>
@@ -25,8 +32,8 @@
             <div class="col-md-4 moneybox">
                 <h2  class="pb-3">MoneyBox</h2>
                 <div>
+                    Total profit : <span id="totalProfit">0 </span> {{client.currency}}<br/><br/>
                     Plan : {{client.plan}} {{client.currency}}<br/>
-                    Total profit : <span id="totalProfit">0 </span> {{client.currency}}<br/>
                     Difference : <span id="difference"> 0 </span> {{client.currency}}
                 </div>
                 <div class="p-5">
@@ -47,6 +54,20 @@
                 client:{},
                 totalProfit: 0,
                 difference: 0,
+                ready:0,
+                data:{
+                    'product_id': 2,
+                    'products_quantity' : 2,
+                    'sell_price' : 1050,
+                    'client_id' : 1,
+                }
+            }
+        },
+        watch:{
+            ready : function(){
+                if(this.ready === 2){
+                    this.calculateTotalProfit();
+                }
             }
         },
         methods:{
@@ -55,6 +76,7 @@
                     .get('/api/get-sales-list')
                     .then( (response) => {
                         this.sales = response.data ;
+                        this.ready ++ ;
                     })
                     .catch( (error) => {
                         console.log(error);
@@ -65,6 +87,7 @@
                     .get('/api/get-current-client')
                     .then( (response) => {
                         this.client = response.data ;
+                        this.ready ++ ;
                     })
                     .catch( (error) => {
                         console.log(error);
@@ -77,11 +100,6 @@
 
                 $.each(sales, (i) => {
                     // profit of one sale
-                    console.log('1' + sales[i].sell_price );
-                    console.log('2' + sales[i].product.buy_price);
-                    console.log('3' + sales[i].products_quantity);
-                    console.log('4' +percentage);
-
                     sumProfit += (sales[i].sell_price - sales[i].product.buy_price) * sales[i].products_quantity * (percentage/100) ;
                 });
 
@@ -89,9 +107,35 @@
                 this.animateValue('totalProfit',0,this.totalProfit,1000);
                 setTimeout(()=>{
                     this.difference  = this.client.plan - this.totalProfit;
-                    this.animateValue('difference',0,this.difference,1000);
-                },2000);
+                    this.animateValue('difference',0,this.difference,500);
+                },500);
 
+            },
+            addSale(){
+              axios.post('/sales/add',this.data)
+                  .then( (response) => {
+                      this.sales.push(response.data);
+                      this.calculateTotalProfit();
+                  })
+                  .catch( (error) => {
+                      console.log('Error : ' + error);
+                  });
+            },
+            deleteSale(sale_id){
+              axios.post('/sales/delete',{'sale_id' : sale_id})
+                  .then( (response) => {
+                      let sales = this.sales;
+                      $.each(sales, (i) => {
+                          if (sales[i].id === sale_id) {
+                              sales.splice(i, 1);
+                              this.calculateTotalProfit();
+                              return false;
+                          }
+                      });
+                  })
+                  .catch( (error) => {
+
+                  });
             },
             animateValue(id, start, end, duration) {
                 let range = end - start;
@@ -118,5 +162,10 @@
 <style scoped lang="scss">
     .moneybox{
         border-left: 1px solid lightgray;
+    }
+    #totalProfit{
+        color: #38c172;
+        font-size: 20px;
+        font-weight:bold;
     }
 </style>

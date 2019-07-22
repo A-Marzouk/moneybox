@@ -1756,6 +1756,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1763,8 +1770,22 @@ __webpack_require__.r(__webpack_exports__);
       sales: [],
       client: {},
       totalProfit: 0,
-      difference: 0
+      difference: 0,
+      ready: 0,
+      data: {
+        'product_id': 2,
+        'products_quantity': 2,
+        'sell_price': 1050,
+        'client_id': 1
+      }
     };
+  },
+  watch: {
+    ready: function ready() {
+      if (this.ready === 2) {
+        this.calculateTotalProfit();
+      }
+    }
   },
   methods: {
     getSalesList: function getSalesList() {
@@ -1772,6 +1793,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/get-sales-list').then(function (response) {
         _this.sales = response.data;
+        _this.ready++;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -1781,6 +1803,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/get-current-client').then(function (response) {
         _this2.client = response.data;
+        _this2.ready++;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -1793,10 +1816,6 @@ __webpack_require__.r(__webpack_exports__);
       var sumProfit = 0;
       $.each(sales, function (i) {
         // profit of one sale
-        console.log('1' + sales[i].sell_price);
-        console.log('2' + sales[i].product.buy_price);
-        console.log('3' + sales[i].products_quantity);
-        console.log('4' + percentage);
         sumProfit += (sales[i].sell_price - sales[i].product.buy_price) * sales[i].products_quantity * (percentage / 100);
       });
       this.totalProfit = sumProfit;
@@ -1804,8 +1823,37 @@ __webpack_require__.r(__webpack_exports__);
       setTimeout(function () {
         _this3.difference = _this3.client.plan - _this3.totalProfit;
 
-        _this3.animateValue('difference', 0, _this3.difference, 1000);
-      }, 2000);
+        _this3.animateValue('difference', 0, _this3.difference, 500);
+      }, 500);
+    },
+    addSale: function addSale() {
+      var _this4 = this;
+
+      axios.post('/sales/add', this.data).then(function (response) {
+        _this4.sales.push(response.data);
+
+        _this4.calculateTotalProfit();
+      })["catch"](function (error) {
+        console.log('Error : ' + error);
+      });
+    },
+    deleteSale: function deleteSale(sale_id) {
+      var _this5 = this;
+
+      axios.post('/sales/delete', {
+        'sale_id': sale_id
+      }).then(function (response) {
+        var sales = _this5.sales;
+        $.each(sales, function (i) {
+          if (sales[i].id === sale_id) {
+            sales.splice(i, 1);
+
+            _this5.calculateTotalProfit();
+
+            return false;
+          }
+        });
+      })["catch"](function (error) {});
     },
     animateValue: function animateValue(id, start, end, duration) {
       var range = end - start;
@@ -6401,7 +6449,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border-left: 1px solid lightgray;\n}", ""]);
+exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border-left: 1px solid lightgray;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}", ""]);
 
 // exports
 
@@ -37910,7 +37958,21 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-8" }, [
-        _c("h2", { staticClass: "pb-3" }, [_vm._v("Sales list")]),
+        _c("div", { staticClass: "d-flex justify-content-between" }, [
+          _c("h2", { staticClass: "pb-3" }, [_vm._v("Sales list")]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-outline-dark",
+                attrs: { href: "javascript:void(0)" },
+                on: { click: _vm.addSale }
+              },
+              [_vm._v("Add sale")]
+            )
+          ])
+        ]),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped" }, [
           _vm._m(0),
@@ -37932,6 +37994,22 @@ var render = function() {
                       _vm._s(_vm.client.currency) +
                       " "
                   )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "btn btn-dark btn-sm",
+                      attrs: { href: "javascript:void(0)" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteSale(sale.id)
+                        }
+                      }
+                    },
+                    [_vm._v("X")]
+                  )
                 ])
               ])
             }),
@@ -37944,16 +38022,17 @@ var render = function() {
         _c("h2", { staticClass: "pb-3" }, [_vm._v("MoneyBox")]),
         _vm._v(" "),
         _c("div", [
+          _vm._v("\n                Total profit : "),
+          _c("span", { attrs: { id: "totalProfit" } }, [_vm._v("0 ")]),
+          _vm._v(" " + _vm._s(_vm.client.currency)),
+          _c("br"),
+          _c("br"),
           _vm._v(
             "\n                Plan : " +
               _vm._s(_vm.client.plan) +
               " " +
               _vm._s(_vm.client.currency)
           ),
-          _c("br"),
-          _vm._v("\n                Total profit : "),
-          _c("span", { attrs: { id: "totalProfit" } }, [_vm._v("0 ")]),
-          _vm._v(" " + _vm._s(_vm.client.currency)),
           _c("br"),
           _vm._v("\n                Difference : "),
           _c("span", { attrs: { id: "difference" } }, [_vm._v(" 0 ")]),
@@ -37988,7 +38067,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Quantity")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Sell Price")])
+        _c("th", [_vm._v("Sell Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Actions")])
       ])
     ])
   }
