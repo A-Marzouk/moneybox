@@ -20,6 +20,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('products-list', require('./components/admin/ProductsListComponent.vue').default);
+Vue.component('managers-list', require('./components/admin/ManagersListComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -30,5 +31,10 @@ Vue.component('products-list', require('./components/admin/ProductsListComponent
 if ($("#productsList").length !== 0){
     let productsList = new Vue({
         el:'#productsList'
+    });
+}
+if ($("#managersList").length !== 0){
+    let managersList = new Vue({
+        el:'#managersList'
     });
 }

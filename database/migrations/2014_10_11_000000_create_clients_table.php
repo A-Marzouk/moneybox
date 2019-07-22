@@ -15,6 +15,7 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->decimal('percentage',16,2)->unsigned()->nullable();
             $table->integer('user_id')->unsigned()->index();
             $table->timestamps();
         });

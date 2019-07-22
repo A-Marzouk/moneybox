@@ -9,8 +9,14 @@
                 </div>
             @endif
         </div>
-        <div id="productsList">
+        <div id="productsList" class="pb-2">
             <products-list></products-list>
+        </div>
+
+        <hr>
+
+        <div id="managersList" class="pt-2">
+            <managers-list></managers-list>
         </div>
     </div>
 @endsection
