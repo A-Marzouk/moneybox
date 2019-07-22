@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Product;
 use Illuminate\Http\Request;
 
-class AdminsController extends Controller
+class ProductsController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,9 +22,9 @@ class AdminsController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function getProducts()
     {
-        return view('admin.dashboard');
+        return Product::all();
     }
 
 }
