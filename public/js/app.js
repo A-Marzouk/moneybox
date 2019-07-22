@@ -1769,7 +1769,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       sales: [],
       client: {},
-      totalProfit: 0,
+      totalProfit: 1,
       difference: 0,
       ready: 0,
       data: {
@@ -1803,6 +1803,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/get-current-client').then(function (response) {
         _this2.client = response.data;
+        _this2.data.client_id = _this2.client.id;
         _this2.ready++;
       })["catch"](function (error) {
         console.log(error);
@@ -1810,6 +1811,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     calculateTotalProfit: function calculateTotalProfit() {
       var _this3 = this;
+
+      if (this.sales.length < 1) {
+        return;
+      }
 
       var percentage = this.client.percentage;
       var sales = this.sales;
@@ -1888,6 +1893,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -38111,7 +38118,9 @@ var render = function() {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(manager.client.percentage) + " % ")]),
             _vm._v(" "),
-            _c("td", [_vm._v(" COMING SOON ")])
+            _c("td", [_vm._v(" COMING SOON ")]),
+            _vm._v(" "),
+            _c("td", [_vm._v(" " + _vm._s(manager.client.plan) + " ")])
           ])
         }),
         0
@@ -38132,7 +38141,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Percentage")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Total products sold")])
+        _c("th", [_vm._v("Total products sold")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Plan")])
       ])
     ])
   }

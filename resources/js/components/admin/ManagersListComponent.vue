@@ -8,6 +8,7 @@
                     <th>Name</th>
                     <th>Percentage</th>
                     <th>Total products sold</th>
+                    <th>Plan</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,6 +17,7 @@
                     <td>{{manager.name}}</td>
                     <td>{{manager.client.percentage}} % </td>
                     <td> COMING SOON </td>
+                    <td> {{manager.client.plan}} </td>
                 </tr>
             </tbody>
         </table>

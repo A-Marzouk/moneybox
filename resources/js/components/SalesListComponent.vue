@@ -52,7 +52,7 @@
             return {
                 sales:[],
                 client:{},
-                totalProfit: 0,
+                totalProfit: 1,
                 difference: 0,
                 ready:0,
                 data:{
@@ -87,6 +87,7 @@
                     .get('/api/get-current-client')
                     .then( (response) => {
                         this.client = response.data ;
+                        this.data.client_id = this.client.id ;
                         this.ready ++ ;
                     })
                     .catch( (error) => {
@@ -94,6 +95,9 @@
                     });
             },
             calculateTotalProfit () {
+                if(this.sales.length < 1){
+                    return ;
+                }
                 let percentage  = this.client.percentage ;
                 let sales       = this.sales;
                 let sumProfit   = 0 ;
