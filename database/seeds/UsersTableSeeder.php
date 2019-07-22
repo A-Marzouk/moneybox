@@ -33,7 +33,8 @@ class UsersTableSeeder extends Seeder
                 ],
                 'client' => [
                     'percentage' => 5,
-                    'plan' => 100,
+                    'plan' => 500,
+                    'currency' => 'UAH',
                 ],
             ],
         ])->each(function ($item) {

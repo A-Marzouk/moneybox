@@ -23,6 +23,7 @@ Vue.component('products-list', require('./components/admin/ProductsListComponent
 Vue.component('managers-list', require('./components/admin/ManagersListComponent.vue').default);
 
 Vue.component('sales-list', require('./components/SalesListComponent.vue').default);
+Vue.component('add-sale', require('./components/AddSaleComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

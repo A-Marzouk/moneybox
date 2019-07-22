@@ -17,6 +17,7 @@ class CreateClientsTable extends Migration
             $table->bigIncrements('id');
             $table->decimal('percentage',16,2)->unsigned()->nullable();
             $table->decimal('plan',16,2)->unsigned()->nullable();
+            $table->string('currency')->nullable();
             $table->integer('user_id')->unsigned()->index();
             $table->timestamps();
         });
