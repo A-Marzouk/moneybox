@@ -22,6 +22,8 @@ window.Vue = require('vue');
 Vue.component('products-list', require('./components/admin/ProductsListComponent.vue').default);
 Vue.component('managers-list', require('./components/admin/ManagersListComponent.vue').default);
 
+Vue.component('sales-list', require('./components/SalesListComponent.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -36,5 +38,12 @@ if ($("#productsList").length !== 0){
 if ($("#managersList").length !== 0){
     let managersList = new Vue({
         el:'#managersList'
+    });
+}
+
+
+if ($("#salesList").length !== 0){
+    let salesList = new Vue({
+        el:'#salesList'
     });
 }

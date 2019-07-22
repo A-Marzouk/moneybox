@@ -30,4 +30,9 @@ class ClientsController extends Controller
 
     }
 
+    public function getCurrentClient()
+    {
+       return  currentClient() ;
+    }
+
 }

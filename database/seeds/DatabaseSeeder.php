@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(RolesAndPermissionsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(ProductsTableSeeder::class);
+        $this->call(SalesTableSeeder::class);
     }
 
     private function cleanDatabase()

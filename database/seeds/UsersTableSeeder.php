@@ -29,9 +29,12 @@ class UsersTableSeeder extends Seeder
                     'email' => 'client@moneybox.com',
                     'password' => '123456789',
                     'username' => 'client',
-                    'name' => 'client',
+                    'name' => 'client 1',
                 ],
-                'client' => [],
+                'client' => [
+                    'percentage' => 5,
+                    'plan' => 100,
+                ],
             ],
         ])->each(function ($item) {
             app(User::class)->createClient($item);

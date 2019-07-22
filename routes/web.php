@@ -33,3 +33,5 @@ Route::get('/home','HomeController@index')
 
 Route::get('api/get-products','ProductsController@getProducts')->name('get.products');
 Route::get('api/get-managers','ClientsController@getManagers')->name('get.products');
+Route::get('api/get-current-client','ClientsController@getCurrentClient')->name('get.current.client');
+Route::get('api/get-sales-list','SalesController@getSalesList')->name('get.sales.list');

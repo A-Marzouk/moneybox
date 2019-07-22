@@ -95,5 +95,4 @@ class User extends Authenticatable
         return $this->hasOne(Client::class);
     }
 
-
 }
