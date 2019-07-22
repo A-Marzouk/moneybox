@@ -1,16 +1,22 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h2>Products list</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Buy price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(product, index) in products" :key="index">
+                    <td>{{index+1}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.buy_price}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -23,11 +29,17 @@
         },
         methods:{
             getProducts(){
-
+                axios.get('/api/get-products')
+                    .then( (response) => {
+                        this.products = response.data ;
+                    })
+                    .catch( (error) => {
+                        console.log(error);
+                    });
             }
         },
         mounted() {
-            console.log('Products component.')
+            this.getProducts();
         }
     }
 </script>

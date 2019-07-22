@@ -9,8 +9,8 @@
                 </div>
             @endif
         </div>
-        <div>
-            Admin
+        <div id="productsList">
+            <products-list></products-list>
         </div>
     </div>
 @endsection

@@ -14,13 +14,13 @@ class ProductsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('role:admin');
+        $this->middleware('auth');
     }
 
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return array of objects
      */
     public function getProducts()
     {
