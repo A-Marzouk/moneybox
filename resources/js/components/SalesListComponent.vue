@@ -5,7 +5,7 @@
                 <div class="d-flex justify-content-between">
                     <h2 class="pb-3">Sales list</h2>
                     <div>
-                        <a href="javascript:void(0)" @click="addSale" class="btn btn-outline-dark">Add sale</a>
+                        <a href="javascript:void(0)" @click="addNewSale = true" class="btn btn-outline-dark">Add sale</a>
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -25,6 +25,29 @@
                         <td>{{sale.products_quantity}}</td>
                         <td>{{sale.sell_price}} {{client.currency}} </td>
                         <td><a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a> </td>
+                    </tr>
+                    <tr v-show="addNewSale">
+                        <td>
+                           {{this.sales.length + 1}}
+                        </td>
+                        <td>
+                            <select v-model="newSale.product_id" id="" class="custom-select">
+                                <option selected disabled>Select product</option>
+                                <option v-for="(product,index) in products" :key="index + 'A'" :value="product.id">
+                                    {{product.name}}
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" v-model="newSale.products_quantity" class="form-control">
+                        </td>
+                        <td>
+                            <input type="number" min="0" max="999999" step="any" v-model="newSale.sell_price" class="form-control">
+                        </td>
+                        <td class="d-flex">
+                            <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addSale">Add</a>
+                            <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewSale = false ">Cancel</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -51,16 +74,18 @@
         data(){
             return {
                 sales:[],
+                products:[],
                 client:{},
                 totalProfit: 1,
                 difference: 0,
                 ready:0,
-                data:{
-                    'product_id': 2,
-                    'products_quantity' : 2,
-                    'sell_price' : 1050,
-                    'client_id' : 1,
-                }
+                newSale:{
+                    'product_id': '',
+                    'products_quantity' : '',
+                    'sell_price' : '',
+                    'client_id' : '',
+                },
+                addNewSale:false
             }
         },
         watch:{
@@ -82,12 +107,21 @@
                         console.log(error);
                     });
             },
+            getProducts(){
+                axios
+                    .get('/api/get-products')
+                    .then( (response) => {
+                        this.products = response.data ;
+                    })
+                    .catch( (error) => {
+                        console.log(error);
+                    });
+            },
             getCurrentClient(){
                 axios
                     .get('/api/get-current-client')
                     .then( (response) => {
                         this.client = response.data ;
-                        this.data.client_id = this.client.id ;
                         this.ready ++ ;
                     })
                     .catch( (error) => {
@@ -111,18 +145,20 @@
                 this.animateValue('totalProfit',0,this.totalProfit,1000);
                 setTimeout(()=>{
                     this.difference  = this.client.plan - this.totalProfit;
-                    this.animateValue('difference',0,this.difference,500);
-                },500);
+                    this.animateValue('difference',0,this.difference,100);
+                },100);
 
             },
             addSale(){
-              axios.post('/sales/add',this.data)
+                this.newSale.client_id = this.client.id;
+                axios.post('/sales/add',this.newSale)
                   .then( (response) => {
                       this.sales.push(response.data);
                       this.calculateTotalProfit();
+                      this.addNewSale = false;
                   })
                   .catch( (error) => {
-                      console.log('Error : ' + error);
+                      alert('Error adding new sale.')
                   });
             },
             deleteSale(sale_id){
@@ -158,6 +194,7 @@
         },
         mounted(){
             this.getSalesList();
+            this.getProducts();
             this.getCurrentClient();
         }
     }

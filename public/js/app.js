@@ -1763,21 +1763,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
     return {
       sales: [],
+      products: [],
       client: {},
       totalProfit: 1,
       difference: 0,
       ready: 0,
-      data: {
-        'product_id': 2,
-        'products_quantity': 2,
-        'sell_price': 1050,
-        'client_id': 1
-      }
+      newSale: {
+        'product_id': '',
+        'products_quantity': '',
+        'sell_price': '',
+        'client_id': ''
+      },
+      addNewSale: false
     };
   },
   watch: {
@@ -1798,19 +1823,27 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    getCurrentClient: function getCurrentClient() {
+    getProducts: function getProducts() {
       var _this2 = this;
 
+      axios.get('/api/get-products').then(function (response) {
+        _this2.products = response.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    getCurrentClient: function getCurrentClient() {
+      var _this3 = this;
+
       axios.get('/api/get-current-client').then(function (response) {
-        _this2.client = response.data;
-        _this2.data.client_id = _this2.client.id;
-        _this2.ready++;
+        _this3.client = response.data;
+        _this3.ready++;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     calculateTotalProfit: function calculateTotalProfit() {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.sales.length < 1) {
         return;
@@ -1826,34 +1859,37 @@ __webpack_require__.r(__webpack_exports__);
       this.totalProfit = sumProfit;
       this.animateValue('totalProfit', 0, this.totalProfit, 1000);
       setTimeout(function () {
-        _this3.difference = _this3.client.plan - _this3.totalProfit;
+        _this4.difference = _this4.client.plan - _this4.totalProfit;
 
-        _this3.animateValue('difference', 0, _this3.difference, 500);
-      }, 500);
+        _this4.animateValue('difference', 0, _this4.difference, 100);
+      }, 100);
     },
     addSale: function addSale() {
-      var _this4 = this;
+      var _this5 = this;
 
-      axios.post('/sales/add', this.data).then(function (response) {
-        _this4.sales.push(response.data);
+      this.newSale.client_id = this.client.id;
+      axios.post('/sales/add', this.newSale).then(function (response) {
+        _this5.sales.push(response.data);
 
-        _this4.calculateTotalProfit();
+        _this5.calculateTotalProfit();
+
+        _this5.addNewSale = false;
       })["catch"](function (error) {
-        console.log('Error : ' + error);
+        alert('Error adding new sale.');
       });
     },
     deleteSale: function deleteSale(sale_id) {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.post('/sales/delete', {
         'sale_id': sale_id
       }).then(function (response) {
-        var sales = _this5.sales;
+        var sales = _this6.sales;
         $.each(sales, function (i) {
           if (sales[i].id === sale_id) {
             sales.splice(i, 1);
 
-            _this5.calculateTotalProfit();
+            _this6.calculateTotalProfit();
 
             return false;
           }
@@ -1878,6 +1914,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getSalesList();
+    this.getProducts();
     this.getCurrentClient();
   }
 });
@@ -37974,7 +38011,11 @@ var render = function() {
               {
                 staticClass: "btn btn-outline-dark",
                 attrs: { href: "javascript:void(0)" },
-                on: { click: _vm.addSale }
+                on: {
+                  click: function($event) {
+                    _vm.addNewSale = true
+                  }
+                }
               },
               [_vm._v("Add sale")]
             )
@@ -37986,41 +38027,215 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.sales, function(sale, index) {
-              return _c("tr", { key: index }, [
-                _c("td", [_vm._v(_vm._s(index + 1))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(sale.product.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(sale.products_quantity))]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(sale.sell_price) +
-                      " " +
-                      _vm._s(_vm.client.currency) +
-                      " "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "a",
+            [
+              _vm._l(_vm.sales, function(sale, index) {
+                return _c("tr", { key: index }, [
+                  _c("td", [_vm._v(_vm._s(index + 1))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(sale.product.name))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(sale.products_quantity))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(sale.sell_price) +
+                        " " +
+                        _vm._s(_vm.client.currency) +
+                        " "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-dark btn-sm",
+                        attrs: { href: "javascript:void(0)" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteSale(sale.id)
+                          }
+                        }
+                      },
+                      [_vm._v("X")]
+                    )
+                  ])
+                ])
+              }),
+              _vm._v(" "),
+              _c(
+                "tr",
+                {
+                  directives: [
                     {
-                      staticClass: "btn btn-dark btn-sm",
-                      attrs: { href: "javascript:void(0)" },
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.addNewSale,
+                      expression: "addNewSale"
+                    }
+                  ]
+                },
+                [
+                  _c("td", [
+                    _vm._v(
+                      "\n                       " +
+                        _vm._s(this.sales.length + 1) +
+                        "\n                    "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.newSale.product_id,
+                            expression: "newSale.product_id"
+                          }
+                        ],
+                        staticClass: "custom-select",
+                        attrs: { id: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.newSale,
+                              "product_id",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "option",
+                          { attrs: { selected: "", disabled: "" } },
+                          [_vm._v("Select product")]
+                        ),
+                        _vm._v(" "),
+                        _vm._l(_vm.products, function(product, index) {
+                          return _c(
+                            "option",
+                            {
+                              key: index + "A",
+                              domProps: { value: product.id }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(product.name) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.newSale.products_quantity,
+                          expression: "newSale.products_quantity"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number" },
+                      domProps: { value: _vm.newSale.products_quantity },
                       on: {
-                        click: function($event) {
-                          return _vm.deleteSale(sale.id)
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.newSale,
+                            "products_quantity",
+                            $event.target.value
+                          )
                         }
                       }
-                    },
-                    [_vm._v("X")]
-                  )
-                ])
-              ])
-            }),
-            0
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.newSale.sell_price,
+                          expression: "newSale.sell_price"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "number",
+                        min: "0",
+                        max: "999999",
+                        step: "any"
+                      },
+                      domProps: { value: _vm.newSale.sell_price },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.newSale,
+                            "sell_price",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "d-flex" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-primary mr-2 btn-sm",
+                        attrs: { href: "javascript:void(0)" },
+                        on: { click: _vm.addSale }
+                      },
+                      [_vm._v("Add")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-danger btn-sm",
+                        attrs: { href: "javascript:void(0)" },
+                        on: {
+                          click: function($event) {
+                            _vm.addNewSale = false
+                          }
+                        }
+                      },
+                      [_vm._v("Cancel")]
+                    )
+                  ])
+                ]
+              )
+            ],
+            2
           )
         ])
       ]),
