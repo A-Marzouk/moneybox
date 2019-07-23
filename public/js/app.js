@@ -1786,6 +1786,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1855,8 +1856,8 @@ __webpack_require__.r(__webpack_exports__);
         sumProfit += (sales[i].sell_price - sales[i].product.buy_price) * sales[i].products_quantity * (percentage / 100);
       });
       this.totalProfit = sumProfit;
-      this.animateValue('totalProfit', 0, this.totalProfit, 100);
       this.difference = this.client.plan - this.totalProfit;
+      this.animateValue('totalProfit', 0, sumProfit, 30);
     },
     addSale: function addSale() {
       var _this4 = this;
@@ -1868,9 +1869,19 @@ __webpack_require__.r(__webpack_exports__);
         _this4.calculateTotalProfit();
 
         _this4.addNewSale = false;
+
+        _this4.clearInputs();
       })["catch"](function (error) {
         alert('Error adding new sale.');
       });
+    },
+    clearInputs: function clearInputs() {
+      this.newSale = {
+        'product_id': '',
+        'products_quantity': '',
+        'sell_price': '',
+        'client_id': ''
+      };
     },
     deleteSale: function deleteSale(sale_id) {
       var _this5 = this;
@@ -1891,17 +1902,20 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {});
     },
     animateValue: function animateValue(id, start, end, duration) {
+      var _this6 = this;
+
       var range = end - start;
       var current = start;
-      var increment = end > start ? 1 : -1;
+      var increment = 50;
       var stepTime = Math.abs(Math.floor(duration / range));
       var obj = document.getElementById(id);
       var timer = setInterval(function () {
         current += increment;
         obj.innerHTML = current;
 
-        if (current === end) {
+        if (current >= end) {
           clearInterval(timer);
+          obj.innerHTML = _this6.totalProfit;
         }
       }, stepTime);
     }
@@ -1950,10 +1964,56 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      managers: []
+      managers: [],
+      newManager: {},
+      editedManager: {
+        'id': '',
+        'name': '',
+        'percentage': '',
+        'plan': ''
+      }
     };
   },
   methods: {
@@ -1961,11 +2021,68 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get('/api/get-managers').then(function (response) {
-        console.log(response.data);
         _this.managers = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    deleteManager: function deleteManager(manager_id) {
+      var _this2 = this;
+
+      axios.post('/managers/delete', {
+        'manager_id': manager_id
+      }).then(function (response) {
+        var managers = _this2.managers;
+        $.each(managers, function (i) {
+          if (managers[i].id === manager_id) {
+            managers.splice(i, 1);
+            return false;
+          }
+        });
+      })["catch"](function (error) {
+        console.log('Error :' + error);
+      });
+    },
+    editManager: function editManager(manager) {
+      this.editedManager.id = manager.id;
+      this.editedManager.name = manager.name;
+      this.editedManager.plan = manager.client.plan;
+      this.editedManager.percentage = manager.client.percentage;
+    },
+    saveEditedManager: function saveEditedManager(manager) {
+      var _this3 = this;
+
+      axios.post('/managers/update', manager).then(function (response) {
+        var managers = _this3.managers;
+        $.each(managers, function (i) {
+          if (managers[i].id === manager.id) {
+            managers[i] = response.data;
+            return false;
+          }
+        });
+
+        _this3.clearEditedManager();
+      })["catch"](function (error) {
+        console.log('Error : ' + error);
+      });
+    },
+    clearInputs: function clearInputs() {
+      this.newManager = {
+        'name': '',
+        'plan': '',
+        'percentage': ''
+      };
+    },
+    clearEditedManager: function clearEditedManager() {
+      this.editedManager = {
+        'id': '',
+        'name': '',
+        'percentage': '',
+        'plan': ''
+      };
+    },
+    isEdited: function isEdited(manager_id) {
+      return this.editedManager.id === manager_id;
     }
   },
   mounted: function mounted() {
@@ -38371,9 +38488,12 @@ var render = function() {
         _vm._v(" "),
         _c("div", [
           _vm._v("\n                Total profit : "),
-          _c("span", { attrs: { id: "totalProfit" } }, [_vm._v("0 ")]),
+          _c("span", { attrs: { id: "totalProfit" } }, [
+            _vm._v(" " + _vm._s(_vm.totalProfit.toFixed(2)) + " ")
+          ]),
           _vm._v(" " + _vm._s(_vm.client.currency)),
           _c("br"),
+          _vm._v(" "),
           _c("br"),
           _vm._v(
             "\n                Plan : " +
@@ -38384,7 +38504,7 @@ var render = function() {
           _c("br"),
           _vm._v("\n                Difference : "),
           _c("span", { attrs: { id: "difference" } }, [
-            _vm._v(" " + _vm._s(this.difference) + " ")
+            _vm._v(" " + _vm._s(_vm.difference.toFixed(2)) + " ")
           ]),
           _vm._v(" " + _vm._s(_vm.client.currency) + "\n            ")
         ]),
@@ -38445,11 +38565,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("h2", [_vm._v("Managers list")]),
+  return _c("div", { staticClass: "container pb-5" }, [
+    _vm._m(0),
     _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
-      _vm._m(0),
+      _vm._m(1),
       _vm._v(" "),
       _c(
         "tbody",
@@ -38457,13 +38577,291 @@ var render = function() {
           return _c("tr", { key: index }, [
             _c("td", [_vm._v(_vm._s(index + 1))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(manager.name))]),
+            _c("td", [
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.isEdited(manager.id),
+                      expression: "!isEdited(manager.id)"
+                    }
+                  ]
+                },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(manager.name) +
+                      "\n                    "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.isEdited(manager.id),
+                      expression: "isEdited(manager.id)"
+                    }
+                  ]
+                },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editedManager.name,
+                        expression: "editedManager.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.editedManager.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.editedManager, "name", $event.target.value)
+                      }
+                    }
+                  })
+                ]
+              )
+            ]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(manager.client.percentage) + " % ")]),
+            _c("td", [
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.isEdited(manager.id),
+                      expression: "!isEdited(manager.id)"
+                    }
+                  ]
+                },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(manager.client.percentage) +
+                      " %\n                    "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.isEdited(manager.id),
+                      expression: "isEdited(manager.id)"
+                    }
+                  ]
+                },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editedManager.percentage,
+                        expression: "editedManager.percentage"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      min: "0",
+                      max: "999999",
+                      step: "any"
+                    },
+                    domProps: { value: _vm.editedManager.percentage },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.editedManager,
+                          "percentage",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]
+              )
+            ]),
             _vm._v(" "),
             _c("td", [_vm._v(" COMING SOON ")]),
             _vm._v(" "),
-            _c("td", [_vm._v(" " + _vm._s(manager.client.plan) + " ")])
+            _c("td", [
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.isEdited(manager.id),
+                      expression: "!isEdited(manager.id)"
+                    }
+                  ]
+                },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(manager.client.plan) +
+                      "\n                    "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.isEdited(manager.id),
+                      expression: "isEdited(manager.id)"
+                    }
+                  ]
+                },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editedManager.plan,
+                        expression: "editedManager.plan"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "number",
+                      min: "0",
+                      max: "999999",
+                      step: "any"
+                    },
+                    domProps: { value: _vm.editedManager.plan },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.editedManager, "plan", $event.target.value)
+                      }
+                    }
+                  })
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", { staticClass: "d-flex" }, [
+              _c(
+                "a",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.isEdited(manager.id),
+                      expression: "!isEdited(manager.id)"
+                    }
+                  ],
+                  staticClass: "btn btn-outline-danger btn-sm mr-2",
+                  attrs: { href: "javascript:void(0)" },
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteManager(manager.id)
+                    }
+                  }
+                },
+                [_vm._v("\n                        Del\n                    ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.isEdited(manager.id),
+                      expression: "!isEdited(manager.id)"
+                    }
+                  ],
+                  staticClass: "btn btn-outline-primary btn-sm",
+                  attrs: { href: "javascript:void(0)" },
+                  on: {
+                    click: function($event) {
+                      return _vm.editManager(manager)
+                    }
+                  }
+                },
+                [_vm._v("\n                        Edit\n                    ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.isEdited(manager.id),
+                      expression: "isEdited(manager.id)"
+                    }
+                  ],
+                  staticClass: "btn btn-outline-danger btn-sm mr-2",
+                  attrs: { href: "javascript:void(0)" },
+                  on: { click: _vm.clearEditedManager }
+                },
+                [
+                  _vm._v(
+                    "\n                        Cancel\n                    "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.isEdited(manager.id),
+                      expression: "isEdited(manager.id)"
+                    }
+                  ],
+                  staticClass: "btn btn-outline-success btn-sm",
+                  attrs: { href: "javascript:void(0)" },
+                  on: {
+                    click: function($event) {
+                      return _vm.saveEditedManager(_vm.editedManager)
+                    }
+                  }
+                },
+                [_vm._v("\n                        Save\n                    ")]
+              )
+            ])
           ])
         }),
         0
@@ -38472,6 +38870,14 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "d-flex justify-content-between" }, [
+      _c("h2", { staticClass: "pb-3" }, [_vm._v("Managers list")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -38486,7 +38892,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Total products sold")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Plan")])
+        _c("th", [_vm._v("Plan")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Actions")])
       ])
     ])
   }

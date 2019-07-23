@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -34,5 +35,39 @@ class ClientsController extends Controller
     {
        return  currentClient() ;
     }
+
+
+    public function updateManager(Request $request){
+        $this->validate($request, [
+            'name' => 'required|max:191',
+            'percentage' => 'required|max:191',
+            'plan' => 'required|max:191',
+        ]);
+
+        $user   = User::find($request->id);
+        $client = $user->client;
+
+        $user->update([
+            'name' => $request->name
+        ]);
+
+        $client->update(
+            [
+                'percentage' => $request->percentage,
+                'plan' => $request->plan
+            ]
+        );
+
+        $user['client'] = $client;
+        return $user ;
+
+    }
+
+    public function deleteManager(Request $request){
+        return Client::destroy($request->manager_id);
+    }
+
+
+
 
 }

@@ -36,6 +36,9 @@ Route::post('/products/add','ProductsController@addProduct')->name('add.product'
 Route::post('/products/delete','ProductsController@deleteProduct')->name('delete.product');
 Route::post('/products/update','ProductsController@updateProduct')->name('update.product');
 
+Route::post('/managers/update','ClientsController@updateManager')->name('update.manager');
+Route::post('/managers/delete','ClientsController@deleteManager')->name('delete.manager');
+
 
 
 // api

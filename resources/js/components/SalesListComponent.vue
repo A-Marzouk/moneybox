@@ -55,9 +55,10 @@
             <div class="col-md-4 moneybox">
                 <h2  class="pb-3">MoneyBox</h2>
                 <div>
-                    Total profit : <span id="totalProfit">0 </span> {{client.currency}}<br/><br/>
+                    Total profit : <span id="totalProfit"> {{totalProfit.toFixed(2)}} </span> {{client.currency}}<br/>
+                    <br/>
                     Plan : {{client.plan}} {{client.currency}}<br/>
-                    Difference : <span id="difference"> {{this.difference}} </span> {{client.currency}}
+                    Difference : <span id="difference"> {{ difference.toFixed(2)}} </span> {{client.currency}}
                 </div>
                 <div class="p-5">
                     <a href="javascript:void(0)" @click="calculateTotalProfit" class="btn btn-outline-dark btn-block">Calculate</a>
@@ -142,10 +143,8 @@
                 });
 
                 this.totalProfit = sumProfit ;
-                this.animateValue('totalProfit',0,this.totalProfit,100);
                 this.difference  = this.client.plan - this.totalProfit;
-
-
+                this.animateValue('totalProfit',0,sumProfit,30);
             },
             addSale(){
                 this.newSale.client_id = this.client.id;
@@ -154,10 +153,19 @@
                       this.sales.push(response.data);
                       this.calculateTotalProfit();
                       this.addNewSale = false;
+                      this.clearInputs();
                   })
                   .catch( (error) => {
                       alert('Error adding new sale.')
                   });
+            },
+            clearInputs(){
+                this.newSale ={
+                    'product_id': '',
+                    'products_quantity' : '',
+                    'sell_price' : '',
+                    'client_id' : '',
+                };
             },
             deleteSale(sale_id){
               axios.post('/sales/delete',{'sale_id' : sale_id})
@@ -178,14 +186,16 @@
             animateValue(id, start, end, duration) {
                 let range = end - start;
                 let current = start;
-                let increment = end > start? 1 : -1;
+                let increment = 50 ;
                 let stepTime = Math.abs(Math.floor(duration / range));
                 let obj = document.getElementById(id);
-                let timer = setInterval(function() {
+
+                let timer = setInterval( () => {
                     current += increment;
                     obj.innerHTML = current;
-                    if (current === end) {
+                    if (current >= end) {
                         clearInterval(timer);
+                        obj.innerHTML = this.totalProfit;
                     }
                 }, stepTime);
             }
@@ -207,4 +217,5 @@
         font-size: 20px;
         font-weight:bold;
     }
+
 </style>

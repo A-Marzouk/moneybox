@@ -54,7 +54,6 @@ class ProductsController extends Controller
 
     }
 
-
     public function deleteProduct(Request $request){
         return Product::destroy($request->product_id);
     }
