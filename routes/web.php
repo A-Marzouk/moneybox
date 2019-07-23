@@ -32,6 +32,12 @@ Route::get('/home','HomeController@index')
 Route::post('/sales/add','SalesController@addSale')->name('add.sale');
 Route::post('/sales/delete','SalesController@deleteSale')->name('delete.sale');
 
+Route::post('/products/add','ProductsController@addProduct')->name('add.product');
+Route::post('/products/delete','ProductsController@deleteProduct')->name('delete.product');
+Route::post('/products/update','ProductsController@updateProduct')->name('update.product');
+
+
+
 // api
 Route::get('api/get-products','ProductsController@getProducts')->name('get.products');
 Route::get('api/get-managers','ClientsController@getManagers')->name('get.products');

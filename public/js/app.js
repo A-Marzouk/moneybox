@@ -1843,8 +1843,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     calculateTotalProfit: function calculateTotalProfit() {
-      var _this4 = this;
-
       if (this.sales.length < 1) {
         return;
       }
@@ -1857,39 +1855,35 @@ __webpack_require__.r(__webpack_exports__);
         sumProfit += (sales[i].sell_price - sales[i].product.buy_price) * sales[i].products_quantity * (percentage / 100);
       });
       this.totalProfit = sumProfit;
-      this.animateValue('totalProfit', 0, this.totalProfit, 1000);
-      setTimeout(function () {
-        _this4.difference = _this4.client.plan - _this4.totalProfit;
-
-        _this4.animateValue('difference', 0, _this4.difference, 100);
-      }, 100);
+      this.animateValue('totalProfit', 0, this.totalProfit, 100);
+      this.difference = this.client.plan - this.totalProfit;
     },
     addSale: function addSale() {
-      var _this5 = this;
+      var _this4 = this;
 
       this.newSale.client_id = this.client.id;
       axios.post('/sales/add', this.newSale).then(function (response) {
-        _this5.sales.push(response.data);
+        _this4.sales.push(response.data);
 
-        _this5.calculateTotalProfit();
+        _this4.calculateTotalProfit();
 
-        _this5.addNewSale = false;
+        _this4.addNewSale = false;
       })["catch"](function (error) {
         alert('Error adding new sale.');
       });
     },
     deleteSale: function deleteSale(sale_id) {
-      var _this6 = this;
+      var _this5 = this;
 
       axios.post('/sales/delete', {
         'sale_id': sale_id
       }).then(function (response) {
-        var sales = _this6.sales;
+        var sales = _this5.sales;
         $.each(sales, function (i) {
           if (sales[i].id === sale_id) {
             sales.splice(i, 1);
 
-            _this6.calculateTotalProfit();
+            _this5.calculateTotalProfit();
 
             return false;
           }
@@ -2012,10 +2006,71 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      products: []
+      products: [],
+      newProduct: {
+        'name': '',
+        'buy_price': ''
+      },
+      addNewProduct: false,
+      editedProduct: {
+        'id': '',
+        'name': '',
+        'buy_price': ''
+      }
     };
   },
   methods: {
@@ -2024,9 +2079,80 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/get-products').then(function (response) {
         _this.products = response.data;
+        $.each(products, function (i) {
+          products[i].edited = false;
+        });
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    addProduct: function addProduct() {
+      var _this2 = this;
+
+      axios.post('/products/add', this.newProduct).then(function (response) {
+        _this2.products.push(response.data);
+
+        _this2.addNewProduct = false;
+
+        _this2.clearInputs();
+      })["catch"](function (error) {
+        console.log('Error : ' + error);
+      });
+    },
+    deleteProduct: function deleteProduct(product_id) {
+      var _this3 = this;
+
+      axios.post('/products/delete', {
+        'product_id': product_id
+      }).then(function (response) {
+        var products = _this3.products;
+        $.each(products, function (i) {
+          if (products[i].id === product_id) {
+            products.splice(i, 1);
+            return false;
+          }
+        });
+      })["catch"](function (error) {
+        console.log('Error :' + error);
+      });
+    },
+    editProduct: function editProduct(product) {
+      this.editedProduct.id = product.id;
+      this.editedProduct.name = product.name;
+      this.editedProduct.buy_price = product.buy_price;
+    },
+    saveEditedProduct: function saveEditedProduct(product) {
+      var _this4 = this;
+
+      axios.post('/products/update', product).then(function (response) {
+        var products = _this4.products;
+        $.each(products, function (i) {
+          if (products[i].id === product.id) {
+            products[i] = product;
+            return false;
+          }
+        });
+
+        _this4.clearEditedProduct();
+      })["catch"](function (error) {
+        console.log('Error : ' + error);
+      });
+    },
+    clearInputs: function clearInputs() {
+      this.newProduct = {
+        'name': '',
+        'buy_price': ''
+      };
+    },
+    clearEditedProduct: function clearEditedProduct() {
+      this.editedProduct = {
+        'id': '',
+        'name': '',
+        'buy_price': ''
+      };
+    },
+    isEdited: function isEdited(product_id) {
+      return this.editedProduct.id === product_id;
     }
   },
   mounted: function mounted() {
@@ -38257,7 +38383,9 @@ var render = function() {
           ),
           _c("br"),
           _vm._v("\n                Difference : "),
-          _c("span", { attrs: { id: "difference" } }, [_vm._v(" 0 ")]),
+          _c("span", { attrs: { id: "difference" } }, [
+            _vm._v(" " + _vm._s(this.difference) + " ")
+          ]),
           _vm._v(" " + _vm._s(_vm.client.currency) + "\n            ")
         ]),
         _vm._v(" "),
@@ -38385,23 +38513,385 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("h2", [_vm._v("Products list")]),
+    _c("div", { staticClass: "d-flex justify-content-between" }, [
+      _c("h2", { staticClass: "pb-3" }, [_vm._v("Products list")]),
+      _vm._v(" "),
+      _c("div", [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-outline-dark mr-3",
+            attrs: { href: "javascript:void(0)" },
+            on: {
+              click: function($event) {
+                _vm.addNewProduct = true
+              }
+            }
+          },
+          [_vm._v("Add product")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-outline-dark",
+            attrs: { href: "javascript:void(0)" }
+          },
+          [_vm._v("Import from Excel")]
+        )
+      ])
+    ]),
     _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
       _vm._m(0),
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.products, function(product, index) {
-          return _c("tr", { key: index }, [
-            _c("td", [_vm._v(_vm._s(index + 1))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(product.name))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(product.buy_price))])
-          ])
-        }),
-        0
+        [
+          _vm._l(_vm.products, function(product, index) {
+            return _c("tr", { key: index }, [
+              _c("td", [_vm._v(_vm._s(index + 1))]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(product.name) +
+                        "\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editedProduct.name,
+                          expression: "editedProduct.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.editedProduct.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editedProduct,
+                            "name",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(product.buy_price) +
+                        "\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editedProduct.buy_price,
+                          expression: "editedProduct.buy_price"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "number",
+                        min: "0",
+                        max: "999999",
+                        step: "any"
+                      },
+                      domProps: { value: _vm.editedProduct.buy_price },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editedProduct,
+                            "buy_price",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ],
+                    staticClass: "btn btn-outline-danger btn-sm",
+                    attrs: { href: "javascript:void(0)" },
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteProduct(product.id)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        Del\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ],
+                    staticClass: "btn btn-outline-primary btn-sm",
+                    attrs: { href: "javascript:void(0)" },
+                    on: {
+                      click: function($event) {
+                        return _vm.editProduct(product)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        Edit\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      }
+                    ],
+                    staticClass: "btn btn-outline-danger btn-sm",
+                    attrs: { href: "javascript:void(0)" },
+                    on: { click: _vm.clearEditedProduct }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        Cancel\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      }
+                    ],
+                    staticClass: "btn btn-outline-success btn-sm",
+                    attrs: { href: "javascript:void(0)" },
+                    on: {
+                      click: function($event) {
+                        return _vm.saveEditedProduct(_vm.editedProduct)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        Save\n                    "
+                    )
+                  ]
+                )
+              ])
+            ])
+          }),
+          _vm._v(" "),
+          _c(
+            "tr",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.addNewProduct,
+                  expression: "addNewProduct"
+                }
+              ]
+            },
+            [
+              _c("td", [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(this.products.length + 1) +
+                    "\n                "
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newProduct.name,
+                      expression: "newProduct.name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.newProduct.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newProduct, "name", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newProduct.buy_price,
+                      expression: "newProduct.buy_price"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "number",
+                    min: "0",
+                    max: "999999",
+                    step: "any"
+                  },
+                  domProps: { value: _vm.newProduct.buy_price },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newProduct, "buy_price", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "d-flex" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-primary mr-2 btn-sm",
+                    attrs: { href: "javascript:void(0)" },
+                    on: { click: _vm.addProduct }
+                  },
+                  [_vm._v("Add")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-danger btn-sm",
+                    attrs: { href: "javascript:void(0)" },
+                    on: {
+                      click: function($event) {
+                        _vm.addNewProduct = false
+                      }
+                    }
+                  },
+                  [_vm._v("Cancel")]
+                )
+              ])
+            ]
+          )
+        ],
+        2
       )
     ])
   ])
@@ -38417,7 +38907,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Buy price")])
+        _c("th", [_vm._v("Buy price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Actions")])
       ])
     ])
   }

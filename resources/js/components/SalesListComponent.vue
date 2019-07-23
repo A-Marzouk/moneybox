@@ -57,7 +57,7 @@
                 <div>
                     Total profit : <span id="totalProfit">0 </span> {{client.currency}}<br/><br/>
                     Plan : {{client.plan}} {{client.currency}}<br/>
-                    Difference : <span id="difference"> 0 </span> {{client.currency}}
+                    Difference : <span id="difference"> {{this.difference}} </span> {{client.currency}}
                 </div>
                 <div class="p-5">
                     <a href="javascript:void(0)" @click="calculateTotalProfit" class="btn btn-outline-dark btn-block">Calculate</a>
@@ -142,11 +142,9 @@
                 });
 
                 this.totalProfit = sumProfit ;
-                this.animateValue('totalProfit',0,this.totalProfit,1000);
-                setTimeout(()=>{
-                    this.difference  = this.client.plan - this.totalProfit;
-                    this.animateValue('difference',0,this.difference,100);
-                },100);
+                this.animateValue('totalProfit',0,this.totalProfit,100);
+                this.difference  = this.client.plan - this.totalProfit;
+
 
             },
             addSale(){

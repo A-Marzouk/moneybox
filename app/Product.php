@@ -17,4 +17,15 @@ class Product extends Model
 
     protected $table = 'products';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'buy_price',
+    ];
+
+
 }
