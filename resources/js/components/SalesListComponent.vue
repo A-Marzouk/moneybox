@@ -16,6 +16,7 @@
                         <th>Quantity</th>
                         <th>Sell Price</th>
                         <th>Actions</th>
+                        <th>Bonus</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -25,6 +26,7 @@
                         <td>{{sale.products_quantity}}</td>
                         <td>{{sale.sell_price}} {{client.currency}} </td>
                         <td><a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a> </td>
+                        <td>{{calculateSingleBonus(sale)}}</td>
                     </tr>
                     <tr v-show="addNewSale">
                         <td>
@@ -156,7 +158,7 @@
                       this.clearInputs();
                   })
                   .catch( (error) => {
-                      alert('Error adding new sale.')
+                      alert('Error adding new sale.');
                   });
             },
             clearInputs(){
@@ -198,6 +200,10 @@
                         obj.innerHTML = this.totalProfit;
                     }
                 }, stepTime);
+            },
+            calculateSingleBonus(sale){
+               let bonus =  (sale.sell_price - sale.product.buy_price) * sale.products_quantity * (this.client.percentage/100) ;
+               return Math.ceil(bonus) ;
             }
         },
         mounted(){

@@ -1787,6 +1787,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1918,6 +1920,10 @@ __webpack_require__.r(__webpack_exports__);
           obj.innerHTML = _this6.totalProfit;
         }
       }, stepTime);
+    },
+    calculateSingleBonus: function calculateSingleBonus(sale) {
+      var bonus = (sale.sell_price - sale.product.buy_price) * sale.products_quantity * (this.client.percentage / 100);
+      return Math.ceil(bonus);
     }
   },
   mounted: function mounted() {
@@ -38302,7 +38308,9 @@ var render = function() {
                       },
                       [_vm._v("X")]
                     )
-                  ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.calculateSingleBonus(sale)))])
                 ])
               }),
               _vm._v(" "),
@@ -38539,7 +38547,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Sell Price")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Actions")])
+        _c("th", [_vm._v("Actions")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Bonus")])
       ])
     ])
   }
