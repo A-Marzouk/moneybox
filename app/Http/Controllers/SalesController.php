@@ -14,7 +14,7 @@ class SalesController extends Controller
     }
 
     public function getSalesList(){
-        return Sale::with('product','client')->where('client_id',currentClient()->id)->get();
+        return Sale::with('product','client','costs')->where('client_id',currentClient()->id)->get();
     }
 
     public function addSale(Request $request){

@@ -48,4 +48,9 @@ class Sale extends Model
         return $this->belongsTo(Product::class); // sales.product_id
     }
 
+
+    public function costs(){
+        return $this->hasMany(Cost::class); // sales.product_id
+    }
+
 }

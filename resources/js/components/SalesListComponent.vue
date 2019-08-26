@@ -1,11 +1,12 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="d-flex justify-content-between">
                     <h2 class="pb-3">Sales list</h2>
                     <div>
-                        <a href="javascript:void(0)" @click="addNewSale = true" class="btn btn-outline-dark">Add sale</a>
+                        <a href="javascript:void(0)" @click="addNewSale = true" class="btn btn-outline-dark">Add
+                            sale</a>
                     </div>
                 </div>
                 <table class="table table-striped">
@@ -15,8 +16,10 @@
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Sell Price</th>
-                        <th>Actions</th>
+                        <th>Other payments</th>
                         <th>Bonus</th>
+                        <th>Actions</th>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -24,13 +27,25 @@
                         <td>{{index +1}}</td>
                         <td>{{sale.product.name}}</td>
                         <td>{{sale.products_quantity}}</td>
-                        <td>{{sale.sell_price}} {{client.currency}} </td>
-                        <td><a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a> </td>
+                        <td>{{sale.sell_price}} {{client.currency}}</td>
+                        <td>
+
+                            <a v-if="sale.costs.length > 0" href="javascript:void(0)" data-toggle="modal" :data-target="'#costsModal_' + sale.id">
+                                 {{getTotalCost(sale)}}
+                            </a>
+
+                            <span v-else>
+                                 {{getTotalCost(sale)}}
+                            </span>
+
+                        </td>
                         <td>{{calculateSingleBonus(sale)}}</td>
+                        <td><a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>
+                        </td>
                     </tr>
                     <tr v-show="addNewSale">
                         <td>
-                           {{this.sales.length + 1}}
+                            {{this.sales.length + 1}}
                         </td>
                         <td>
                             <select v-model="newSale.product_id" id="" class="custom-select">
@@ -44,7 +59,8 @@
                             <input type="number" v-model="newSale.products_quantity" class="form-control">
                         </td>
                         <td>
-                            <input type="number" min="0" max="999999" step="any" v-model="newSale.sell_price" class="form-control">
+                            <input type="number" min="0" max="999999" step="any" v-model="newSale.sell_price"
+                                   class="form-control">
                         </td>
                         <td class="d-flex">
                             <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addSale">Add</a>
@@ -54,145 +70,172 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-4 moneybox">
-                <h2  class="pb-3">MoneyBox</h2>
+            <div class="col-md-2 moneybox">
+                <h2 class="pb-3">MoneyBox</h2>
                 <div>
                     Total profit : <span id="totalProfit"> {{totalProfit.toFixed(2)}} </span> {{client.currency}}<br/>
                     <br/>
                     Plan : {{client.plan}} {{client.currency}}<br/>
                     Difference : <span id="difference"> {{ difference.toFixed(2)}} </span> {{client.currency}}
                 </div>
-                <div class="p-5">
+                <div class="">
                     <a href="javascript:void(0)" @click="calculateTotalProfit" class="btn btn-outline-dark btn-block">Calculate</a>
                 </div>
             </div>
 
         </div>
+
+        <!-- modals -->
+
+        <div v-for="(sale, index) in sales" :key="index">
+            <div class="modal fade" :id="'costsModal_'+sale.id" tabindex="-1" role="dialog" aria-labelledby="costsModal"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Other costs</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div v-for="(cost,index) in sale.costs" :key="index">
+                                {{index+1}} - {{cost.label}} : {{cost.cost}} UAH
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script>
     export default {
         name: "SalesList",
-        data(){
+        data() {
             return {
-                sales:[],
-                products:[],
-                client:{},
+                sales: [],
+                products: [],
+                client: {},
                 totalProfit: 1,
                 difference: 0,
-                ready:0,
-                newSale:{
+                ready: 0,
+                newSale: {
                     'product_id': '',
-                    'products_quantity' : '',
-                    'sell_price' : '',
-                    'client_id' : '',
+                    'products_quantity': '',
+                    'sell_price': '',
+                    'client_id': '',
                 },
-                addNewSale:false
+                addNewSale: false
             }
         },
-        watch:{
-            ready : function(){
-                if(this.ready === 2){
+        watch: {
+            ready: function () {
+                if (this.ready === 2) {
                     this.calculateTotalProfit();
                 }
             }
         },
-        methods:{
-            getSalesList(){
+        methods: {
+            getSalesList() {
                 axios
                     .get('/api/get-sales-list')
-                    .then( (response) => {
-                        this.sales = response.data ;
-                        this.ready ++ ;
+                    .then((response) => {
+                        this.sales = response.data;
+                        this.ready++;
                     })
-                    .catch( (error) => {
+                    .catch((error) => {
                         console.log(error);
                     });
             },
-            getProducts(){
+            getProducts() {
                 axios
                     .get('/api/get-products')
-                    .then( (response) => {
-                        this.products = response.data ;
+                    .then((response) => {
+                        this.products = response.data;
                     })
-                    .catch( (error) => {
+                    .catch((error) => {
                         console.log(error);
                     });
             },
-            getCurrentClient(){
+            getCurrentClient() {
                 axios
                     .get('/api/get-current-client')
-                    .then( (response) => {
-                        this.client = response.data ;
-                        this.ready ++ ;
+                    .then((response) => {
+                        this.client = response.data;
+                        this.ready++;
                     })
-                    .catch( (error) => {
+                    .catch((error) => {
                         console.log(error);
                     });
             },
-            calculateTotalProfit () {
-                if(this.sales.length < 1){
-                    return ;
+            calculateTotalProfit() {
+                if (this.sales.length < 1) {
+                    return;
                 }
-                let percentage  = this.client.percentage ;
-                let sales       = this.sales;
-                let sumProfit   = 0 ;
+                let percentage = this.client.percentage;
+                let sales = this.sales;
+                let sumProfit = 0;
 
                 $.each(sales, (i) => {
                     // profit of one sale
-                    sumProfit += (sales[i].sell_price - sales[i].product.buy_price) * sales[i].products_quantity * (percentage/100) ;
+                    sumProfit += (sales[i].sell_price - sales[i].product.buy_price) * sales[i].products_quantity * (percentage / 100);
                 });
 
-                this.totalProfit = sumProfit ;
-                this.difference  = this.client.plan - this.totalProfit;
-                this.animateValue('totalProfit',0,sumProfit,30);
+                this.totalProfit = sumProfit;
+                this.difference = this.client.plan - this.totalProfit;
+                this.animateValue('totalProfit', 0, sumProfit, 30);
             },
-            addSale(){
+            addSale() {
                 this.newSale.client_id = this.client.id;
-                axios.post('/sales/add',this.newSale)
-                  .then( (response) => {
-                      this.sales.push(response.data);
-                      this.calculateTotalProfit();
-                      this.addNewSale = false;
-                      this.clearInputs();
-                  })
-                  .catch( (error) => {
-                      alert('Error adding new sale.');
-                  });
+                axios.post('/sales/add', this.newSale)
+                    .then((response) => {
+                        this.sales.push(response.data);
+                        this.calculateTotalProfit();
+                        this.addNewSale = false;
+                        this.clearInputs();
+                    })
+                    .catch((error) => {
+                        alert('Error adding new sale.');
+                    });
             },
-            clearInputs(){
-                this.newSale ={
+            clearInputs() {
+                this.newSale = {
                     'product_id': '',
-                    'products_quantity' : '',
-                    'sell_price' : '',
-                    'client_id' : '',
+                    'products_quantity': '',
+                    'sell_price': '',
+                    'client_id': '',
                 };
             },
-            deleteSale(sale_id){
-              axios.post('/sales/delete',{'sale_id' : sale_id})
-                  .then( (response) => {
-                      let sales = this.sales;
-                      $.each(sales, (i) => {
-                          if (sales[i].id === sale_id) {
-                              sales.splice(i, 1);
-                              this.calculateTotalProfit();
-                              return false;
-                          }
-                      });
-                  })
-                  .catch( (error) => {
+            deleteSale(sale_id) {
+                axios.post('/sales/delete', {'sale_id': sale_id})
+                    .then((response) => {
+                        let sales = this.sales;
+                        $.each(sales, (i) => {
+                            if (sales[i].id === sale_id) {
+                                sales.splice(i, 1);
+                                this.calculateTotalProfit();
+                                return false;
+                            }
+                        });
+                    })
+                    .catch((error) => {
 
-                  });
+                    });
             },
             animateValue(id, start, end, duration) {
                 let range = end - start;
                 let current = start;
-                let increment = 50 ;
+                let increment = 50;
                 let stepTime = Math.abs(Math.floor(duration / range));
                 let obj = document.getElementById(id);
 
-                let timer = setInterval( () => {
+                let timer = setInterval(() => {
                     current += increment;
                     obj.innerHTML = current;
                     if (current >= end) {
@@ -201,12 +244,22 @@
                     }
                 }, stepTime);
             },
-            calculateSingleBonus(sale){
-               let bonus =  (sale.sell_price - sale.product.buy_price) * sale.products_quantity * (this.client.percentage/100) ;
-               return Math.ceil(bonus) ;
+            calculateSingleBonus(sale) {
+                let bonus = (sale.sell_price - sale.product.buy_price) * sale.products_quantity * (this.client.percentage / 100);
+                return Math.ceil(bonus);
+            },
+            getTotalCost(sale) {
+                let costs = sale.costs;
+                let sum = 0;
+                $.each(costs, (i, cost) => {
+                    sum = (sum - (cost.cost * -1));
+                });
+
+                console.log(sum);
+                return sum;
             }
         },
-        mounted(){
+        mounted() {
             this.getSalesList();
             this.getProducts();
             this.getCurrentClient();
@@ -215,13 +268,14 @@
 </script>
 
 <style scoped lang="scss">
-    .moneybox{
+    .moneybox {
         border-left: 1px solid lightgray;
     }
-    #totalProfit{
+
+    #totalProfit {
         color: #38c172;
         font-size: 20px;
-        font-weight:bold;
+        font-weight: bold;
     }
 
 </style>
