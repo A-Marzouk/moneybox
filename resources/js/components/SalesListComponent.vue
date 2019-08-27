@@ -94,6 +94,9 @@
                                 </div>
                             </div>
                         </td>
+                        <td>
+                            0
+                        </td>
                         <td class="d-flex">
                             <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addSale">Add</a>
                             <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewSale = false ">Cancel</a>
@@ -226,13 +229,12 @@
                 if (this.sales.length < 1) {
                     return;
                 }
-                let percentage = this.client.percentage;
                 let sales = this.sales;
                 let sumProfit = 0;
 
                 $.each(sales, (i) => {
                     // profit of one sale
-                    sumProfit += (sales[i].sell_price - sales[i].product.buy_price) * sales[i].products_quantity * (percentage / 100);
+                    sumProfit += this.calculateSingleBonus(sales[i]);
                 });
 
                 this.totalProfit = sumProfit;
@@ -267,6 +269,20 @@
                     'products_quantity': '',
                     'sell_price': '',
                     'client_id': '',
+                    'costs' : [
+                        {
+                            label:'Transport',
+                            cost:0,
+                        },
+                        {
+                            label:'Storing',
+                            cost:0,
+                        },
+                        {
+                            label:'Other',
+                            cost:0,
+                        }
+                    ],
                 };
             },
             deleteSale(sale_id) {
@@ -302,8 +318,12 @@
                 }, stepTime);
             },
             calculateSingleBonus(sale) {
-                let bonus = (sale.sell_price - sale.product.buy_price) * sale.products_quantity * (this.client.percentage / 100);
-                return Math.ceil(bonus);
+                let totalCosts   =  this.getTotalCost(sale) + ( sale.product.buy_price * sale.products_quantity);
+                let totalIncome  =  (sale.sell_price * sale.products_quantity ) ;
+                let percentage   =  this.client.percentage / 100 ;
+                let bonus        =  (totalIncome - totalCosts) * percentage ;
+
+                return Math.round(bonus * 100) / 100;
             },
             getTotalCost(sale) {
                 let costs = sale.costs;

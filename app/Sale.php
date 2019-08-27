@@ -50,7 +50,7 @@ class Sale extends Model
 
 
     public function costs(){
-        return $this->hasMany(Cost::class); // sales.product_id
+        return $this->hasMany(Cost::class);
     }
 
 }

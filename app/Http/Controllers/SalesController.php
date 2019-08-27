@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Cost;
 use App\Product;
 use App\Sale;
 use Illuminate\Http\Request;
@@ -38,6 +39,24 @@ class SalesController extends Controller
         $sale = Sale::create($request->all());
         $sale['product'] = $sale->product;
         $sale['client']  = $sale->client;
+
+        // create costs
+
+        if(isset($request->costs)){
+            foreach ($request->costs as $cost){
+                if($cost['cost'] > 0){
+                    Cost::create([
+                        'label'   => $cost['label'],
+                        'cost'    => $cost['cost'],
+                        'sale_id' => $sale->id,
+                    ]);
+                }
+            }
+        }
+
+
+        $sale['costs']   = $sale->costs;
+
 
         return $sale ;
     }

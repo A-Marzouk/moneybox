@@ -1864,6 +1864,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1933,33 +1936,34 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     calculateTotalProfit: function calculateTotalProfit() {
+      var _this4 = this;
+
       if (this.sales.length < 1) {
         return;
       }
 
-      var percentage = this.client.percentage;
       var sales = this.sales;
       var sumProfit = 0;
       $.each(sales, function (i) {
         // profit of one sale
-        sumProfit += (sales[i].sell_price - sales[i].product.buy_price) * sales[i].products_quantity * (percentage / 100);
+        sumProfit += _this4.calculateSingleBonus(sales[i]);
       });
       this.totalProfit = sumProfit;
       this.difference = this.client.plan - this.totalProfit;
       this.animateValue('totalProfit', 0, sumProfit, 30);
     },
     addSale: function addSale() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.newSale.client_id = this.client.id;
       axios.post('/sales/add', this.newSale).then(function (response) {
-        _this4.sales.push(response.data);
+        _this5.sales.push(response.data);
 
-        _this4.calculateTotalProfit();
+        _this5.calculateTotalProfit();
 
-        _this4.addNewSale = false;
+        _this5.addNewSale = false;
 
-        _this4.clearInputs();
+        _this5.clearInputs();
       })["catch"](function (error) {
         alert('Error adding new sale.');
       });
@@ -1978,21 +1982,31 @@ __webpack_require__.r(__webpack_exports__);
         'product_id': '',
         'products_quantity': '',
         'sell_price': '',
-        'client_id': ''
+        'client_id': '',
+        'costs': [{
+          label: 'Transport',
+          cost: 0
+        }, {
+          label: 'Storing',
+          cost: 0
+        }, {
+          label: 'Other',
+          cost: 0
+        }]
       };
     },
     deleteSale: function deleteSale(sale_id) {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.post('/sales/delete', {
         'sale_id': sale_id
       }).then(function (response) {
-        var sales = _this5.sales;
+        var sales = _this6.sales;
         $.each(sales, function (i) {
           if (sales[i].id === sale_id) {
             sales.splice(i, 1);
 
-            _this5.calculateTotalProfit();
+            _this6.calculateTotalProfit();
 
             return false;
           }
@@ -2000,7 +2014,7 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {});
     },
     animateValue: function animateValue(id, start, end, duration) {
-      var _this6 = this;
+      var _this7 = this;
 
       var range = end - start;
       var current = start;
@@ -2013,13 +2027,16 @@ __webpack_require__.r(__webpack_exports__);
 
         if (current >= end) {
           clearInterval(timer);
-          obj.innerHTML = _this6.totalProfit;
+          obj.innerHTML = _this7.totalProfit;
         }
       }, stepTime);
     },
     calculateSingleBonus: function calculateSingleBonus(sale) {
-      var bonus = (sale.sell_price - sale.product.buy_price) * sale.products_quantity * (this.client.percentage / 100);
-      return Math.ceil(bonus);
+      var totalCosts = this.getTotalCost(sale) + sale.product.buy_price * sale.products_quantity;
+      var totalIncome = sale.sell_price * sale.products_quantity;
+      var percentage = this.client.percentage / 100;
+      var bonus = (totalIncome - totalCosts) * percentage;
+      return Math.round(bonus * 100) / 100;
     },
     getTotalCost: function getTotalCost(sale) {
       var costs = sale.costs;
@@ -38758,6 +38775,12 @@ var render = function() {
                             2
                           )
                         ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        "\n                        0\n                    "
                       )
                     ]),
                     _vm._v(" "),
