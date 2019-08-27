@@ -2204,6 +2204,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2222,7 +2229,8 @@ __webpack_require__.r(__webpack_exports__);
         'plan': ''
       },
       addNewManager: false,
-      shownPasswordManagerID: ''
+      shownPasswordManagerID: '',
+      errors: {}
     };
   },
   methods: {
@@ -2237,6 +2245,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     deleteManager: function deleteManager(manager_id) {
       var _this2 = this;
+
+      if (!confirm('Are you sure you want to delete this manager ?!')) {
+        return;
+      }
 
       axios.post('/managers/delete', {
         'manager_id': manager_id
@@ -2278,17 +2290,24 @@ __webpack_require__.r(__webpack_exports__);
     addManager: function addManager() {
       var _this4 = this;
 
+      this.errors = {};
       axios.post('/managers/add', this.newManager).then(function (response) {
         _this4.managers.push(response.data);
+
+        _this4.addNewManager = false;
+
+        _this4.clearInputs();
       })["catch"](function (error) {
-        console.log('Error : ' + error.response.data.errors);
+        _this4.errors = error.response.data.errors;
       });
     },
     clearInputs: function clearInputs() {
       this.newManager = {
         'name': '',
         'plan': '',
-        'percentage': ''
+        'percentage': '',
+        'password': '',
+        'email': ''
       };
     },
     clearEditedManager: function clearEditedManager() {
@@ -39168,6 +39187,27 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: Object.entries(_vm.errors).length !== 0,
+            expression: "Object.entries(errors).length !== 0"
+          }
+        ],
+        staticClass: "alert alert-danger"
+      },
+      _vm._l(_vm.errors, function(error, index) {
+        return _c("div", { key: index }, [
+          _vm._v("\n            " + _vm._s(error[0]) + "\n        ")
+        ])
+      }),
+      0
+    ),
+    _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
       _vm._m(0),
       _vm._v(" "),
@@ -39290,7 +39330,7 @@ var render = function() {
                       attrs: {
                         type: "number",
                         min: "0",
-                        max: "999999",
+                        max: "99",
                         step: "any"
                       },
                       domProps: { value: _vm.editedManager.percentage },
@@ -39421,7 +39461,7 @@ var render = function() {
                       ? _c("span", [
                           _vm._v(
                             "\n                            " +
-                              _vm._s(manager.plainPassword) +
+                              _vm._s(manager.plain_password) +
                               "\n                        "
                           )
                         ])
@@ -39602,65 +39642,12 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.newManager.email,
-                      expression: "newManager.email"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.newManager.email },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.newManager, "email", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.newManager.password,
-                      expression: "newManager.password"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.newManager.password },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.newManager, "password", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
                       value: _vm.newManager.percentage,
                       expression: "newManager.percentage"
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: {
-                    type: "number",
-                    min: "0",
-                    max: "999999",
-                    step: "any"
-                  },
+                  attrs: { type: "number", min: "0", max: "99", step: "any" },
                   domProps: { value: _vm.newManager.percentage },
                   on: {
                     input: function($event) {
@@ -39701,6 +39688,54 @@ var render = function() {
                         return
                       }
                       _vm.$set(_vm.newManager, "plan", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newManager.email,
+                      expression: "newManager.email"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "email", name: "newEmail" },
+                  domProps: { value: _vm.newManager.email },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newManager, "email", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newManager.password,
+                      expression: "newManager.password"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "password", name: "newPassword" },
+                  domProps: { value: _vm.newManager.password },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newManager, "password", $event.target.value)
                     }
                   }
                 })

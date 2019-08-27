@@ -65,30 +65,39 @@ class ClientsController extends Controller
     }
 
     public function addManager(Request $request){
+
         $this->validate($request, [
             'name' => 'required|max:191',
+            'email' => 'required|max:191|email|unique:users',
+            'password' => 'required|max:191|min:6',
             'percentage' => 'required|max:191',
             'plan' => 'required|max:191',
         ]);
 
-        return app(User::class)->createClient([
+
+        $manager = app(User::class)->createClient([
             'user' => [
-                'email' => 'client@moneybox.com',
-                'password' => '123456789',
+                'email' => $request->email,
+                'password' => $request->password,
+                'plain_password' => $request->password,
                 'username' => 'client',
-                'name' => 'client 1',
+                'name' => $request->name,
             ],
             'client' => [
-                'percentage' => 5,
-                'plan' => 500,
+                'percentage' => $request->percentage,
+                'plan' => $request->plan,
                 'currency' => 'UAH',
             ],
         ]);
 
+        $manager['client'] = $manager->client;
+
+        return $manager ;
+
     }
 
     public function deleteManager(Request $request){
-        return Client::destroy($request->manager_id);
+       return User::destroy($request->manager_id);
     }
 
 

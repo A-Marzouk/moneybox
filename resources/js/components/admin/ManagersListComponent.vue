@@ -7,6 +7,12 @@
             </div>
         </div>
 
+        <div class="alert alert-danger" v-show="Object.entries(errors).length !== 0">
+            <div v-for="(error,index) in errors" :key="index">
+                {{error[0]}}
+            </div>
+        </div>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -36,7 +42,7 @@
                             {{manager.client.percentage}} %
                         </div>
                         <div  v-show="isEdited(manager.id)">
-                            <input type="number" min="0" max="999999" step="any" v-model="editedManager.percentage" class="form-control">
+                            <input type="number" min="0" max="99" step="any" v-model="editedManager.percentage" class="form-control">
                         </div>
                     </td>
                     <td>
@@ -55,7 +61,7 @@
                     <td>
                         <div  v-show="!isEdited(manager.id)">
                             <span v-if="isShown(manager.id)">
-                                {{manager.plainPassword}}
+                                {{manager.plain_password}}
                             </span>
                             <span v-else>
                                 <a href="javascript:void(0)" @click="showPassword(manager.id)">
@@ -87,17 +93,18 @@
                     <td>
                         <input type="text" v-model="newManager.name" class="form-control">
                     </td>
+
                     <td>
-                        <input type="text" v-model="newManager.email" class="form-control">
-                    </td>
-                    <td>
-                        <input type="text" v-model="newManager.password" class="form-control">
-                    </td>
-                    <td>
-                        <input type="number" min="0" max="999999" step="any" v-model="newManager.percentage" class="form-control">
+                        <input type="number" min="0" max="99" step="any" v-model="newManager.percentage" class="form-control">
                     </td>
                     <td>
                         <input type="number" min="0" max="999999" step="any" v-model="newManager.plan" class="form-control">
+                    </td>
+                    <td>
+                        <input type="email" name="newEmail" v-model="newManager.email" class="form-control">
+                    </td>
+                    <td>
+                        <input type="password" name="newPassword" v-model="newManager.password" class="form-control">
                     </td>
                     <td class="d-flex">
                         <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addManager">Add</a>
@@ -129,6 +136,7 @@
                 },
                 addNewManager:false,
                 shownPasswordManagerID:'',
+                errors: {},
             }
         },
         methods:{
@@ -142,6 +150,9 @@
                     });
             },
             deleteManager(manager_id){
+                if (!confirm('Are you sure you want to delete this manager ?!')) {
+                    return;
+                }
                 axios.post('/managers/delete',{'manager_id' : manager_id})
                     .then( (response) => {
                         let managers = this.managers;
@@ -179,19 +190,24 @@
                     })
             },
             addManager(){
+                this.errors = {} ;
                 axios.post('/managers/add',this.newManager)
                     .then( (response) => {
-                        this.managers.push(response.data)
+                        this.managers.push(response.data);
+                        this.addNewManager = false;
+                        this.clearInputs();
                     })
                     .catch( (error) => {
-                        console.log('Error : ' + error.response.data.errors)
+                        this.errors = error.response.data.errors;
                     })
             },
             clearInputs(){
                 this.newManager = {
                     'name':'',
                     'plan':'',
-                    'percentage':''
+                    'percentage':'',
+                    'password':'',
+                    'email':''
                 };
             },
             clearEditedManager(){

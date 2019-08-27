@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','plainPassword',
+        'name', 'email', 'password','plain_password',
     ];
 
     /**
@@ -93,6 +93,16 @@ class User extends Authenticatable
     public function client()
     {
         return $this->hasOne(Client::class);
+    }
+
+
+    // this is a recommended way to declare event handlers
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($user) { // before delete() method call this
+            $user->client()->delete();
+        });
     }
 
 }

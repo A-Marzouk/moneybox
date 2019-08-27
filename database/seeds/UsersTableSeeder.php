@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
             [
                 'email' => 'admin@moneybox.com',
                 'password' => 'administrator',
-                'plainPassword' => 'administrator',
+                'plain_password' => 'administrator',
                 'username' => 'admin',
                 'name' => 'admin',
             ],
@@ -29,7 +29,7 @@ class UsersTableSeeder extends Seeder
                 'user' => [
                     'email' => 'client@moneybox.com',
                     'password' => '123456789',
-                    'plainPassword' => '123456789',
+                    'plain_password' => '123456789',
                     'username' => 'client',
                     'name' => 'client 1',
                 ],
