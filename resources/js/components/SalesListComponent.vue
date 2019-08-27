@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="moneyBoxContainer">
         <div class="row">
             <div class="col-md-10">
                 <div class="d-flex justify-content-between">
@@ -61,6 +61,38 @@
                         <td>
                             <input type="number" min="0" max="999999" step="any" v-model="newSale.sell_price"
                                    class="form-control">
+                        </td>
+                        <td>
+                            <input type="number"  min="0" max="999999"  class="form-control" @click="showOtherPaymentsBox" v-model="newSale.totalCost">
+                            <div class="box-popup" v-show="paymentsBox">
+                                <div class="container">
+                                    <h5>Other payments :</h5>
+                                    <div v-for="(cost,index) in newSale.costs" :key="index">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="d-flex">
+                                                    <input type="text" class="form-control" v-model="cost.label">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="number" class="form-control" placeholder="cost" v-model="cost.cost">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2">
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-outline-dark addCostBtn" @click="addNewCost">+</a>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <a href="javascript:void(0)" class="btn btn-primary btn-sm" @click="addOtherPayments">OK</a>
+                                        </div>
+                                        <div>
+                                            Total : {{getTotalCost(newSale)}} UAH
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td class="d-flex">
                             <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addSale">Add</a>
@@ -130,8 +162,24 @@
                     'products_quantity': '',
                     'sell_price': '',
                     'client_id': '',
+                    'costs' : [
+                        {
+                            label:'Transport',
+                            cost:0,
+                        },
+                        {
+                            label:'Storing',
+                            cost:0,
+                        },
+                        {
+                            label:'Other',
+                            cost:0,
+                        }
+                    ],
+                    totalCost : 0
                 },
-                addNewSale: false
+                addNewSale: false,
+                paymentsBox: false,
             }
         },
         watch: {
@@ -204,6 +252,15 @@
                         alert('Error adding new sale.');
                     });
             },
+            showOtherPaymentsBox(){
+                this.paymentsBox = true ;
+            },
+            addNewCost(){
+              this.newSale.costs.push({
+                  label:'New cost',
+                  cost:0
+              })
+            },
             clearInputs() {
                 this.newSale = {
                     'product_id': '',
@@ -255,8 +312,11 @@
                     sum = (sum - (cost.cost * -1));
                 });
 
-                console.log(sum);
                 return sum;
+            },
+            addOtherPayments(){
+                this.newSale.totalCost = this.getTotalCost(this.newSale) ;
+                this.paymentsBox = false;
             }
         },
         mounted() {
@@ -277,5 +337,36 @@
         font-size: 20px;
         font-weight: bold;
     }
+
+    .box-popup{
+        width:250px;
+        background: white;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        position: absolute;
+        margin-top: 5px;
+        margin-bottom: 30px;
+
+        .container{
+            padding:10px;
+        }
+
+        input{
+            height: 30px;
+        }
+
+        .row{
+            padding-top: 5px;
+        }
+    }
+
+    .addCostBtn{
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+    }
+
 
 </style>

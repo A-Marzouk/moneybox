@@ -1832,6 +1832,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1846,9 +1878,21 @@ __webpack_require__.r(__webpack_exports__);
         'product_id': '',
         'products_quantity': '',
         'sell_price': '',
-        'client_id': ''
+        'client_id': '',
+        'costs': [{
+          label: 'Transport',
+          cost: 0
+        }, {
+          label: 'Storing',
+          cost: 0
+        }, {
+          label: 'Other',
+          cost: 0
+        }],
+        totalCost: 0
       },
-      addNewSale: false
+      addNewSale: false,
+      paymentsBox: false
     };
   },
   watch: {
@@ -1920,6 +1964,15 @@ __webpack_require__.r(__webpack_exports__);
         alert('Error adding new sale.');
       });
     },
+    showOtherPaymentsBox: function showOtherPaymentsBox() {
+      this.paymentsBox = true;
+    },
+    addNewCost: function addNewCost() {
+      this.newSale.costs.push({
+        label: 'New cost',
+        cost: 0
+      });
+    },
     clearInputs: function clearInputs() {
       this.newSale = {
         'product_id': '',
@@ -1974,8 +2027,11 @@ __webpack_require__.r(__webpack_exports__);
       $.each(costs, function (i, cost) {
         sum = sum - cost.cost * -1;
       });
-      console.log(sum);
       return sum;
+    },
+    addOtherPayments: function addOtherPayments() {
+      this.newSale.totalCost = this.getTotalCost(this.newSale);
+      this.paymentsBox = false;
     }
   },
   mounted: function mounted() {
@@ -6794,7 +6850,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border-left: 1px solid lightgray;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}", ""]);
+exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border-left: 1px solid lightgray;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}\n.box-popup[data-v-a05a3f04] {\n  width: 250px;\n  background: white;\n  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  position: absolute;\n  margin-top: 5px;\n  margin-bottom: 30px;\n}\n.box-popup .container[data-v-a05a3f04] {\n  padding: 10px;\n}\n.box-popup input[data-v-a05a3f04] {\n  height: 30px;\n}\n.box-popup .row[data-v-a05a3f04] {\n  padding-top: 5px;\n}\n.addCostBtn[data-v-a05a3f04] {\n  height: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 25px;\n}", ""]);
 
 // exports
 
@@ -38302,6 +38358,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "moneyBoxContainer" },
     [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-md-10" }, [
@@ -38537,6 +38594,171 @@ var render = function() {
                           }
                         }
                       })
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.newSale.totalCost,
+                            expression: "newSale.totalCost"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "number", min: "0", max: "999999" },
+                        domProps: { value: _vm.newSale.totalCost },
+                        on: {
+                          click: _vm.showOtherPaymentsBox,
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.newSale,
+                              "totalCost",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.paymentsBox,
+                              expression: "paymentsBox"
+                            }
+                          ],
+                          staticClass: "box-popup"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "container" },
+                            [
+                              _c("h5", [_vm._v("Other payments :")]),
+                              _vm._v(" "),
+                              _vm._l(_vm.newSale.costs, function(cost, index) {
+                                return _c("div", { key: index }, [
+                                  _c("div", { staticClass: "row" }, [
+                                    _c("div", { staticClass: "col-6" }, [
+                                      _c("div", { staticClass: "d-flex" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: cost.label,
+                                              expression: "cost.label"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: { type: "text" },
+                                          domProps: { value: cost.label },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                cost,
+                                                "label",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-6" }, [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: cost.cost,
+                                            expression: "cost.cost"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          type: "number",
+                                          placeholder: "cost"
+                                        },
+                                        domProps: { value: cost.cost },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              cost,
+                                              "cost",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      })
+                                    ])
+                                  ])
+                                ])
+                              }),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "pt-2" }, [
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass:
+                                      "btn btn-sm btn-outline-dark addCostBtn",
+                                    attrs: { href: "javascript:void(0)" },
+                                    on: { click: _vm.addNewCost }
+                                  },
+                                  [_vm._v("+")]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("hr"),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "d-flex justify-content-between align-items-center"
+                                },
+                                [
+                                  _c("div", [
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass: "btn btn-primary btn-sm",
+                                        attrs: { href: "javascript:void(0)" },
+                                        on: { click: _vm.addOtherPayments }
+                                      },
+                                      [_vm._v("OK")]
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", [
+                                    _vm._v(
+                                      "\n                                        Total : " +
+                                        _vm._s(_vm.getTotalCost(_vm.newSale)) +
+                                        " UAH\n                                    "
+                                    )
+                                  ])
+                                ]
+                              )
+                            ],
+                            2
+                          )
+                        ]
+                      )
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "d-flex" }, [
