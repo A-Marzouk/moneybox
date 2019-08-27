@@ -1872,6 +1872,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -6875,7 +6878,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border-left: 1px solid lightgray;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}\n.box-popup[data-v-a05a3f04] {\n  width: 250px;\n  background: white;\n  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  position: absolute;\n  margin-top: 5px;\n  margin-bottom: 30px;\n}\n.box-popup .container[data-v-a05a3f04] {\n  padding: 10px;\n}\n.box-popup input[data-v-a05a3f04] {\n  height: 30px;\n}\n.box-popup .row[data-v-a05a3f04] {\n  padding-top: 5px;\n}\n.addCostBtn[data-v-a05a3f04] {\n  height: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 25px;\n}", ""]);
+exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border: 1px solid lightgray;\n  border-radius: 10px;\n  padding: 20px;\n  margin-top: 30px;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}\n.box-popup[data-v-a05a3f04] {\n  width: 250px;\n  background: white;\n  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  position: absolute;\n  margin-top: 5px;\n  margin-bottom: 30px;\n  z-index: 2;\n}\n.box-popup .container[data-v-a05a3f04] {\n  padding: 10px;\n}\n.box-popup input[data-v-a05a3f04] {\n  height: 30px;\n}\n.box-popup .row[data-v-a05a3f04] {\n  padding-top: 5px;\n}\n.addCostBtn[data-v-a05a3f04] {\n  height: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 25px;\n}", ""]);
 
 // exports
 
@@ -38386,7 +38389,7 @@ var render = function() {
     { staticClass: "moneyBoxContainer" },
     [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-10" }, [
+        _c("div", { staticClass: "col-md-12 border-bottom" }, [
           _c("div", { staticClass: "d-flex justify-content-between" }, [
             _c("h2", { staticClass: "pb-3" }, [_vm._v("Sales list")]),
             _vm._v(" "),
@@ -38850,9 +38853,11 @@ var render = function() {
               2
             )
           ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-2 moneybox" }, [
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-12 moneybox" }, [
           _c("h2", { staticClass: "pb-3" }, [_vm._v("MoneyBox")]),
           _vm._v(" "),
           _c("div", [

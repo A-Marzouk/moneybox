@@ -1,7 +1,7 @@
 <template>
     <div class="moneyBoxContainer">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12 border-bottom">
                 <div class="d-flex justify-content-between">
                     <h2 class="pb-3">Sales list</h2>
                     <div>
@@ -110,7 +110,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-2 moneybox">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 moneybox">
                 <h2 class="pb-3">MoneyBox</h2>
                 <div>
                     Total profit : <span id="totalProfit"> {{totalProfit.toFixed(2)}} </span> {{client.currency}}<br/>
@@ -357,7 +360,10 @@
 
 <style scoped lang="scss">
     .moneybox {
-        border-left: 1px solid lightgray;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        padding:20px;
+        margin-top:30px;
     }
 
     #totalProfit {
@@ -374,6 +380,7 @@
         position: absolute;
         margin-top: 5px;
         margin-bottom: 30px;
+        z-index:2 ;
 
         .container{
             padding:10px;
