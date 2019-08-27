@@ -25,10 +25,11 @@ class ClientsController extends Controller
      */
     public function getManagers()
     {
-       return  User::whereHas('roles', function ($query) {
+       $users =  User::whereHas('roles', function ($query) {
             $query->where('name', '=', 'client');
         })->with('client')->get();
 
+       return $users ;
     }
 
     public function getCurrentClient()

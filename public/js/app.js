@@ -2197,6 +2197,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2214,7 +2221,8 @@ __webpack_require__.r(__webpack_exports__);
         'percentage': '',
         'plan': ''
       },
-      addNewManager: false
+      addNewManager: false,
+      shownPasswordManagerID: ''
     };
   },
   methods: {
@@ -2293,6 +2301,17 @@ __webpack_require__.r(__webpack_exports__);
     },
     isEdited: function isEdited(manager_id) {
       return this.editedManager.id === manager_id;
+    },
+    isShown: function isShown(manager_id) {
+      return this.shownPasswordManagerID === manager_id;
+    },
+    showPassword: function showPassword(manager_id) {
+      var _this5 = this;
+
+      this.shownPasswordManagerID = manager_id;
+      setTimeout(function () {
+        _this5.shownPasswordManagerID = '';
+      }, 3000);
     }
   },
   mounted: function mounted() {
@@ -39398,11 +39417,32 @@ var render = function() {
                     ]
                   },
                   [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(manager.password) +
-                        "\n                    "
-                    )
+                    _vm.isShown(manager.id)
+                      ? _c("span", [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(manager.plainPassword) +
+                              "\n                        "
+                          )
+                        ])
+                      : _c("span", [
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "javascript:void(0)" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.showPassword(manager.id)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                ******\n                            "
+                              )
+                            ]
+                          )
+                        ])
                   ]
                 )
               ]),

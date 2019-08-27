@@ -54,7 +54,14 @@
                     </td>
                     <td>
                         <div  v-show="!isEdited(manager.id)">
-                            {{manager.password}}
+                            <span v-if="isShown(manager.id)">
+                                {{manager.plainPassword}}
+                            </span>
+                            <span v-else>
+                                <a href="javascript:void(0)" @click="showPassword(manager.id)">
+                                    ******
+                                </a>
+                            </span>
                         </div>
                     </td>
                     <td class="d-flex">
@@ -121,6 +128,7 @@
                     'plan': '',
                 },
                 addNewManager:false,
+                shownPasswordManagerID:'',
             }
         },
         methods:{
@@ -196,6 +204,15 @@
             },
             isEdited(manager_id){
                 return this.editedManager.id === manager_id ;
+            },
+            isShown(manager_id){
+                return this.shownPasswordManagerID === manager_id ;
+            },
+            showPassword(manager_id){
+                this.shownPasswordManagerID = manager_id;
+                setTimeout(() => {
+                    this.shownPasswordManagerID = '' ;
+                },3000);
             }
         },
         mounted() {
