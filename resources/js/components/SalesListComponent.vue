@@ -9,6 +9,11 @@
                             sale</a>
                     </div>
                 </div>
+                <div class="alert alert-danger" v-show="Object.entries(errors).length !== 0">
+                    <div v-for="(error,index) in errors" :key="index">
+                        {{error[0]}}
+                    </div>
+                </div>
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -56,7 +61,7 @@
                             </select>
                         </td>
                         <td>
-                            <input type="number" v-model="newSale.products_quantity" class="form-control">
+                            <input type="number" min="0" max="999999" v-model="newSale.products_quantity" class="form-control">
                         </td>
                         <td>
                             <input type="number" min="0" max="999999" step="any" v-model="newSale.sell_price"
@@ -75,7 +80,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-6">
-                                                <input type="number" class="form-control" placeholder="cost" v-model="cost.cost">
+                                                <input type="number" min="0" max="999999" class="form-control" placeholder="cost" v-model="cost.cost">
                                             </div>
                                         </div>
                                     </div>
@@ -114,7 +119,7 @@
                     Difference : <span id="difference"> {{ difference.toFixed(2)}} </span> {{client.currency}}
                 </div>
                 <div class="">
-                    <a href="javascript:void(0)" @click="calculateTotalProfit" class="btn btn-outline-dark btn-block">Calculate</a>
+                    <a href="javascript:void(0)" @click="calculateTotalProfit" class="mt-3 btn btn-outline-dark btn-block">Calculate</a>
                 </div>
             </div>
 
@@ -183,6 +188,7 @@
                 },
                 addNewSale: false,
                 paymentsBox: false,
+                errors: {},
             }
         },
         watch: {
@@ -242,6 +248,7 @@
                 this.animateValue('totalProfit', 0, sumProfit, 30);
             },
             addSale() {
+                this.errors = {} ;
                 this.newSale.client_id = this.client.id;
                 axios.post('/sales/add', this.newSale)
                     .then((response) => {
@@ -251,7 +258,8 @@
                         this.clearInputs();
                     })
                     .catch((error) => {
-                        alert('Error adding new sale.');
+                        console.log(error.response.data.errors);
+                        this.errors = error.response.data.errors;
                     });
             },
             showOtherPaymentsBox(){

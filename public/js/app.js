@@ -1867,6 +1867,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1895,7 +1900,8 @@ __webpack_require__.r(__webpack_exports__);
         totalCost: 0
       },
       addNewSale: false,
-      paymentsBox: false
+      paymentsBox: false,
+      errors: {}
     };
   },
   watch: {
@@ -1955,6 +1961,7 @@ __webpack_require__.r(__webpack_exports__);
     addSale: function addSale() {
       var _this5 = this;
 
+      this.errors = {};
       this.newSale.client_id = this.client.id;
       axios.post('/sales/add', this.newSale).then(function (response) {
         _this5.sales.push(response.data);
@@ -1965,7 +1972,8 @@ __webpack_require__.r(__webpack_exports__);
 
         _this5.clearInputs();
       })["catch"](function (error) {
-        alert('Error adding new sale.');
+        console.log(error.response.data.errors);
+        _this5.errors = error.response.data.errors;
       });
     },
     showOtherPaymentsBox: function showOtherPaymentsBox() {
@@ -38399,6 +38407,31 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: Object.entries(_vm.errors).length !== 0,
+                  expression: "Object.entries(errors).length !== 0"
+                }
+              ],
+              staticClass: "alert alert-danger"
+            },
+            _vm._l(_vm.errors, function(error, index) {
+              return _c("div", { key: index }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(error[0]) +
+                    "\n                "
+                )
+              ])
+            }),
+            0
+          ),
+          _vm._v(" "),
           _c("table", { staticClass: "table table-striped" }, [
             _vm._m(0),
             _vm._v(" "),
@@ -38563,7 +38596,7 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "999999" },
                         domProps: { value: _vm.newSale.products_quantity },
                         on: {
                           input: function($event) {
@@ -38707,6 +38740,8 @@ var render = function() {
                                         staticClass: "form-control",
                                         attrs: {
                                           type: "number",
+                                          min: "0",
+                                          max: "999999",
                                           placeholder: "cost"
                                         },
                                         domProps: { value: cost.cost },
@@ -38847,7 +38882,7 @@ var render = function() {
             _c(
               "a",
               {
-                staticClass: "btn btn-outline-dark btn-block",
+                staticClass: "mt-3 btn btn-outline-dark btn-block",
                 attrs: { href: "javascript:void(0)" },
                 on: { click: _vm.calculateTotalProfit }
               },
