@@ -119,7 +119,10 @@
                     Total profit : <span id="totalProfit"> {{totalProfit.toFixed(2)}} </span> {{client.currency}}<br/>
                     <br/>
                     Plan : {{client.plan}} {{client.currency}}<br/>
-                    Difference : <span id="difference"> {{ difference.toFixed(2)}} </span> {{client.currency}}
+                    Difference : {{ difference.toFixed(2)}} {{client.currency}} <br/>
+                    <span v-show="abovePlan > 0 ">
+                        Above plan : {{ abovePlan.toFixed(2)}} {{client.currency}}
+                    </span>
                 </div>
                 <div class="">
                     <a href="javascript:void(0)" @click="calculateTotalProfit" class="mt-3 btn btn-outline-dark btn-block">Calculate</a>
@@ -167,6 +170,7 @@
                 client: {},
                 totalProfit: 1,
                 difference: 0,
+                abovePlan: 0,
                 ready: 0,
                 newSale: {
                     'product_id': '',
@@ -248,6 +252,13 @@
 
                 this.totalProfit = sumProfit;
                 this.difference = this.client.plan - this.totalProfit;
+
+                if(this.totalProfit > this.client.plan){ // profit is higher than target
+                    this.abovePlan  = this.totalProfit - this.client.plan ;
+                    this.difference = 0 ;
+                }else{
+                    this.abovePlan = 0 ;
+                }
                 this.animateValue('totalProfit', 0, sumProfit, 30);
             },
             addSale() {

@@ -1875,6 +1875,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1884,6 +1887,7 @@ __webpack_require__.r(__webpack_exports__);
       client: {},
       totalProfit: 1,
       difference: 0,
+      abovePlan: 0,
       ready: 0,
       newSale: {
         'product_id': '',
@@ -1959,6 +1963,15 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.totalProfit = sumProfit;
       this.difference = this.client.plan - this.totalProfit;
+
+      if (this.totalProfit > this.client.plan) {
+        // profit is higher than target
+        this.abovePlan = this.totalProfit - this.client.plan;
+        this.difference = 0;
+      } else {
+        this.abovePlan = 0;
+      }
+
       this.animateValue('totalProfit', 0, sumProfit, 30);
     },
     addSale: function addSale() {
@@ -38876,11 +38889,37 @@ var render = function() {
                 _vm._s(_vm.client.currency)
             ),
             _c("br"),
-            _vm._v("\n                Difference : "),
-            _c("span", { attrs: { id: "difference" } }, [
-              _vm._v(" " + _vm._s(_vm.difference.toFixed(2)) + " ")
-            ]),
-            _vm._v(" " + _vm._s(_vm.client.currency) + "\n            ")
+            _vm._v(
+              "\n                Difference : " +
+                _vm._s(_vm.difference.toFixed(2)) +
+                " " +
+                _vm._s(_vm.client.currency) +
+                " "
+            ),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.abovePlan > 0,
+                    expression: "abovePlan > 0 "
+                  }
+                ]
+              },
+              [
+                _vm._v(
+                  "\n                    Above plan : " +
+                    _vm._s(_vm.abovePlan.toFixed(2)) +
+                    " " +
+                    _vm._s(_vm.client.currency) +
+                    "\n                "
+                )
+              ]
+            )
           ]),
           _vm._v(" "),
           _c("div", {}, [
