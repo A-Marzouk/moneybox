@@ -2,15 +2,20 @@
     <div class="container pb-5">
         <div class="d-flex justify-content-between">
             <h2 class="pb-3">Managers list</h2>
+            <div>
+                <a href="javascript:void(0)" @click="addNewManager = true" class="btn btn-outline-dark mr-3">Add Manager</a>
+            </div>
         </div>
+
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Name</th>
                     <th>Percentage</th>
-                    <th>Total products sold</th>
                     <th>Plan</th>
+                    <th>Email</th>
+                    <th>Password</th>
                     <th>Actions</th>
                 </tr>
 
@@ -34,13 +39,22 @@
                             <input type="number" min="0" max="999999" step="any" v-model="editedManager.percentage" class="form-control">
                         </div>
                     </td>
-                    <td> COMING SOON </td>
                     <td>
                         <div  v-show="!isEdited(manager.id)">
                             {{manager.client.plan}}
                         </div>
                         <div  v-show="isEdited(manager.id)">
                             <input type="number" min="0" max="999999" step="any" v-model="editedManager.plan" class="form-control">
+                        </div>
+                    </td>
+                    <td>
+                        <div  v-show="!isEdited(manager.id)">
+                            {{manager.email}}
+                        </div>
+                    </td>
+                    <td>
+                        <div  v-show="!isEdited(manager.id)">
+                            {{manager.password}}
                         </div>
                     </td>
                     <td class="d-flex">
@@ -58,6 +72,31 @@
                         </a>
                     </td>
                 </tr>
+                <tr v-show="addNewManager">
+                    <td>
+                        {{this.managers.length + 1}}
+                    </td>
+
+                    <td>
+                        <input type="text" v-model="newManager.name" class="form-control">
+                    </td>
+                    <td>
+                        <input type="text" v-model="newManager.email" class="form-control">
+                    </td>
+                    <td>
+                        <input type="text" v-model="newManager.password" class="form-control">
+                    </td>
+                    <td>
+                        <input type="number" min="0" max="999999" step="any" v-model="newManager.percentage" class="form-control">
+                    </td>
+                    <td>
+                        <input type="number" min="0" max="999999" step="any" v-model="newManager.plan" class="form-control">
+                    </td>
+                    <td class="d-flex">
+                        <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addManager">Add</a>
+                        <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewManager = false ">Cancel</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -68,13 +107,20 @@
         data(){
             return{
                 managers:[],
-                newManager:{},
+                newManager:{
+                    'name': '',
+                    'email': '',
+                    'password': '',
+                    'percentage': '',
+                    'plan': '',
+                },
                 editedManager:{
                     'id': '',
                     'name': '',
                     'percentage': '',
                     'plan': '',
-                }
+                },
+                addNewManager:false,
             }
         },
         methods:{
@@ -121,7 +167,16 @@
                         this.clearEditedManager();
                     })
                     .catch( (error) => {
-                        console.log('Error : ' + error)
+                        console.log('Error : ' + error.response.data.errors)
+                    })
+            },
+            addManager(){
+                axios.post('/managers/add',this.newManager)
+                    .then( (response) => {
+                        this.managers.push(response.data)
+                    })
+                    .catch( (error) => {
+                        console.log('Error : ' + error.response.data.errors)
                     })
             },
             clearInputs(){

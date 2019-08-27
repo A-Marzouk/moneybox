@@ -4,7 +4,6 @@
             <h2 class="pb-3">Products list</h2>
             <div>
                 <a href="javascript:void(0)" @click="addNewProduct = true" class="btn btn-outline-dark mr-3">Add product</a>
-                <a href="javascript:void(0)" class="btn btn-outline-dark">Import from Excel</a>
             </div>
         </div>
         <table class="table table-striped">
