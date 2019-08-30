@@ -27,7 +27,7 @@ class SalesController extends Controller
         ]);
 
         // sell price should be bigger than buy_price
-        $product = Product::find($request->product_id)->first();
+        $product = Product::where('id',$request->product_id)->first();
         if($request->sell_price < $product->buy_price){
             $error = \Illuminate\Validation\ValidationException::withMessages([
                 'ErrorInPrice' => ['Sell price can not be less than buy price.'],
