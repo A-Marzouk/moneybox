@@ -2,8 +2,13 @@
     <div class="container">
         <div class="d-flex justify-content-between">
             <h2 class="pb-3">Products list</h2>
-            <div>
-                <a href="javascript:void(0)" @click="addNewProduct = true" class="btn btn-outline-dark mr-3">Add product</a>
+            <div class="d-flex">
+                <div>
+                    <a href="javascript:void(0)" @click="addNewProduct = true" class="btn btn-outline-dark mr-3">Add product</a>
+                </div>
+                <div>
+                    <a href="/admin/excel/actions" class="btn btn-outline-dark mr-3">Excel</a>
+                </div>
             </div>
         </div>
         <table class="table table-striped">
@@ -11,6 +16,8 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>date</th>
+                    <th>supplier</th>
                     <th>Buy price</th>
                     <th>Actions</th>
                 </tr>
@@ -24,6 +31,22 @@
                         </div>
                         <div v-show="isEdited(product.id)">
                             <input type="text" v-model="editedProduct.name" class="form-control">
+                        </div>
+                    </td>
+                    <td>
+                        <div v-show="!isEdited(product.id)">
+                            {{product.date}}
+                        </div>
+                        <div v-show="isEdited(product.id)">
+                            <input type="date" v-model="editedProduct.date" class="form-control">
+                        </div>
+                    </td>
+                    <td>
+                        <div v-show="!isEdited(product.id)">
+                            {{product.supplier}}
+                        </div>
+                        <div v-show="isEdited(product.id)">
+                            <input type="text" v-model="editedProduct.supplier" class="form-control">
                         </div>
                     </td>
                     <td>
@@ -58,6 +81,12 @@
                         <input type="text" v-model="newProduct.name" class="form-control">
                     </td>
                     <td>
+                        <input type="date" v-model="newProduct.date" class="form-control">
+                    </td>
+                    <td>
+                        <input type="text" v-model="newProduct.supplier" class="form-control">
+                    </td>
+                    <td>
                         <input type="number" min="0" max="999999" step="any" v-model="newProduct.buy_price" class="form-control">
                     </td>
                     <td class="d-flex">
@@ -77,13 +106,17 @@
                 products:[],
                 newProduct:{
                     'name':'',
-                    'buy_price':''
+                    'buy_price':'',
+                    'date':'',
+                    'supplier':'',
                 },
                 addNewProduct:false,
                 editedProduct:{
                     'id':'',
                     'name':'',
-                    'buy_price':''
+                    'buy_price':'',
+                    'date':'',
+                    'supplier':''
                 }
             }
         },
@@ -112,6 +145,9 @@
                     })
             },
             deleteProduct(product_id){
+                if (!confirm('Are you sure you want to delete this product ?')) {
+                    return;
+                }
                 axios.post('/products/delete',{'product_id' : product_id})
                     .then( (response) => {
                         let products = this.products;
@@ -130,6 +166,8 @@
                 this.editedProduct.id = product.id;
                 this.editedProduct.name = product.name;
                 this.editedProduct.buy_price = product.buy_price;
+                this.editedProduct.date = product.date;
+                this.editedProduct.supplier = product.supplier;
             },
             saveEditedProduct(product){
                 axios.post('/products/update',product)
@@ -157,7 +195,9 @@
                 this.editedProduct = {
                     'id' : '',
                     'name':'',
-                    'buy_price':''
+                    'buy_price':'',
+                    'date':'',
+                    'supplier':'',
                 };
             },
             isEdited(product_id){

@@ -2051,7 +2051,7 @@ __webpack_require__.r(__webpack_exports__);
 
         if (current >= end) {
           clearInterval(timer);
-          obj.innerHTML = _this7.totalProfit;
+          obj.innerHTML = _this7.totalProfit.toFixed(2);
         }
       }, stepTime);
     },
@@ -2421,19 +2421,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       products: [],
       newProduct: {
         'name': '',
-        'buy_price': ''
+        'buy_price': '',
+        'date': '',
+        'supplier': ''
       },
       addNewProduct: false,
       editedProduct: {
         'id': '',
         'name': '',
-        'buy_price': ''
+        'buy_price': '',
+        'date': '',
+        'supplier': ''
       }
     };
   },
@@ -2466,6 +2499,10 @@ __webpack_require__.r(__webpack_exports__);
     deleteProduct: function deleteProduct(product_id) {
       var _this3 = this;
 
+      if (!confirm('Are you sure you want to delete this product ?')) {
+        return;
+      }
+
       axios.post('/products/delete', {
         'product_id': product_id
       }).then(function (response) {
@@ -2484,6 +2521,8 @@ __webpack_require__.r(__webpack_exports__);
       this.editedProduct.id = product.id;
       this.editedProduct.name = product.name;
       this.editedProduct.buy_price = product.buy_price;
+      this.editedProduct.date = product.date;
+      this.editedProduct.supplier = product.supplier;
     },
     saveEditedProduct: function saveEditedProduct(product) {
       var _this4 = this;
@@ -2512,7 +2551,9 @@ __webpack_require__.r(__webpack_exports__);
       this.editedProduct = {
         'id': '',
         'name': '',
-        'buy_price': ''
+        'buy_price': '',
+        'date': '',
+        'supplier': ''
       };
     },
     isEdited: function isEdited(product_id) {
@@ -39823,25 +39864,29 @@ var render = function() {
     _c("div", { staticClass: "d-flex justify-content-between" }, [
       _c("h2", { staticClass: "pb-3" }, [_vm._v("Products list")]),
       _vm._v(" "),
-      _c("div", [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-outline-dark mr-3",
-            attrs: { href: "javascript:void(0)" },
-            on: {
-              click: function($event) {
-                _vm.addNewProduct = true
+      _c("div", { staticClass: "d-flex" }, [
+        _c("div", [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-outline-dark mr-3",
+              attrs: { href: "javascript:void(0)" },
+              on: {
+                click: function($event) {
+                  _vm.addNewProduct = true
+                }
               }
-            }
-          },
-          [_vm._v("Add product")]
-        )
+            },
+            [_vm._v("Add product")]
+          )
+        ]),
+        _vm._v(" "),
+        _vm._m(0)
       ])
     ]),
     _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
-      _vm._m(0),
+      _vm._m(1),
       _vm._v(" "),
       _c(
         "tbody",
@@ -39905,6 +39950,134 @@ var render = function() {
                           _vm.$set(
                             _vm.editedProduct,
                             "name",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(product.date) +
+                        "\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editedProduct.date,
+                          expression: "editedProduct.date"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "date" },
+                      domProps: { value: _vm.editedProduct.date },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editedProduct,
+                            "date",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(product.supplier) +
+                        "\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editedProduct.supplier,
+                          expression: "editedProduct.supplier"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.editedProduct.supplier },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editedProduct,
+                            "supplier",
                             $event.target.value
                           )
                         }
@@ -40138,6 +40311,54 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
+                      value: _vm.newProduct.date,
+                      expression: "newProduct.date"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "date" },
+                  domProps: { value: _vm.newProduct.date },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newProduct, "date", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newProduct.supplier,
+                      expression: "newProduct.supplier"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.newProduct.supplier },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newProduct, "supplier", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
                       value: _vm.newProduct.buy_price,
                       expression: "newProduct.buy_price"
                     }
@@ -40199,11 +40420,30 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-outline-dark mr-3",
+          attrs: { href: "/admin/excel/actions" }
+        },
+        [_vm._v("Excel")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
         _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("date")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("supplier")]),
         _vm._v(" "),
         _c("th", [_vm._v("Buy price")]),
         _vm._v(" "),

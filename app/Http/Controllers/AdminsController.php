@@ -26,4 +26,7 @@ class AdminsController extends Controller
         return view('admin.dashboard');
     }
 
+    public function showExcelActionPage(){
+        return view('admin.excel_actions');
+    }
 }

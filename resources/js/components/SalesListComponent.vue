@@ -335,7 +335,7 @@
                     obj.innerHTML = current;
                     if (current >= end) {
                         clearInterval(timer);
-                        obj.innerHTML = this.totalProfit;
+                        obj.innerHTML = this.totalProfit.toFixed(2);
                     }
                 }, stepTime);
             },

@@ -18,6 +18,8 @@ class CreateProductsTable extends Migration
             $table->string('name')->nullable();
             $table->string('sell_price')->nullable();
             $table->string('buy_price')->nullable();
+            $table->date('date')->nullable();
+            $table->string('supplier')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -40,7 +40,11 @@ Route::post('/managers/add','ClientsController@addManager')->name('add.manager')
 Route::post('/managers/update','ClientsController@updateManager')->name('update.manager');
 Route::post('/managers/delete','ClientsController@deleteManager')->name('delete.manager');
 
+// excel
 
+Route::get('/admin/excel/actions', 'AdminsController@showExcelActionPage')->name('admin.excel');
+Route::get('/admin/export/products', 'ProductsController@export')->name('admin.products.export');
+Route::post('/admin/import/products', 'ProductsController@import')->name('admin.products.import');
 
 // api
 Route::get('api/get-products','ProductsController@getProducts')->name('get.products');

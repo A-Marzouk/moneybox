@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\classes\Notification;
+use App\Exports\ProductsExport;
 use App\Product;
 use Illuminate\Http\Request;
+
+
+use App\classes\Upload;
+use App\Imports\ProductsImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductsController extends Controller
 {
@@ -31,6 +38,8 @@ class ProductsController extends Controller
         $this->validate($request, [
             'name' => 'required|max:191',
             'buy_price' => 'required|max:191',
+            'date' => 'max:191',
+            'supplier' => 'max:191',
         ]);
 
         return Product::create($request->all());
@@ -46,7 +55,9 @@ class ProductsController extends Controller
         $product->update(
             [
                 'name' => $request->name,
-                'buy_price' => $request->buy_price
+                'buy_price' => $request->buy_price,
+                'date' => $request->date,
+                'supplier' => $request->supplier,
             ]
         );
 
@@ -57,6 +68,24 @@ class ProductsController extends Controller
     public function deleteProduct(Request $request){
         return Product::destroy($request->product_id);
     }
+
+
+    public function export()
+    {
+        Notification::productsAction('Exported');
+        return Excel::download(new ProductsExport, 'products.xlsx');
+    }
+    public function import(Request $request)
+    {
+
+        $result  = Upload::productsSheet('productsExcelSheet',date(time()) );
+        $filePth = $result['path'];
+
+        Excel::import(new ProductsImport, $filePth);
+        Notification::productsAction('Imported');
+        return redirect(route('admin.dashboard'));
+    }
+
 
 
 }
