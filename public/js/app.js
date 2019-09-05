@@ -39867,7 +39867,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "d-flex justify-content-between" }, [
-      _c("h2", { staticClass: "pb-3" }, [_vm._v("Список продуктов")]),
+      _c("h2", { staticClass: "pb-3" }, [_vm._v("Список товаров")]),
       _vm._v(" "),
       _c("div", { staticClass: "d-flex" }, [
         _c("div", [

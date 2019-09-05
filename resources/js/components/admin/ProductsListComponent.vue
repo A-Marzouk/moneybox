@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="d-flex justify-content-between">
-            <h2 class="pb-3">Список продуктов</h2>
+            <h2 class="pb-3">Список товаров</h2>
             <div class="d-flex">
                 <div>
                     <a href="javascript:void(0)" @click="addNewProduct = true" class="btn btn-outline-dark mr-3">Добавить товар</a>
