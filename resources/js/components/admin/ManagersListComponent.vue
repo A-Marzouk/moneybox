@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between">
             <h2 class="pb-3">Managers list</h2>
             <div>
-                <a href="javascript:void(0)" @click="addNewManager = true" class="btn btn-outline-dark mr-3">Add Manager</a>
+                <a href="javascript:void(0)" @click="addNewManager = true" class="btn btn-outline-dark mr-3">Добавить менеджер</a>
             </div>
         </div>
 
@@ -17,12 +17,12 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Percentage</th>
-                    <th>Plan</th>
-                    <th>Email</th>
-                    <th>Password</th>
-                    <th>Actions</th>
+                    <th>Имя</th>
+                    <th>Процент</th>
+                    <th>План</th>
+                    <th>Эл. адрес</th>
+                    <th>Пароль</th>
+                    <th>Действия</th>
                 </tr>
 
             </thead>
@@ -72,16 +72,16 @@
                     </td>
                     <td class="d-flex">
                         <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm mr-2" v-show="!isEdited(manager.id)" @click="deleteManager(manager.id)">
-                            Del
+                            Удалять
                         </a>
                         <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" v-show="!isEdited(manager.id)" @click="editManager(manager)">
-                            Edit
+                            Редактировать
                         </a>
                         <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm mr-2" v-show="isEdited(manager.id)"  @click="clearEditedManager">
-                            Cancel
+                            Отменить
                         </a>
                         <a href="javascript:void(0)" class="btn btn-outline-success btn-sm" v-show="isEdited(manager.id)"  @click="saveEditedManager(editedManager)">
-                            Save
+                            Сохранить
                         </a>
                     </td>
                 </tr>

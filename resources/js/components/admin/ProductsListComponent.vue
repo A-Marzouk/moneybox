@@ -1,13 +1,13 @@
 <template>
     <div class="container">
         <div class="d-flex justify-content-between">
-            <h2 class="pb-3">Products list</h2>
+            <h2 class="pb-3">Список продуктов</h2>
             <div class="d-flex">
                 <div>
-                    <a href="javascript:void(0)" @click="addNewProduct = true" class="btn btn-outline-dark mr-3">Add product</a>
+                    <a href="javascript:void(0)" @click="addNewProduct = true" class="btn btn-outline-dark mr-3">Добавить товар</a>
                 </div>
                 <div>
-                    <a href="/admin/excel/actions" class="btn btn-outline-dark mr-3">Excel</a>
+                    <a href="/admin/excel/actions" class="btn btn-outline-dark mr-3">Эксел</a>
                 </div>
             </div>
         </div>
@@ -15,11 +15,11 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>date</th>
-                    <th>supplier</th>
-                    <th>Buy price</th>
-                    <th>Actions</th>
+                    <th>Название</th>
+                    <th>Дата</th>
+                    <th>Поставщик</th>
+                    <th>Цена покупки</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,16 +59,16 @@
                     </td>
                     <td>
                         <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" v-show="!isEdited(product.id)" @click="deleteProduct(product.id)">
-                            Del
+                            Удалять
                         </a>
                         <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" v-show="!isEdited(product.id)" @click="editProduct(product)">
-                            Edit
+                            Редактировать
                         </a>
                         <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" v-show="isEdited(product.id)"  @click="clearEditedProduct">
-                            Cancel
+                            Отменить
                         </a>
                         <a href="javascript:void(0)" class="btn btn-outline-success btn-sm" v-show="isEdited(product.id)"  @click="saveEditedProduct(editedProduct)">
-                            Save
+                            Сохранить
                         </a>
                     </td>
                 </tr>

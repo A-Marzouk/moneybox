@@ -1878,6 +1878,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1895,13 +1896,13 @@ __webpack_require__.r(__webpack_exports__);
         'sell_price': '',
         'client_id': '',
         'costs': [{
-          label: 'Transport',
+          label: 'Транспорт',
           cost: 0
         }, {
-          label: 'Storing',
+          label: 'Склад',
           cost: 0
         }, {
-          label: 'Other',
+          label: 'Другой',
           cost: 0
         }],
         totalCost: 0
@@ -38537,7 +38538,7 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-md-12 border-bottom" }, [
           _c("div", { staticClass: "d-flex justify-content-between" }, [
-            _c("h2", { staticClass: "pb-3" }, [_vm._v("Sales list")]),
+            _c("h2", { staticClass: "pb-3" }, [_vm._v("Список продаж")]),
             _vm._v(" "),
             _c("div", [
               _c(
@@ -38551,7 +38552,11 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("Add\n                        sale")]
+                [
+                  _vm._v(
+                    "\n                        Добавить продажу\n                    "
+                  )
+                ]
               )
             ])
           ]),
@@ -38841,7 +38846,7 @@ var render = function() {
                             "div",
                             { staticClass: "container" },
                             [
-                              _c("h5", [_vm._v("Other payments :")]),
+                              _c("h5", [_vm._v("Другие расходы :")]),
                               _vm._v(" "),
                               _vm._l(_vm.newSale.costs, function(cost, index) {
                                 return _c("div", { key: index }, [
@@ -38948,7 +38953,7 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("div", [
                                     _vm._v(
-                                      "\n                                        Total : " +
+                                      "\n                                        Общая сумма : " +
                                         _vm._s(_vm.getTotalCost(_vm.newSale)) +
                                         " UAH\n                                    "
                                     )
@@ -38976,7 +38981,7 @@ var render = function() {
                           attrs: { href: "javascript:void(0)" },
                           on: { click: _vm.addSale }
                         },
-                        [_vm._v("Add")]
+                        [_vm._v("Добавить")]
                       ),
                       _vm._v(" "),
                       _c(
@@ -38990,7 +38995,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("Cancel")]
+                        [_vm._v("Отменить")]
                       )
                     ])
                   ]
@@ -39004,10 +39009,10 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-md-12 moneybox" }, [
-          _c("h2", { staticClass: "pb-3" }, [_vm._v("MoneyBox")]),
+          _c("h2", { staticClass: "pb-3" }, [_vm._v("Копилка")]),
           _vm._v(" "),
           _c("div", [
-            _vm._v("\n                Total profit : "),
+            _vm._v("\n                Общая прибыль : "),
             _c("span", { attrs: { id: "totalProfit" } }, [
               _vm._v(" " + _vm._s(_vm.totalProfit.toFixed(2)) + " ")
             ]),
@@ -39016,14 +39021,14 @@ var render = function() {
             _vm._v(" "),
             _c("br"),
             _vm._v(
-              "\n                Plan : " +
+              "\n                План : " +
                 _vm._s(_vm.client.plan) +
                 " " +
                 _vm._s(_vm.client.currency)
             ),
             _c("br"),
             _vm._v(
-              "\n                Difference : " +
+              "\n                Разница : " +
                 _vm._s(_vm.difference.toFixed(2)) +
                 " " +
                 _vm._s(_vm.client.currency) +
@@ -39045,7 +39050,7 @@ var render = function() {
               },
               [
                 _vm._v(
-                  "\n                    Above plan : " +
+                  "\n                    Сверху плана : " +
                     _vm._s(_vm.abovePlan.toFixed(2)) +
                     " " +
                     _vm._s(_vm.client.currency) +
@@ -39063,7 +39068,7 @@ var render = function() {
                 attrs: { href: "javascript:void(0)" },
                 on: { click: _vm.calculateTotalProfit }
               },
-              [_vm._v("Calculate")]
+              [_vm._v("Вычислять")]
             )
           ])
         ])
@@ -39131,17 +39136,17 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Product")]),
+        _c("th", [_vm._v("Товар")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Quantity")]),
+        _c("th", [_vm._v("Количество")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Sell Price")]),
+        _c("th", [_vm._v("Цена продажи")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Other payments")]),
+        _c("th", [_vm._v("Другие расходы")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Bonus")]),
+        _c("th", [_vm._v("Бонус")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Actions")])
+        _c("th", [_vm._v("Действия")])
       ])
     ])
   },
@@ -39153,7 +39158,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Other costs")]
+        [_vm._v("Другие расходы")]
       ),
       _vm._v(" "),
       _c(
@@ -39223,7 +39228,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v("Add Manager")]
+          [_vm._v("Добавить менеджер")]
         )
       ])
     ]),
@@ -39550,7 +39555,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        Del\n                    "
+                      "\n                        Удалять\n                    "
                     )
                   ]
                 ),
@@ -39576,7 +39581,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        Edit\n                    "
+                      "\n                        Редактировать\n                    "
                     )
                   ]
                 ),
@@ -39598,7 +39603,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        Cancel\n                    "
+                      "\n                        Отменить\n                    "
                     )
                   ]
                 ),
@@ -39624,7 +39629,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        Save\n                    "
+                      "\n                        Сохранить\n                    "
                     )
                   ]
                 )
@@ -39824,17 +39829,17 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Name")]),
+        _c("th", [_vm._v("Имя")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Percentage")]),
+        _c("th", [_vm._v("Процент")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Plan")]),
+        _c("th", [_vm._v("План")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Email")]),
+        _c("th", [_vm._v("Эл. адрес")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Password")]),
+        _c("th", [_vm._v("Пароль")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Actions")])
+        _c("th", [_vm._v("Действия")])
       ])
     ])
   }
@@ -39862,7 +39867,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "d-flex justify-content-between" }, [
-      _c("h2", { staticClass: "pb-3" }, [_vm._v("Products list")]),
+      _c("h2", { staticClass: "pb-3" }, [_vm._v("Список продуктов")]),
       _vm._v(" "),
       _c("div", { staticClass: "d-flex" }, [
         _c("div", [
@@ -39877,7 +39882,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("Add product")]
+            [_vm._v("Добавить товар")]
           )
         ]),
         _vm._v(" "),
@@ -40178,7 +40183,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        Del\n                    "
+                      "\n                        Удалять\n                    "
                     )
                   ]
                 ),
@@ -40204,7 +40209,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        Edit\n                    "
+                      "\n                        Редактировать\n                    "
                     )
                   ]
                 ),
@@ -40226,7 +40231,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        Cancel\n                    "
+                      "\n                        Отменить\n                    "
                     )
                   ]
                 ),
@@ -40252,7 +40257,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                        Save\n                    "
+                      "\n                        Сохранить\n                    "
                     )
                   ]
                 )
@@ -40427,7 +40432,7 @@ var staticRenderFns = [
           staticClass: "btn btn-outline-dark mr-3",
           attrs: { href: "/admin/excel/actions" }
         },
-        [_vm._v("Excel")]
+        [_vm._v("Эксел")]
       )
     ])
   },
@@ -40439,15 +40444,15 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Name")]),
+        _c("th", [_vm._v("Название")]),
         _vm._v(" "),
-        _c("th", [_vm._v("date")]),
+        _c("th", [_vm._v("Дата")]),
         _vm._v(" "),
-        _c("th", [_vm._v("supplier")]),
+        _c("th", [_vm._v("Поставщик")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Buy price")]),
+        _c("th", [_vm._v("Цена покупки")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Actions")])
+        _c("th", [_vm._v("Действия")])
       ])
     ])
   }

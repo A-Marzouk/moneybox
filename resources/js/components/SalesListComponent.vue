@@ -3,10 +3,11 @@
         <div class="row">
             <div class="col-md-12 border-bottom">
                 <div class="d-flex justify-content-between">
-                    <h2 class="pb-3">Sales list</h2>
+                    <h2 class="pb-3">Список продаж</h2>
                     <div>
-                        <a href="javascript:void(0)" @click="addNewSale = true" class="btn btn-outline-dark">Add
-                            sale</a>
+                        <a href="javascript:void(0)" @click="addNewSale = true" class="btn btn-outline-dark">
+                            Добавить продажу
+                        </a>
                     </div>
                 </div>
                 <div class="alert alert-danger" v-show="Object.entries(errors).length !== 0">
@@ -18,12 +19,12 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Sell Price</th>
-                        <th>Other payments</th>
-                        <th>Bonus</th>
-                        <th>Actions</th>
+                        <th>Товар</th>
+                        <th>Количество</th>
+                        <th>Цена продажи</th>
+                        <th>Другие расходы</th>
+                        <th>Бонус</th>
+                        <th>Действия</th>
 
                     </tr>
                     </thead>
@@ -71,7 +72,7 @@
                             <input type="number"  min="0" max="999999"  class="form-control" @click="showOtherPaymentsBox" v-model="newSale.totalCost">
                             <div class="box-popup" v-show="paymentsBox">
                                 <div class="container">
-                                    <h5>Other payments :</h5>
+                                    <h5>Другие расходы :</h5>
                                     <div v-for="(cost,index) in newSale.costs" :key="index">
                                         <div class="row">
                                             <div class="col-6">
@@ -93,7 +94,7 @@
                                             <a href="javascript:void(0)" class="btn btn-primary btn-sm" @click="addOtherPayments">OK</a>
                                         </div>
                                         <div>
-                                            Total : {{getTotalCost(newSale)}} UAH
+                                            Общая сумма : {{getTotalCost(newSale)}} UAH
                                         </div>
                                     </div>
                                 </div>
@@ -103,8 +104,8 @@
                             0
                         </td>
                         <td class="d-flex">
-                            <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addSale">Add</a>
-                            <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewSale = false ">Cancel</a>
+                            <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addSale">Добавить</a>
+                            <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewSale = false ">Отменить</a>
                         </td>
                     </tr>
                     </tbody>
@@ -114,18 +115,18 @@
 
         <div class="row">
             <div class="col-md-12 moneybox">
-                <h2 class="pb-3">MoneyBox</h2>
+                <h2 class="pb-3">Копилка</h2>
                 <div>
-                    Total profit : <span id="totalProfit"> {{totalProfit.toFixed(2)}} </span> {{client.currency}}<br/>
+                    Общая прибыль : <span id="totalProfit"> {{totalProfit.toFixed(2)}} </span> {{client.currency}}<br/>
                     <br/>
-                    Plan : {{client.plan}} {{client.currency}}<br/>
-                    Difference : {{ difference.toFixed(2)}} {{client.currency}} <br/>
+                    План : {{client.plan}} {{client.currency}}<br/>
+                    Разница : {{ difference.toFixed(2)}} {{client.currency}} <br/>
                     <span v-show="abovePlan > 0 ">
-                        Above plan : {{ abovePlan.toFixed(2)}} {{client.currency}}
+                        Сверху плана : {{ abovePlan.toFixed(2)}} {{client.currency}}
                     </span>
                 </div>
                 <div class="">
-                    <a href="javascript:void(0)" @click="calculateTotalProfit" class="mt-3 btn btn-outline-dark btn-block">Calculate</a>
+                    <a href="javascript:void(0)" @click="calculateTotalProfit" class="mt-3 btn btn-outline-dark btn-block">Вычислять</a>
                 </div>
             </div>
 
@@ -139,7 +140,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Other costs</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Другие расходы</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -179,15 +180,15 @@
                     'client_id': '',
                     'costs' : [
                         {
-                            label:'Transport',
+                            label:'Транспорт',
                             cost:0,
                         },
                         {
-                            label:'Storing',
+                            label:'Склад',
                             cost:0,
                         },
                         {
-                            label:'Other',
+                            label:'Другой',
                             cost:0,
                         }
                     ],
