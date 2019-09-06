@@ -30,23 +30,29 @@
                     </thead>
                     <tbody>
                     <tr v-for="(sale, index) in sales" :key="index">
-                        <td>{{index +1}}</td>
-                        <td>{{sale.product.name}}</td>
-                        <td>{{sale.products_quantity}}</td>
-                        <td>{{sale.sell_price}} {{client.currency}}</td>
-                        <td>
+                        <template v-if="sale.product !== null">
+                            <td>{{index +1}}</td>
+                            <td>{{sale.product.name}}</td>
+                            <td>{{sale.products_quantity}}</td>
+                            <td>{{sale.sell_price}} {{client.currency}}</td>
+                            <td>
 
-                            <a v-if="sale.costs.length > 0" href="javascript:void(0)" data-toggle="modal" :data-target="'#costsModal_' + sale.id">
-                                 {{getTotalCost(sale)}}
-                            </a>
+                                <a v-if="sale.costs.length > 0" href="javascript:void(0)" data-toggle="modal" :data-target="'#costsModal_' + sale.id">
+                                    {{getTotalCost(sale)}}
+                                </a>
 
-                            <span v-else>
+                                <span v-else>
                                  {{getTotalCost(sale)}}
                             </span>
 
-                        </td>
-                        <td>{{calculateSingleBonus(sale)}}</td>
-                        <td><a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>
+                            </td>
+                            <td>{{calculateSingleBonus(sale)}}</td>
+                        </template>
+                        <template v-else>
+                            Product has been deleted
+                        </template>
+                        <td>
+                            <a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>
                         </td>
                     </tr>
                     <tr v-show="addNewSale">

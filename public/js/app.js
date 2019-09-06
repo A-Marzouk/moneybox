@@ -1879,6 +1879,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -38593,67 +38599,82 @@ var render = function() {
               "tbody",
               [
                 _vm._l(_vm.sales, function(sale, index) {
-                  return _c("tr", { key: index }, [
-                    _c("td", [_vm._v(_vm._s(index + 1))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(sale.product.name))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(sale.products_quantity))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(
-                        _vm._s(sale.sell_price) +
-                          " " +
-                          _vm._s(_vm.client.currency)
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      sale.costs.length > 0
-                        ? _c(
-                            "a",
-                            {
-                              attrs: {
-                                href: "javascript:void(0)",
-                                "data-toggle": "modal",
-                                "data-target": "#costsModal_" + sale.id
-                              }
-                            },
-                            [
+                  return _c(
+                    "tr",
+                    { key: index },
+                    [
+                      sale.product !== null
+                        ? [
+                            _c("td", [_vm._v(_vm._s(index + 1))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(sale.product.name))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(sale.products_quantity))]),
+                            _vm._v(" "),
+                            _c("td", [
                               _vm._v(
-                                "\n                             " +
-                                  _vm._s(_vm.getTotalCost(sale)) +
-                                  "\n                        "
+                                _vm._s(sale.sell_price) +
+                                  " " +
+                                  _vm._s(_vm.client.currency)
                               )
-                            ]
-                          )
-                        : _c("span", [
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              sale.costs.length > 0
+                                ? _c(
+                                    "a",
+                                    {
+                                      attrs: {
+                                        href: "javascript:void(0)",
+                                        "data-toggle": "modal",
+                                        "data-target": "#costsModal_" + sale.id
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                " +
+                                          _vm._s(_vm.getTotalCost(sale)) +
+                                          "\n                            "
+                                      )
+                                    ]
+                                  )
+                                : _c("span", [
+                                    _vm._v(
+                                      "\n                             " +
+                                        _vm._s(_vm.getTotalCost(sale)) +
+                                        "\n                        "
+                                    )
+                                  ])
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(_vm._s(_vm.calculateSingleBonus(sale)))
+                            ])
+                          ]
+                        : [
                             _vm._v(
-                              "\n                             " +
-                                _vm._s(_vm.getTotalCost(sale)) +
-                                "\n                        "
+                              "\n                        Product has been deleted\n                    "
                             )
-                          ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(_vm.calculateSingleBonus(sale)))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-dark btn-sm",
-                          attrs: { href: "javascript:void(0)" },
-                          on: {
-                            click: function($event) {
-                              return _vm.deleteSale(sale.id)
+                          ],
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-dark btn-sm",
+                            attrs: { href: "javascript:void(0)" },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteSale(sale.id)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v("X")]
-                      )
-                    ])
-                  ])
+                          },
+                          [_vm._v("X")]
+                        )
+                      ])
+                    ],
+                    2
+                  )
                 }),
                 _vm._v(" "),
                 _c(
