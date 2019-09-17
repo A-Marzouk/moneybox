@@ -15,6 +15,7 @@ class ProductsExport implements FromCollection, WithHeadings
             'supplier',
             'date',
             'name',
+            'quantity',
             'buy_price',
             'id'
         );
@@ -25,6 +26,7 @@ class ProductsExport implements FromCollection, WithHeadings
         return [
             'supplier',
             'date',
+            'quantity',
             'item',
             'price',
             'id'

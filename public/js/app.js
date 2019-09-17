@@ -1918,6 +1918,11 @@ __webpack_require__.r(__webpack_exports__);
       errors: {}
     };
   },
+  computed: {
+    orderedProducts: function orderedProducts() {
+      return _.orderBy(this.products, 'name');
+    }
+  },
   watch: {
     ready: function ready() {
       if (this.ready === 2) {
@@ -2457,12 +2462,68 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       products: [],
+      sortedProducts: [],
       newProduct: {
         'name': '',
+        'quantity': '',
         'buy_price': '',
         'date': '',
         'supplier': ''
@@ -2471,18 +2532,27 @@ __webpack_require__.r(__webpack_exports__);
       editedProduct: {
         'id': '',
         'name': '',
+        'quantity': '',
         'buy_price': '',
         'date': '',
         'supplier': ''
-      }
+      },
+      sortByName: '',
+      sortByDate: '',
+      currency: 'UAH',
+      currentCurrency: 'UAH'
     };
   },
+  computed: {},
   methods: {
     getProducts: function getProducts() {
       var _this = this;
 
       axios.get('/api/get-products').then(function (response) {
         _this.products = response.data;
+
+        _this.sortProductsByName();
+
         $.each(products, function (i) {
           products[i].edited = false;
         });
@@ -2527,6 +2597,7 @@ __webpack_require__.r(__webpack_exports__);
     editProduct: function editProduct(product) {
       this.editedProduct.id = product.id;
       this.editedProduct.name = product.name;
+      this.editedProduct.quantity = product.quantity;
       this.editedProduct.buy_price = product.buy_price;
       this.editedProduct.date = product.date;
       this.editedProduct.supplier = product.supplier;
@@ -2565,6 +2636,22 @@ __webpack_require__.r(__webpack_exports__);
     },
     isEdited: function isEdited(product_id) {
       return this.editedProduct.id === product_id;
+    },
+    sortProductsByName: function sortProductsByName() {
+      this.products = _.orderBy(this.products, ['name'], [this.sortByName]);
+    },
+    sortProductsByDate: function sortProductsByDate() {
+      this.products = _.orderBy(this.products, ['date'], [this.sortByDate]);
+    },
+    changeCurrency: function changeCurrency() {
+      var _this5 = this;
+
+      // get products by currency
+      axios.get('api/products/' + this.currency).then(function (response) {
+        _this5.products = response.data;
+        _this5.products = _.orderBy(_this5.products, ['name'], [_this5.sortByName]);
+        _this5.currentCurrency = _this5.currency;
+      });
     }
   },
   mounted: function mounted() {
@@ -38739,10 +38826,18 @@ var render = function() {
                             [_vm._v("Select product")]
                           ),
                           _vm._v(" "),
-                          _vm._l(_vm.products, function(product, index) {
+                          _vm._l(_vm.orderedProducts, function(product, index) {
                             return _c(
                               "option",
                               {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: product.quantity > 0,
+                                    expression: "product.quantity > 0"
+                                  }
+                                ],
                                 key: index + "A",
                                 domProps: { value: product.id }
                               },
@@ -39891,6 +39986,162 @@ var render = function() {
       _c("h2", { staticClass: "pb-3" }, [_vm._v("Список товаров")]),
       _vm._v(" "),
       _c("div", { staticClass: "d-flex" }, [
+        _c("div", { staticClass: "mr-2" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.currency,
+                  expression: "currency"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.currency = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.changeCurrency
+                ]
+              }
+            },
+            [
+              _c("option", { attrs: { value: "UAH" } }, [
+                _vm._v("\n                        UAH\n                    ")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "USD" } }, [
+                _vm._v("\n                        USD\n                    ")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "EUR" } }, [
+                _vm._v("\n                        EUR\n                    ")
+              ])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mr-2" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.sortByName,
+                  expression: "sortByName"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.sortByName = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.sortProductsByName
+                ]
+              }
+            },
+            [
+              _c("option", { attrs: { value: "" } }, [
+                _vm._v(
+                  "\n                        Сорт. по имени\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "asc" } }, [
+                _vm._v(
+                  "\n                        Сорт. по имени ↓\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "desc" } }, [
+                _vm._v(
+                  "\n                        Сорт. по имени ↑\n                    "
+                )
+              ])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mr-2" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.sortByDate,
+                  expression: "sortByDate"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.sortByDate = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.sortProductsByDate
+                ]
+              }
+            },
+            [
+              _c("option", { attrs: { value: "" } }, [
+                _vm._v(
+                  "\n                        Сорт. по дате\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "asc" } }, [
+                _vm._v(
+                  "\n                        Сорт. по дате ↓\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "desc" } }, [
+                _vm._v(
+                  "\n                        Сорт. по дате ↑\n                    "
+                )
+              ])
+            ]
+          )
+        ]),
+        _vm._v(" "),
         _c("div", [
           _c(
             "a",
@@ -39976,6 +40227,70 @@ var render = function() {
                           _vm.$set(
                             _vm.editedProduct,
                             "name",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(product.quantity) +
+                        "\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editedProduct.quantity,
+                          expression: "editedProduct.quantity"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "0", max: "999999" },
+                      domProps: { value: _vm.editedProduct.quantity },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editedProduct,
+                            "quantity",
                             $event.target.value
                           )
                         }
@@ -40127,11 +40442,25 @@ var render = function() {
                     ]
                   },
                   [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(product.buy_price) +
-                        "\n                    "
-                    )
+                    _vm.currency === "UAH"
+                      ? _c("span", [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(product.buy_price) +
+                              " " +
+                              _vm._s(_vm.currentCurrency) +
+                              "\n                        "
+                          )
+                        ])
+                      : _c("span", [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(product.buy_price_new_currency) +
+                              " " +
+                              _vm._s(_vm.currentCurrency) +
+                              "\n                        "
+                          )
+                        ])
                   ]
                 ),
                 _vm._v(" "),
@@ -40466,6 +40795,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
         _c("th", [_vm._v("Название")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Количество")]),
         _vm._v(" "),
         _c("th", [_vm._v("Дата")]),
         _vm._v(" "),
