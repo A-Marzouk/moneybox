@@ -62,7 +62,7 @@
                         <td>
                             <select v-model="newSale.product_id" id="" class="custom-select">
                                 <option selected disabled>Select product</option>
-                                <option v-for="(product,index) in products" :key="index + 'A'" :value="product.id">
+                                <option v-for="(product,index) in orderedProducts" :key="index + 'A'" :value="product.id" v-show="product.quantity > 0">
                                     {{product.name}}
                                 </option>
                             </select>
@@ -203,6 +203,11 @@
                 addNewSale: false,
                 paymentsBox: false,
                 errors: {},
+            }
+        },
+        computed:{
+            orderedProducts: function () {
+                return _.orderBy(this.products, 'name');
             }
         },
         watch: {

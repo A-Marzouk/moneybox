@@ -37,6 +37,7 @@ class ProductsController extends Controller
     public function addProduct(Request $request){
         $this->validate($request, [
             'name' => 'required|max:191',
+            'quantity' => 'max:191',
             'buy_price' => 'required|max:191',
             'date' => 'max:191',
             'supplier' => 'max:191',
@@ -48,6 +49,7 @@ class ProductsController extends Controller
     public function updateProduct(Request $request){
         $this->validate($request, [
             'name' => 'required|max:191',
+            'quantity' => 'max:191',
             'buy_price' => 'required|max:191',
         ]);
 
@@ -55,6 +57,7 @@ class ProductsController extends Controller
         $product->update(
             [
                 'name' => $request->name,
+                'quantity' => $request->quantity,
                 'buy_price' => $request->buy_price,
                 'date' => $request->date,
                 'supplier' => $request->supplier,

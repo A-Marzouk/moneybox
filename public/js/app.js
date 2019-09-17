@@ -1918,6 +1918,11 @@ __webpack_require__.r(__webpack_exports__);
       errors: {}
     };
   },
+  computed: {
+    orderedProducts: function orderedProducts() {
+      return _.orderBy(this.products, 'name');
+    }
+  },
   watch: {
     ready: function ready() {
       if (this.ready === 2) {
@@ -2483,6 +2488,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2490,6 +2505,7 @@ __webpack_require__.r(__webpack_exports__);
       sortedProducts: [],
       newProduct: {
         'name': '',
+        'quantity': '',
         'buy_price': '',
         'date': '',
         'supplier': ''
@@ -2498,6 +2514,7 @@ __webpack_require__.r(__webpack_exports__);
       editedProduct: {
         'id': '',
         'name': '',
+        'quantity': '',
         'buy_price': '',
         'date': '',
         'supplier': ''
@@ -2506,17 +2523,16 @@ __webpack_require__.r(__webpack_exports__);
       sortByDate: ''
     };
   },
-  computed: {
-    orderedProducts: function orderedProducts() {
-      return _.orderBy(this.products, 'name');
-    }
-  },
+  computed: {},
   methods: {
     getProducts: function getProducts() {
       var _this = this;
 
       axios.get('/api/get-products').then(function (response) {
         _this.products = response.data;
+
+        _this.sortProductsByName();
+
         $.each(products, function (i) {
           products[i].edited = false;
         });
@@ -2561,6 +2577,7 @@ __webpack_require__.r(__webpack_exports__);
     editProduct: function editProduct(product) {
       this.editedProduct.id = product.id;
       this.editedProduct.name = product.name;
+      this.editedProduct.quantity = product.quantity;
       this.editedProduct.buy_price = product.buy_price;
       this.editedProduct.date = product.date;
       this.editedProduct.supplier = product.supplier;
@@ -38779,10 +38796,18 @@ var render = function() {
                             [_vm._v("Select product")]
                           ),
                           _vm._v(" "),
-                          _vm._l(_vm.products, function(product, index) {
+                          _vm._l(_vm.orderedProducts, function(product, index) {
                             return _c(
                               "option",
                               {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: product.quantity > 0,
+                                    expression: "product.quantity > 0"
+                                  }
+                                ],
                                 key: index + "A",
                                 domProps: { value: product.id }
                               },
@@ -40149,6 +40174,70 @@ var render = function() {
                   [
                     _vm._v(
                       "\n                        " +
+                        _vm._s(product.quantity) +
+                        "\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editedProduct.quantity,
+                          expression: "editedProduct.quantity"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "0", max: "999999" },
+                      domProps: { value: _vm.editedProduct.quantity },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editedProduct,
+                            "quantity",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
                         _vm._s(product.date) +
                         "\n                    "
                     )
@@ -40614,6 +40703,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
         _c("th", [_vm._v("Название")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Количество")]),
         _vm._v(" "),
         _c("th", [_vm._v("Дата")]),
         _vm._v(" "),

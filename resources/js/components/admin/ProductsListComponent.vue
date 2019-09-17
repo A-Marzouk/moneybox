@@ -42,6 +42,7 @@
                 <tr>
                     <th>#</th>
                     <th>Название</th>
+                    <th>Количество</th>
                     <th>Дата</th>
                     <th>Поставщик</th>
                     <th>Цена покупки</th>
@@ -57,6 +58,15 @@
                         </div>
                         <div v-show="isEdited(product.id)">
                             <input type="text" v-model="editedProduct.name" class="form-control">
+                        </div>
+                    </td>
+
+                    <td>
+                        <div v-show="!isEdited(product.id)">
+                            {{product.quantity}}
+                        </div>
+                        <div v-show="isEdited(product.id)">
+                            <input type="number" min="0" max="999999" v-model="editedProduct.quantity" class="form-control">
                         </div>
                     </td>
                     <td>
@@ -133,6 +143,7 @@
                 sortedProducts : [],
                 newProduct:{
                     'name':'',
+                    'quantity':'',
                     'buy_price':'',
                     'date':'',
                     'supplier':'',
@@ -141,6 +152,7 @@
                 editedProduct:{
                     'id':'',
                     'name':'',
+                    'quantity':'',
                     'buy_price':'',
                     'date':'',
                     'supplier':''
@@ -150,15 +162,14 @@
             }
         },
         computed:{
-            orderedProducts: function () {
-                return _.orderBy(this.products, 'name');
-            }
+
         },
         methods:{
             getProducts(){
                 axios.get('/api/get-products')
                     .then( (response) => {
                         this.products = response.data ;
+                        this.sortProductsByName();
                         $.each(products, (i) => {
                             products[i].edited = false ;
                         });
@@ -199,6 +210,7 @@
             editProduct(product){
                 this.editedProduct.id = product.id;
                 this.editedProduct.name = product.name;
+                this.editedProduct.quantity = product.quantity;
                 this.editedProduct.buy_price = product.buy_price;
                 this.editedProduct.date = product.date;
                 this.editedProduct.supplier = product.supplier;
