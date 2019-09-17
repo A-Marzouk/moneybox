@@ -3,6 +3,32 @@
         <div class="d-flex justify-content-between">
             <h2 class="pb-3">Список товаров</h2>
             <div class="d-flex">
+                <div class="mr-2">
+                    <select v-model="sortByName" class="form-control" @change="sortProductsByName">
+                        <option value="">
+                            Сорт. по имени
+                        </option>
+                        <option value="asc">
+                            Сорт. по имени &darr;
+                        </option>
+                        <option value="desc">
+                            Сорт. по имени &uarr;
+                        </option>
+                    </select>
+                </div>
+                <div class="mr-2">
+                    <select v-model="sortByDate" class="form-control" @change="sortProductsByDate">
+                        <option value="">
+                            Сорт. по дате
+                        </option>
+                        <option value="asc">
+                            Сорт. по дате &darr;
+                        </option>
+                        <option value="desc">
+                            Сорт. по дате &uarr;
+                        </option>
+                    </select>
+                </div>
                 <div>
                     <a href="javascript:void(0)" @click="addNewProduct = true" class="btn btn-outline-dark mr-3">Добавить товар</a>
                 </div>
@@ -104,6 +130,7 @@
         data(){
             return{
                 products:[],
+                sortedProducts : [],
                 newProduct:{
                     'name':'',
                     'buy_price':'',
@@ -117,7 +144,14 @@
                     'buy_price':'',
                     'date':'',
                     'supplier':''
-                }
+                },
+                sortByName:'',
+                sortByDate:''
+            }
+        },
+        computed:{
+            orderedProducts: function () {
+                return _.orderBy(this.products, 'name');
             }
         },
         methods:{
@@ -202,7 +236,13 @@
             },
             isEdited(product_id){
                 return this.editedProduct.id === product_id ;
-            }
+            },
+            sortProductsByName(){
+                this.products = _.orderBy(this.products, ['name'] , [this.sortByName]);
+            },
+            sortProductsByDate(){
+                this.products = _.orderBy(this.products, ['date'],[this.sortByDate]);
+            },
         },
         mounted() {
             this.getProducts();

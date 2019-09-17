@@ -2457,10 +2457,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       products: [],
+      sortedProducts: [],
       newProduct: {
         'name': '',
         'buy_price': '',
@@ -2474,8 +2501,15 @@ __webpack_require__.r(__webpack_exports__);
         'buy_price': '',
         'date': '',
         'supplier': ''
-      }
+      },
+      sortByName: '',
+      sortByDate: ''
     };
+  },
+  computed: {
+    orderedProducts: function orderedProducts() {
+      return _.orderBy(this.products, 'name');
+    }
   },
   methods: {
     getProducts: function getProducts() {
@@ -2565,6 +2599,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     isEdited: function isEdited(product_id) {
       return this.editedProduct.id === product_id;
+    },
+    sortProductsByName: function sortProductsByName() {
+      this.products = _.orderBy(this.products, ['name'], [this.sortByName]);
+    },
+    sortProductsByDate: function sortProductsByDate() {
+      this.products = _.orderBy(this.products, ['date'], [this.sortByDate]);
     }
   },
   mounted: function mounted() {
@@ -39891,6 +39931,114 @@ var render = function() {
       _c("h2", { staticClass: "pb-3" }, [_vm._v("Список товаров")]),
       _vm._v(" "),
       _c("div", { staticClass: "d-flex" }, [
+        _c("div", { staticClass: "mr-2" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.sortByName,
+                  expression: "sortByName"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.sortByName = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.sortProductsByName
+                ]
+              }
+            },
+            [
+              _c("option", { attrs: { value: "" } }, [
+                _vm._v(
+                  "\n                        Сорт. по имени\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "asc" } }, [
+                _vm._v(
+                  "\n                        Сорт. по имени ↓\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "desc" } }, [
+                _vm._v(
+                  "\n                        Сорт. по имени ↑\n                    "
+                )
+              ])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mr-2" }, [
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.sortByDate,
+                  expression: "sortByDate"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.sortByDate = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  _vm.sortProductsByDate
+                ]
+              }
+            },
+            [
+              _c("option", { attrs: { value: "" } }, [
+                _vm._v(
+                  "\n                        Сорт. по дате\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "asc" } }, [
+                _vm._v(
+                  "\n                        Сорт. по дате ↓\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "desc" } }, [
+                _vm._v(
+                  "\n                        Сорт. по дате ↑\n                    "
+                )
+              ])
+            ]
+          )
+        ]),
+        _vm._v(" "),
         _c("div", [
           _c(
             "a",
