@@ -4,6 +4,19 @@
             <h2 class="pb-3">Список товаров</h2>
             <div class="d-flex">
                 <div class="mr-2">
+                    <select v-model="currency" class="form-control" @change="changeCurrency">
+                        <option value="UAH">
+                            UAH
+                        </option>
+                        <option value="USD">
+                            USD
+                        </option>
+                        <option value="EUR">
+                            EUR
+                        </option>
+                    </select>
+                </div>
+                <div class="mr-2">
                     <select v-model="sortByName" class="form-control" @change="sortProductsByName">
                         <option value="">
                             Сорт. по имени
@@ -87,7 +100,12 @@
                     </td>
                     <td>
                         <div v-show="!isEdited(product.id)">
-                            {{product.buy_price}}
+                            <span v-if="currency === 'UAH'">
+                                {{product.buy_price}} {{currentCurrency}}
+                            </span>
+                            <span v-else>
+                                {{product.buy_price_new_currency}} {{currentCurrency}}
+                            </span>
                         </div>
                         <div v-show="isEdited(product.id)">
                             <input type="number" min="0" max="999999" step="any" v-model="editedProduct.buy_price" class="form-control">
@@ -158,7 +176,9 @@
                     'supplier':''
                 },
                 sortByName:'',
-                sortByDate:''
+                sortByDate:'',
+                currency:'UAH',
+                currentCurrency:'UAH',
             }
         },
         computed:{
@@ -255,6 +275,14 @@
             sortProductsByDate(){
                 this.products = _.orderBy(this.products, ['date'],[this.sortByDate]);
             },
+            changeCurrency(){
+                // get products by currency
+                axios.get('api/products/' + this.currency).then( (response) => {
+                    this.products = response.data ;
+                    this.products = _.orderBy(this.products, ['name'] , [this.sortByName]);
+                    this.currentCurrency = this.currency ;
+                });
+            }
         },
         mounted() {
             this.getProducts();

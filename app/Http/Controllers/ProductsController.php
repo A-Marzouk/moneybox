@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\classes\Notification;
 use App\Exports\ProductsExport;
 use App\Product;
+use danielme85\CConverter\Currency;
 use Illuminate\Http\Request;
 
 
@@ -89,6 +90,27 @@ class ProductsController extends Controller
         return redirect(route('admin.dashboard'));
     }
 
+
+    public function productsByCurrency($currency){
+        // convert all prices to usd :
+        $products = Product::all()->toArray();
+        if($currency === 'UAH'){
+            return $products ;
+        }elseif ($currency === 'USD'){
+            $to = 'USD';
+        }elseif ($currency === 'EUR'){
+            $to = 'EUR';
+        }else{
+            return;
+        }
+
+        $currency  = new Currency();
+        foreach ($products as &$product) {
+            $product['buy_price_new_currency'] = $currency->convert($from = 'UAH', $to, $product['buy_price'] , $decimals = 2);
+        }
+
+        return $products;
+    }
 
 
 }
