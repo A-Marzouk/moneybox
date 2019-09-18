@@ -33,6 +33,7 @@ class SalesController extends Controller
 
         // sell price should be bigger than buy_price
         $product = Product::where('id',$request->product_id)->first();
+
         if($request->sell_price < $product->buy_price){
             $error = \Illuminate\Validation\ValidationException::withMessages([
                 'ErrorInPrice' => ['Sell price can not be less than buy price.'],
@@ -41,7 +42,22 @@ class SalesController extends Controller
         }
 
 
+        if($request->products_quantity > $product->quantity){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'ErrorInQuantity' => ['Not enough products.'],
+            ]);
+            throw $error;
+        }
+
+
+
         $sale = Sale::create($request->all());
+        // update products quantity :
+
+        $product->update([
+            'quantity' => $product->quantity - $sale->products_quantity
+        ]);
+
         $sale['product'] = $sale->product;
         $sale['client']  = $sale->client;
 

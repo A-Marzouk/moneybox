@@ -30,32 +30,6 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(sale, index) in sales" :key="index">
-                        <template v-if="sale.product !== null">
-                            <td>{{index +1}}</td>
-                            <td>{{sale.product.name}}</td>
-                            <td>{{sale.products_quantity}}</td>
-                            <td>{{sale.sell_price}} {{client.currency}}</td>
-                            <td>
-
-                                <a v-if="sale.costs.length > 0" href="javascript:void(0)" data-toggle="modal" :data-target="'#costsModal_' + sale.id">
-                                    {{getTotalCost(sale)}}
-                                </a>
-
-                                <span v-else>
-                                 {{getTotalCost(sale)}}
-                            </span>
-
-                            </td>
-                            <td>{{calculateSingleBonus(sale)}}</td>
-                        </template>
-                        <template v-else>
-                            Product has been deleted
-                        </template>
-                        <td>
-                            <a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>
-                        </td>
-                    </tr>
                     <tr v-show="addNewSale">
                         <td>
                             {{this.sales.length + 1}}
@@ -64,7 +38,7 @@
                             <select v-model="newSale.product" id="" class="custom-select">
                                 <option selected disabled>Select product</option>
                                 <option v-for="(product,index) in orderedProducts" :key="index + 'A'" :value="product" v-show="product.quantity > 0">
-                                    {{product.name}}
+                                    {{product.name}} (Кол. {{product.quantity}})
                                 </option>
                             </select>
                         </td>
@@ -115,6 +89,33 @@
                             <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewSale = false ">Отменить</a>
                         </td>
                     </tr>
+                    <tr v-for="(sale, index) in sales" :key="index">
+                        <template v-if="sale.product !== null">
+                            <td>{{index +1}}</td>
+                            <td>{{sale.product.name}}</td>
+                            <td>{{sale.products_quantity}}</td>
+                            <td>{{sale.sell_price}} {{client.currency}}</td>
+                            <td>
+
+                                <a v-if="sale.costs.length > 0" href="javascript:void(0)" data-toggle="modal" :data-target="'#costsModal_' + sale.id">
+                                    {{getTotalCost(sale)}}
+                                </a>
+
+                                <span v-else>
+                                 {{getTotalCost(sale)}}
+                            </span>
+
+                            </td>
+                            <td>{{calculateSingleBonus(sale)}}</td>
+                        </template>
+                        <template v-else>
+                            Product has been deleted
+                        </template>
+                        <td>
+                            <a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>
+                        </td>
+                    </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -286,6 +287,9 @@
                         this.calculateTotalProfit();
                         this.addNewSale = false;
                         this.clearInputs();
+
+                        // update products quantity
+                        this.getProducts();
                     })
                     .catch((error) => {
                         console.log(error.response.data.errors);

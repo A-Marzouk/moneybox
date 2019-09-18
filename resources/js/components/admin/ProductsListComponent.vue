@@ -63,6 +63,31 @@
                 </tr>
             </thead>
             <tbody>
+                <tr v-show="addNewProduct">
+                <td>
+                    {{this.products.length + 1}}
+                </td>
+
+                <td>
+                    <input type="text" v-model="newProduct.name" class="form-control">
+                </td>
+                <td>
+                    <input type="number" min="0" max="999999" step="any" v-model="newProduct.quantity" class="form-control">
+                </td>
+                <td>
+                    <input type="date" v-model="newProduct.date" class="form-control">
+                </td>
+                <td>
+                    <input type="text" v-model="newProduct.supplier" class="form-control">
+                </td>
+                <td>
+                    <input type="number" min="0" max="999999" step="any" v-model="newProduct.buy_price" class="form-control">
+                </td>
+                <td class="d-flex">
+                    <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addProduct">Add</a>
+                    <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewProduct = false ">Cancel</a>
+                </td>
+            </tr>
                 <tr v-for="(product, index) in products" :key="index">
                     <td>{{index+1}}</td>
                     <td>
@@ -126,28 +151,7 @@
                         </a>
                     </td>
                 </tr>
-                <tr v-show="addNewProduct">
-                    <td>
-                        {{this.products.length + 1}}
-                    </td>
 
-                    <td>
-                        <input type="text" v-model="newProduct.name" class="form-control">
-                    </td>
-                    <td>
-                        <input type="date" v-model="newProduct.date" class="form-control">
-                    </td>
-                    <td>
-                        <input type="text" v-model="newProduct.supplier" class="form-control">
-                    </td>
-                    <td>
-                        <input type="number" min="0" max="999999" step="any" v-model="newProduct.buy_price" class="form-control">
-                    </td>
-                    <td class="d-flex">
-                        <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addProduct">Add</a>
-                        <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewProduct = false ">Cancel</a>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>
