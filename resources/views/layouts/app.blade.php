@@ -75,6 +75,10 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <div>
+            <img src="images/logo-ru.jpg" alt="logo" style="height: 50px; opacity: 0.7; position: fixed; bottom: 10px;right: 18px; z-index: -1;">
+        </div>
     </div>
 </body>
 </html>
