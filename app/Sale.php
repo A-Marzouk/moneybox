@@ -24,6 +24,7 @@ class Sale extends Model
     protected $fillable = [
         'products_quantity',
         'sell_price',
+        'bonus',
         'product_id',
         'client_id',
     ];

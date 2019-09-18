@@ -46,6 +46,8 @@ Route::get('/admin/excel/actions', 'AdminsController@showExcelActionPage')->name
 Route::get('/admin/export/products', 'ProductsController@export')->name('admin.products.export');
 Route::post('/admin/import/products', 'ProductsController@import')->name('admin.products.import');
 
+Route::get('/client/export/sales/{client_id}', 'SalesController@export')->name('client.sales.export');
+
 // api
 Route::get('api/get-products','ProductsController@getProducts')->name('get.products');
 Route::get('api/get-managers','ClientsController@getManagers')->name('get.products');

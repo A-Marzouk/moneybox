@@ -77,6 +77,9 @@
                         <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm" v-show="!isEdited(manager.id)" @click="editManager(manager)">
                             Редактировать
                         </a>
+
+                        <a :href="'/client/export/sales/' + manager.client.id"  v-show="!isEdited(manager.id)" class="btn  btn-sm btn-primary ml-2">Скачать все продажи XLSX</a>
+
                         <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm mr-2" v-show="isEdited(manager.id)"  @click="clearEditedManager">
                             Отменить
                         </a>

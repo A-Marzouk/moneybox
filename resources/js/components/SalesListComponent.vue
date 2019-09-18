@@ -4,10 +4,11 @@
             <div class="col-md-12 border-bottom">
                 <div class="d-flex justify-content-between">
                     <h2 class="pb-3">Список продаж</h2>
-                    <div>
+                    <div class="display-1">
                         <a href="javascript:void(0)" @click="addNewSale = true" class="btn btn-outline-dark">
                             Добавить продажу
                         </a>
+                         <a :href="'/client/export/sales/' + client.id" class="btn  btn-primary ml-2">Скачать все продажи XLSX</a>
                     </div>
                 </div>
                 <div class="alert alert-danger" v-show="Object.entries(errors).length !== 0">
@@ -60,9 +61,9 @@
                             {{this.sales.length + 1}}
                         </td>
                         <td>
-                            <select v-model="newSale.product_id" id="" class="custom-select">
+                            <select v-model="newSale.product" id="" class="custom-select">
                                 <option selected disabled>Select product</option>
-                                <option v-for="(product,index) in orderedProducts" :key="index + 'A'" :value="product.id" v-show="product.quantity > 0">
+                                <option v-for="(product,index) in orderedProducts" :key="index + 'A'" :value="product" v-show="product.quantity > 0">
                                     {{product.name}}
                                 </option>
                             </select>
@@ -180,7 +181,7 @@
                 abovePlan: 0,
                 ready: 0,
                 newSale: {
-                    'product_id': '',
+                    'product': {},
                     'products_quantity': '',
                     'sell_price': '',
                     'client_id': '',
@@ -276,6 +277,9 @@
             addSale() {
                 this.errors = {} ;
                 this.newSale.client_id = this.client.id;
+                this.newSale.product_id   = this.newSale.product.id;
+                this.newSale.bonus = this.calculateSingleBonus(this.newSale);
+                console.log(this.newSale);
                 axios.post('/sales/add', this.newSale)
                     .then((response) => {
                         this.sales.push(response.data);

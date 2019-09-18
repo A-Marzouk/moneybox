@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\classes\Notification;
+use App\Client;
 use App\Cost;
+use App\Exports\SalesExport;
 use App\Product;
 use App\Sale;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalesController extends Controller
 {
@@ -24,6 +28,7 @@ class SalesController extends Controller
             'sell_price' => 'required|max:191',
             'product_id' => 'required|max:191',
             'client_id' =>  'required|max:191',
+            'bonus' =>  'required|max:191',
         ]);
 
         // sell price should be bigger than buy_price
@@ -63,5 +68,15 @@ class SalesController extends Controller
 
     public function deleteSale(Request $request){
         return Sale::destroy($request->sale_id);
+    }
+
+    public function export($client_id)
+    {
+        // check if client exists :
+        $client = Client::where('id',$client_id)->first() ;
+        if($client){
+            Notification::productsAction('Client sales');
+            return Excel::download(new SalesExport($client_id), $client->user->name .'.xlsx');
+        }
     }
 }

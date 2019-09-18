@@ -1885,6 +1885,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1897,7 +1898,7 @@ __webpack_require__.r(__webpack_exports__);
       abovePlan: 0,
       ready: 0,
       newSale: {
-        'product_id': '',
+        'product': {},
         'products_quantity': '',
         'sell_price': '',
         'client_id': '',
@@ -1991,6 +1992,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.errors = {};
       this.newSale.client_id = this.client.id;
+      this.newSale.product_id = this.newSale.product.id;
+      this.newSale.bonus = this.calculateSingleBonus(this.newSale);
+      console.log(this.newSale);
       axios.post('/sales/add', this.newSale).then(function (response) {
         _this5.sales.push(response.data);
 
@@ -2105,6 +2109,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -38633,7 +38640,7 @@ var render = function() {
           _c("div", { staticClass: "d-flex justify-content-between" }, [
             _c("h2", { staticClass: "pb-3" }, [_vm._v("Список продаж")]),
             _vm._v(" "),
-            _c("div", [
+            _c("div", { staticClass: "display-1" }, [
               _c(
                 "a",
                 {
@@ -38650,6 +38657,15 @@ var render = function() {
                     "\n                        Добавить продажу\n                    "
                   )
                 ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "btn  btn-primary ml-2",
+                  attrs: { href: "/client/export/sales/" + _vm.client.id }
+                },
+                [_vm._v("Скачать все продажи XLSX")]
               )
             ])
           ]),
@@ -38793,8 +38809,8 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.newSale.product_id,
-                              expression: "newSale.product_id"
+                              value: _vm.newSale.product,
+                              expression: "newSale.product"
                             }
                           ],
                           staticClass: "custom-select",
@@ -38811,7 +38827,7 @@ var render = function() {
                                 })
                               _vm.$set(
                                 _vm.newSale,
-                                "product_id",
+                                "product",
                                 $event.target.multiple
                                   ? $$selectedVal
                                   : $$selectedVal[0]
@@ -38839,7 +38855,7 @@ var render = function() {
                                   }
                                 ],
                                 key: index + "A",
-                                domProps: { value: product.id }
+                                domProps: { value: product }
                               },
                               [
                                 _vm._v(
@@ -39700,6 +39716,23 @@ var render = function() {
                       "\n                        Редактировать\n                    "
                     )
                   ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(manager.id),
+                        expression: "!isEdited(manager.id)"
+                      }
+                    ],
+                    staticClass: "btn  btn-sm btn-primary ml-2",
+                    attrs: { href: "/client/export/sales/" + manager.client.id }
+                  },
+                  [_vm._v("Скачать все продажи XLSX")]
                 ),
                 _vm._v(" "),
                 _c(
