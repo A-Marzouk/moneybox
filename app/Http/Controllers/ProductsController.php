@@ -32,13 +32,25 @@ class ProductsController extends Controller
      */
     public function getProducts()
     {
-        return Product::all();
+        $products = Product::all()->toArray();
+        $currency  = new Currency();
+
+        foreach ($products as &$product) {
+            if($product['currency'] !== 'UAH'){
+                $product['buy_price_uah'] = $currency->convert($product['currency'], $to = 'UAH', $product['buy_price'] , $decimals = 2);
+            }else{
+                $product['buy_price_uah'] = $product['buy_price'] ;
+            }
+        }
+
+        return $products;
     }
 
     public function addProduct(Request $request){
         $this->validate($request, [
             'name' => 'required|max:191',
             'quantity' => 'max:191',
+            'currency' => 'max:191',
             'buy_price' => 'required|max:191',
             'date' => 'max:191',
             'supplier' => 'max:191',
@@ -51,6 +63,7 @@ class ProductsController extends Controller
         $this->validate($request, [
             'name' => 'required|max:191',
             'quantity' => 'max:191',
+            'currency' => 'max:191',
             'buy_price' => 'required|max:191',
         ]);
 
@@ -59,11 +72,20 @@ class ProductsController extends Controller
             [
                 'name' => $request->name,
                 'quantity' => $request->quantity,
+                'currency' => $request->currency,
                 'buy_price' => $request->buy_price,
                 'date' => $request->date,
                 'supplier' => $request->supplier,
             ]
         );
+
+        $currency  = new Currency();
+
+        if($product['currency'] !== 'UAH'){
+            $product['buy_price_uah'] = $currency->convert($product['currency'], $to = 'UAH', $product['buy_price'] , $decimals = 2);
+        }else{
+            $product['buy_price_uah'] = $product['buy_price'] ;
+        }
 
         return $product ;
 
@@ -110,6 +132,17 @@ class ProductsController extends Controller
         }
 
         return $products;
+    }
+
+    public function getCurrencyRate(){
+        $currency  = new Currency();
+        $usdRate = $currency->convert('USD', $to = 'UAH', 1 , $decimals = 4);
+        $eurRate = $currency->convert('EUR', $to = 'UAH', 1 , $decimals = 4);
+
+        return [
+          'usd_rate' =>  $usdRate,
+          'eur_rate' =>  $eurRate,
+        ];
     }
 
 

@@ -2531,6 +2531,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2539,6 +2556,7 @@ __webpack_require__.r(__webpack_exports__);
       newProduct: {
         'name': '',
         'quantity': '',
+        'currency': 'UAH',
         'buy_price': '',
         'date': '',
         'supplier': ''
@@ -2548,6 +2566,7 @@ __webpack_require__.r(__webpack_exports__);
         'id': '',
         'name': '',
         'quantity': '',
+        'currency': '',
         'buy_price': '',
         'date': '',
         'supplier': ''
@@ -2555,7 +2574,9 @@ __webpack_require__.r(__webpack_exports__);
       sortByName: '',
       sortByDate: '',
       currency: 'UAH',
-      currentCurrency: 'UAH'
+      currentCurrency: 'UAH',
+      USD_rate: 0,
+      EUR_rate: 0
     };
   },
   computed: {},
@@ -2570,6 +2591,7 @@ __webpack_require__.r(__webpack_exports__);
 
         $.each(products, function (i) {
           products[i].edited = false;
+          products[i].calculatedPrice = 0;
         });
       })["catch"](function (error) {
         console.log(error);
@@ -2613,6 +2635,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editedProduct.id = product.id;
       this.editedProduct.name = product.name;
       this.editedProduct.quantity = product.quantity;
+      this.editedProduct.currency = product.currency;
       this.editedProduct.buy_price = product.buy_price;
       this.editedProduct.date = product.date;
       this.editedProduct.supplier = product.supplier;
@@ -2624,7 +2647,7 @@ __webpack_require__.r(__webpack_exports__);
         var products = _this4.products;
         $.each(products, function (i) {
           if (products[i].id === product.id) {
-            products[i] = product;
+            products[i] = response.data;
             return false;
           }
         });
@@ -2667,10 +2690,20 @@ __webpack_require__.r(__webpack_exports__);
         _this5.products = _.orderBy(_this5.products, ['name'], [_this5.sortByName]);
         _this5.currentCurrency = _this5.currency;
       });
+    },
+    getCurrenciesRate: function getCurrenciesRate() {
+      var _this6 = this;
+
+      axios.get('/api/currency/rate').then(function (response) {
+        console.log(response.data);
+        _this6.USD_rate = response.data.usd_rate;
+        _this6.EUR_rate = response.data.eur_rate;
+      });
     }
   },
   mounted: function mounted() {
     this.getProducts();
+    this.getCurrenciesRate();
   }
 });
 
@@ -40029,53 +40062,17 @@ var render = function() {
       _c("h2", { staticClass: "pb-3" }, [_vm._v("Список товаров")]),
       _vm._v(" "),
       _c("div", { staticClass: "d-flex" }, [
-        _c("div", { staticClass: "mr-2" }, [
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.currency,
-                  expression: "currency"
-                }
-              ],
-              staticClass: "form-control",
-              on: {
-                change: [
-                  function($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function(o) {
-                        return o.selected
-                      })
-                      .map(function(o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.currency = $event.target.multiple
-                      ? $$selectedVal
-                      : $$selectedVal[0]
-                  },
-                  _vm.changeCurrency
-                ]
-              }
-            },
-            [
-              _c("option", { attrs: { value: "UAH" } }, [
-                _vm._v("\n                        UAH\n                    ")
-              ]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "USD" } }, [
-                _vm._v("\n                        USD\n                    ")
-              ]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "EUR" } }, [
-                _vm._v("\n                        EUR\n                    ")
-              ])
-            ]
-          )
-        ]),
+        _c(
+          "div",
+          { staticClass: "mr-2", staticStyle: { "padding-top": "10px" } },
+          [_c("b", [_vm._v("USD: " + _vm._s(_vm.USD_rate) + " |")])]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mr-2", staticStyle: { "padding-top": "10px" } },
+          [_c("b", [_vm._v("EUR " + _vm._s(_vm.EUR_rate))])]
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "mr-2" }, [
           _c(
@@ -40664,25 +40661,11 @@ var render = function() {
                     ]
                   },
                   [
-                    _vm.currency === "UAH"
-                      ? _c("span", [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(product.buy_price) +
-                              " " +
-                              _vm._s(_vm.currentCurrency) +
-                              "\n                        "
-                          )
-                        ])
-                      : _c("span", [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(product.buy_price_new_currency) +
-                              " " +
-                              _vm._s(_vm.currentCurrency) +
-                              "\n                        "
-                          )
-                        ])
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(product.buy_price) +
+                        "\n                    "
+                    )
                   ]
                 ),
                 _vm._v(" "),
@@ -40730,6 +40713,97 @@ var render = function() {
                       }
                     })
                   ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(product.id),
+                        expression: "!isEdited(product.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(product.currency) +
+                        "\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(product.id),
+                        expression: "isEdited(product.id)"
+                      },
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.editedProduct.currency,
+                        expression: "editedProduct.currency"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    staticStyle: { width: "90px" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.editedProduct,
+                          "currency",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "UAH" } }, [
+                      _vm._v(
+                        "\n                            UAH\n                        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "USD" } }, [
+                      _vm._v(
+                        "\n                            USD\n                        "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "EUR" } }, [
+                      _vm._v(
+                        "\n                            EUR\n                        "
+                      )
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(product.buy_price_uah) +
+                    "\n                "
                 )
               ]),
               _vm._v(" "),
@@ -40872,9 +40946,13 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Дата")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Поставщик")]),
+        _c("th", { staticStyle: { width: "100px" } }, [_vm._v("Поставщик")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Цена покупки")]),
+        _c("th", { staticStyle: { width: "100px" } }, [_vm._v("Цена")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Валюта")]),
+        _vm._v(" "),
+        _c("th", { staticStyle: { width: "100px" } }, [_vm._v("Цена в грн")]),
         _vm._v(" "),
         _c("th", [_vm._v("Действия")])
       ])

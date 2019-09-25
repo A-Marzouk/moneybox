@@ -3,18 +3,11 @@
         <div class="d-flex justify-content-between">
             <h2 class="pb-3">Список товаров</h2>
             <div class="d-flex">
-                <div class="mr-2">
-                    <select v-model="currency" class="form-control" @change="changeCurrency">
-                        <option value="UAH">
-                            UAH
-                        </option>
-                        <option value="USD">
-                            USD
-                        </option>
-                        <option value="EUR">
-                            EUR
-                        </option>
-                    </select>
+                <div class="mr-2" style="padding-top: 10px;">
+                    <b>USD: {{USD_rate}} |</b>
+                </div>
+                <div class="mr-2" style="padding-top: 10px;">
+                    <b>EUR {{EUR_rate}}</b>
                 </div>
                 <div class="mr-2">
                     <select v-model="sortByName" class="form-control" @change="sortProductsByName">
@@ -57,8 +50,10 @@
                     <th>Название</th>
                     <th>Количество</th>
                     <th>Дата</th>
-                    <th>Поставщик</th>
-                    <th>Цена покупки</th>
+                    <th style="width: 100px;">Поставщик</th>
+                    <th style="width: 100px;">Цена</th>
+                    <th>Валюта</th>
+                    <th style="width: 100px;">Цена в грн</th>
                     <th>Действия</th>
                 </tr>
             </thead>
@@ -123,19 +118,41 @@
                             <input type="text" v-model="editedProduct.supplier" class="form-control">
                         </div>
                     </td>
+
+
                     <td>
                         <div v-show="!isEdited(product.id)">
-                            <span v-if="currency === 'UAH'">
-                                {{product.buy_price}} {{currentCurrency}}
-                            </span>
-                            <span v-else>
-                                {{product.buy_price_new_currency}} {{currentCurrency}}
-                            </span>
+                            {{product.buy_price}}
                         </div>
                         <div v-show="isEdited(product.id)">
                             <input type="number" min="0" max="999999" step="any" v-model="editedProduct.buy_price" class="form-control">
                         </div>
                     </td>
+
+
+                    <td>
+                        <div v-show="!isEdited(product.id)">
+                            {{product.currency}}
+                        </div>
+
+                        <select v-show="isEdited(product.id)" v-model="editedProduct.currency" class="form-control" style="width:90px;">
+                            <option value="UAH">
+                                UAH
+                            </option>
+                            <option value="USD">
+                                USD
+                            </option>
+                            <option value="EUR">
+                                EUR
+                            </option>
+                        </select>
+                    </td>
+
+                    <td>
+                        {{product.buy_price_uah}}
+                    </td>
+
+
                     <td>
                         <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm" v-show="!isEdited(product.id)" @click="deleteProduct(product.id)">
                             Удалять
@@ -166,6 +183,7 @@
                 newProduct:{
                     'name':'',
                     'quantity':'',
+                    'currency':'UAH',
                     'buy_price':'',
                     'date':'',
                     'supplier':'',
@@ -175,6 +193,7 @@
                     'id':'',
                     'name':'',
                     'quantity':'',
+                    'currency':'',
                     'buy_price':'',
                     'date':'',
                     'supplier':''
@@ -183,6 +202,8 @@
                 sortByDate:'',
                 currency:'UAH',
                 currentCurrency:'UAH',
+                USD_rate:0,
+                EUR_rate:0,
             }
         },
         computed:{
@@ -196,6 +217,7 @@
                         this.sortProductsByName();
                         $.each(products, (i) => {
                             products[i].edited = false ;
+                            products[i].calculatedPrice = 0 ;
                         });
                     })
                     .catch( (error) => {
@@ -235,6 +257,7 @@
                 this.editedProduct.id = product.id;
                 this.editedProduct.name = product.name;
                 this.editedProduct.quantity = product.quantity;
+                this.editedProduct.currency = product.currency;
                 this.editedProduct.buy_price = product.buy_price;
                 this.editedProduct.date = product.date;
                 this.editedProduct.supplier = product.supplier;
@@ -245,7 +268,7 @@
                         let products = this.products ;
                         $.each(products, (i) => {
                             if (products[i].id === product.id) {
-                                products[i] = product;
+                                products[i] = response.data;
                                 return false;
                             }
                         });
@@ -286,10 +309,18 @@
                     this.products = _.orderBy(this.products, ['name'] , [this.sortByName]);
                     this.currentCurrency = this.currency ;
                 });
+            },
+            getCurrenciesRate(){
+                axios.get('/api/currency/rate').then( (response) => {
+                    console.log(response.data) ;
+                    this.USD_rate = response.data.usd_rate;
+                    this.EUR_rate = response.data.eur_rate;
+                });
             }
         },
         mounted() {
             this.getProducts();
+            this.getCurrenciesRate()
         }
     }
 </script>

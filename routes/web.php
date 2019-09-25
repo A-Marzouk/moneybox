@@ -54,3 +54,4 @@ Route::get('api/get-managers','ClientsController@getManagers')->name('get.produc
 Route::get('api/get-current-client','ClientsController@getCurrentClient')->name('get.current.client');
 Route::get('api/get-sales-list','SalesController@getSalesList')->name('get.sales.list');
 Route::get('api/products/{currency}','ProductsController@productsByCurrency')->name('products.eur.prices');
+Route::get('api/currency/rate','ProductsController@getCurrencyRate')->name('getCurrencyRate');
