@@ -28,6 +28,7 @@ class ProductsImport implements ToModel, WithHeadingRow
 
         $product->name = $row['item'];
         $product->quantity = $row['quantity'];
+        $product->currency = $row['currency'];
         $product->date = $row['date'];
         $product->supplier = $row['supplier'];
         $product->buy_price = $row['price'];
