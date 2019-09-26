@@ -56,7 +56,18 @@ class ProductsController extends Controller
             'supplier' => 'max:191',
         ]);
 
-        return Product::create($request->all());
+        $product =  Product::create($request->all());
+
+        $currency  = new Currency();
+
+        if($product['currency'] !== 'UAH'){
+            $product['buy_price_uah'] = $currency->convert($product['currency'], $to = 'UAH', $product['buy_price'] , $decimals = 2);
+        }else{
+            $product['buy_price_uah'] = $product['buy_price'] ;
+        }
+
+        return $product ;
+
     }
 
     public function updateProduct(Request $request){

@@ -2548,6 +2548,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2601,7 +2616,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.post('/products/add', this.newProduct).then(function (response) {
-        _this2.products.push(response.data);
+        var product = response.data;
+
+        _this2.products.unshift(response.data);
 
         _this2.addNewProduct = false;
 
@@ -40357,6 +40374,66 @@ var render = function() {
                     }
                   }
                 })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.newProduct.currency,
+                        expression: "newProduct.currency"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    staticStyle: { width: "90px" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.newProduct,
+                          "currency",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "UAH" } }, [
+                      _vm._v(
+                        "\n                        UAH\n                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "USD" } }, [
+                      _vm._v(
+                        "\n                        USD\n                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "EUR" } }, [
+                      _vm._v(
+                        "\n                        EUR\n                    "
+                      )
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", { staticStyle: { width: "100px" } }, [
+                _vm._v("Цена в грн")
               ]),
               _vm._v(" "),
               _c("td", { staticClass: "d-flex" }, [

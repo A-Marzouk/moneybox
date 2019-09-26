@@ -78,6 +78,21 @@
                 <td>
                     <input type="number" min="0" max="999999" step="any" v-model="newProduct.buy_price" class="form-control">
                 </td>
+                <td>
+                    <select  v-model="newProduct.currency" class="form-control" style="width:90px;">
+                        <option value="UAH">
+                            UAH
+                        </option>
+                        <option value="USD">
+                            USD
+                        </option>
+                        <option value="EUR">
+                            EUR
+                        </option>
+                    </select>
+
+                </td>
+                <td style="width: 100px;">Цена в грн</td>
                 <td class="d-flex">
                     <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addProduct">Add</a>
                     <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewProduct = false ">Cancel</a>
@@ -227,7 +242,8 @@
             addProduct(){
                 axios.post('/products/add',this.newProduct)
                     .then( (response) => {
-                        this.products.push(response.data);
+                        let product = response.data ;
+                        this.products.unshift(response.data);
                         this.addNewProduct = false;
                         this.clearInputs();
                     })
