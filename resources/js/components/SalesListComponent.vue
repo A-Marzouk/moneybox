@@ -25,7 +25,7 @@
                         <th>Цена продажи</th>
                         <th>Другие расходы</th>
                         <th>Бонус</th>
-                        <th>Действия</th>
+                        <!--<th>Действия</th>-->
 
                     </tr>
                     </thead>
@@ -111,9 +111,9 @@
                         <template v-else>
                             Product has been deleted
                         </template>
-                        <td>
-                            <a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>
-                        </td>
+                        <!--<td>-->
+                            <!--<a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>-->
+                        <!--</td>-->
                     </tr>
 
                     </tbody>
@@ -181,6 +181,8 @@
                 difference: 0,
                 abovePlan: 0,
                 ready: 0,
+                USD_rate:'',
+                EUR_rate:'',
                 newSale: {
                     'product': {},
                     'products_quantity': '',
@@ -326,6 +328,7 @@
                         }
                     ],
                 };
+
             },
             deleteSale(sale_id) {
                 axios.post('/sales/delete', {'sale_id': sale_id})
@@ -360,7 +363,13 @@
                 }, stepTime);
             },
             calculateSingleBonus(sale) {
-                let totalCosts   =  this.getTotalCost(sale) + ( sale.product.buy_price * sale.products_quantity);
+                let rate = 1.00 ;
+                if(sale.product.currency === 'USD'){
+                    rate = this.USD_rate;
+                }else if(sale.product.currency === 'EUR'){
+                    rate = this.EUR_rate;
+                }
+                let totalCosts   =  this.getTotalCost(sale) + ( sale.product.buy_price * rate * sale.products_quantity);
                 let totalIncome  =  (sale.sell_price * sale.products_quantity ) ;
                 let percentage   =  this.client.percentage / 100 ;
                 let bonus        =  (totalIncome - totalCosts) * percentage ;
@@ -379,12 +388,19 @@
             addOtherPayments(){
                 this.newSale.totalCost = this.getTotalCost(this.newSale) ;
                 this.paymentsBox = false;
+            },
+            getCurrenciesRate(){
+                axios.get('/api/currency/rate').then( (response) => {
+                    this.USD_rate = response.data.usd_rate;
+                    this.EUR_rate = response.data.eur_rate;
+                });
             }
         },
         mounted() {
             this.getSalesList();
             this.getProducts();
             this.getCurrentClient();
+            this.getCurrenciesRate();
         }
     }
 </script>

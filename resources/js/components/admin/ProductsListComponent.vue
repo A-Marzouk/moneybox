@@ -328,7 +328,6 @@
             },
             getCurrenciesRate(){
                 axios.get('/api/currency/rate').then( (response) => {
-                    console.log(response.data) ;
                     this.USD_rate = response.data.usd_rate;
                     this.EUR_rate = response.data.eur_rate;
                 });

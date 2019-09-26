@@ -20,21 +20,21 @@ class SalesExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $client = Client::where('id',$this->client_id)->first();
-        return $client->sales ;
+        $sales = Sale::select('product_id','products_quantity','sell_price','bonus')->where('client_id',$this->client_id)->get();
+        foreach ($sales as &$sale){
+            $product = Product::where('id', $sale['product_id'])->first() ;
+            $sale['product_id'] = $product->name ;
+        }
+        return $sales ;
     }
 
     public function headings(): array
     {
         return [
-            'id',
-            'products_quantity',
-            'sell_price',
-            'product_id',
-            'client_id',
-            'bonus',
-            'created_at',
-            'updated_at',
+            'Продукт',
+            'Количество',
+            'Цена продажи',
+            'Бонус',
         ];
     }
 

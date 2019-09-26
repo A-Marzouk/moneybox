@@ -1898,6 +1898,8 @@ __webpack_require__.r(__webpack_exports__);
       difference: 0,
       abovePlan: 0,
       ready: 0,
+      USD_rate: '',
+      EUR_rate: '',
       newSale: {
         'product': {},
         'products_quantity': '',
@@ -2076,7 +2078,15 @@ __webpack_require__.r(__webpack_exports__);
       }, stepTime);
     },
     calculateSingleBonus: function calculateSingleBonus(sale) {
-      var totalCosts = this.getTotalCost(sale) + sale.product.buy_price * sale.products_quantity;
+      var rate = 1.00;
+
+      if (sale.product.currency === 'USD') {
+        rate = this.USD_rate;
+      } else if (sale.product.currency === 'EUR') {
+        rate = this.EUR_rate;
+      }
+
+      var totalCosts = this.getTotalCost(sale) + sale.product.buy_price * rate * sale.products_quantity;
       var totalIncome = sale.sell_price * sale.products_quantity;
       var percentage = this.client.percentage / 100;
       var bonus = (totalIncome - totalCosts) * percentage;
@@ -2093,12 +2103,21 @@ __webpack_require__.r(__webpack_exports__);
     addOtherPayments: function addOtherPayments() {
       this.newSale.totalCost = this.getTotalCost(this.newSale);
       this.paymentsBox = false;
+    },
+    getCurrenciesRate: function getCurrenciesRate() {
+      var _this8 = this;
+
+      axios.get('/api/currency/rate').then(function (response) {
+        _this8.USD_rate = response.data.usd_rate;
+        _this8.EUR_rate = response.data.eur_rate;
+      });
     }
   },
   mounted: function mounted() {
     this.getSalesList();
     this.getProducts();
     this.getCurrentClient();
+    this.getCurrenciesRate();
   }
 });
 
@@ -2712,7 +2731,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this6 = this;
 
       axios.get('/api/currency/rate').then(function (response) {
-        console.log(response.data);
         _this6.USD_rate = response.data.usd_rate;
         _this6.EUR_rate = response.data.eur_rate;
       });
@@ -39171,23 +39189,7 @@ var render = function() {
                             _vm._v(
                               "\n                        Product has been deleted\n                    "
                             )
-                          ],
-                      _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "btn btn-dark btn-sm",
-                            attrs: { href: "javascript:void(0)" },
-                            on: {
-                              click: function($event) {
-                                return _vm.deleteSale(sale.id)
-                              }
-                            }
-                          },
-                          [_vm._v("X")]
-                        )
-                      ])
+                          ]
                     ],
                     2
                   )
@@ -39336,9 +39338,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Другие расходы")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Бонус")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Действия")])
+        _c("th", [_vm._v("Бонус")])
       ])
     ])
   },
