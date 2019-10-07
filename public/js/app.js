@@ -1887,6 +1887,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1905,6 +1914,7 @@ __webpack_require__.r(__webpack_exports__);
         'products_quantity': '',
         'sell_price': '',
         'client_id': '',
+        'for_new_client': false,
         'costs': [{
           label: 'Транспорт',
           cost: 0
@@ -1929,7 +1939,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     ready: function ready() {
-      if (this.ready === 2) {
+      if (this.ready === 3) {
         this.calculateTotalProfit();
       }
     }
@@ -2089,6 +2099,11 @@ __webpack_require__.r(__webpack_exports__);
       var totalCosts = this.getTotalCost(sale) + sale.product.buy_price * rate * sale.products_quantity;
       var totalIncome = sale.sell_price * sale.products_quantity;
       var percentage = this.client.percentage / 100;
+
+      if (sale.for_new_client) {
+        percentage = 7 / 100;
+      }
+
       var bonus = (totalIncome - totalCosts) * percentage;
       return Math.round(bonus * 100) / 100;
     },
@@ -2110,14 +2125,15 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/currency/rate').then(function (response) {
         _this8.USD_rate = response.data.usd_rate;
         _this8.EUR_rate = response.data.eur_rate;
+        _this8.ready++;
       });
     }
   },
   mounted: function mounted() {
+    this.getCurrenciesRate();
     this.getSalesList();
     this.getProducts();
     this.getCurrentClient();
-    this.getCurrenciesRate();
   }
 });
 
@@ -7201,7 +7217,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border: 1px solid lightgray;\n  border-radius: 10px;\n  padding: 20px;\n  margin-top: 30px;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}\n.box-popup[data-v-a05a3f04] {\n  width: 250px;\n  background: white;\n  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  position: absolute;\n  margin-top: 5px;\n  margin-bottom: 30px;\n  z-index: 2;\n}\n.box-popup .container[data-v-a05a3f04] {\n  padding: 10px;\n}\n.box-popup input[data-v-a05a3f04] {\n  height: 30px;\n}\n.box-popup .row[data-v-a05a3f04] {\n  padding-top: 5px;\n}\n.addCostBtn[data-v-a05a3f04] {\n  height: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 25px;\n}", ""]);
+exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border: 1px solid lightgray;\n  border-radius: 10px;\n  padding: 20px;\n  margin-top: 30px;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}\n.box-popup[data-v-a05a3f04] {\n  width: 250px;\n  background: white;\n  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  position: absolute;\n  margin-top: 5px;\n  margin-bottom: 30px;\n  z-index: 2;\n}\n.box-popup .container[data-v-a05a3f04] {\n  padding: 10px;\n}\n.box-popup input[data-v-a05a3f04] {\n  height: 30px;\n}\n.box-popup .row[data-v-a05a3f04] {\n  padding-top: 5px;\n}\n.addCostBtn[data-v-a05a3f04] {\n  height: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 25px;\n}\n.btn-checkbox[data-v-a05a3f04] {\n  background: lightgrey;\n  border: grey;\n  color: white;\n  white-space: nowrap;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:hover {\n  background: lightgrey;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:focus {\n  outline: none !important;\n}\n.btn-checkbox.active[data-v-a05a3f04] {\n  background: lightgreen;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:active {\n  outline: none !important;\n}\n.green-circle[data-v-a05a3f04] {\n  height: 15px;\n  width: 15px;\n  background-color: greenyellow;\n  border-radius: 50%;\n  display: inline-block;\n}\n.orange-circle[data-v-a05a3f04] {\n  height: 15px;\n  width: 15px;\n  background-color: lightgrey;\n  border-radius: 50%;\n  display: inline-block;\n}", ""]);
 
 // exports
 
@@ -39104,6 +39120,24 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-checkbox mr-2 btn-sm",
+                          class: { active: _vm.newSale.for_new_client },
+                          attrs: { href: "javascript:void(0)" },
+                          on: {
+                            click: function($event) {
+                              _vm.newSale.for_new_client = !_vm.newSale
+                                .for_new_client
+                            }
+                          }
+                        },
+                        [_vm._v("Новый клиент")]
+                      )
+                    ]),
+                    _vm._v(" "),
                     _c("td", { staticClass: "d-flex" }, [
                       _c(
                         "a",
@@ -39183,7 +39217,17 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(_vm._s(_vm.calculateSingleBonus(sale)))
-                            ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              { staticClass: "d-flex justify-content-center" },
+                              [
+                                sale.for_new_client
+                                  ? _c("span", { staticClass: "green-circle" })
+                                  : _c("span", { staticClass: "orange-circle" })
+                              ]
+                            )
                           ]
                         : [
                             _vm._v(
@@ -39338,7 +39382,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Другие расходы")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Бонус")])
+        _c("th", [_vm._v("Бонус")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Новый клиент")])
       ])
     ])
   },

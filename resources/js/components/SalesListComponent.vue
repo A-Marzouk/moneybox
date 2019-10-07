@@ -25,8 +25,7 @@
                         <th>Цена продажи</th>
                         <th>Другие расходы</th>
                         <th>Бонус</th>
-                        <!--<th>Действия</th>-->
-
+                        <th>Новый клиент</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -84,6 +83,10 @@
                         <td>
                             0
                         </td>
+                        <td>
+                            <a href="javascript:void(0)" class="btn btn-checkbox mr-2 btn-sm" :class="{active : newSale.for_new_client}" @click="newSale.for_new_client = !newSale.for_new_client">Новый клиент</a>
+                        </td>
+
                         <td class="d-flex">
                             <a href="javascript:void(0)" class="btn btn-primary mr-2 btn-sm" @click="addSale">Добавить</a>
                             <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewSale = false ">Отменить</a>
@@ -107,6 +110,12 @@
 
                             </td>
                             <td>{{calculateSingleBonus(sale)}}</td>
+                            <td class="d-flex justify-content-center">
+                                <span v-if="sale.for_new_client" class="green-circle">
+                                </span>
+                                <span v-else class="orange-circle">
+                                </span>
+                            </td>
                         </template>
                         <template v-else>
                             Product has been deleted
@@ -188,6 +197,7 @@
                     'products_quantity': '',
                     'sell_price': '',
                     'client_id': '',
+                    'for_new_client':false,
                     'costs' : [
                         {
                             label:'Транспорт',
@@ -216,7 +226,7 @@
         },
         watch: {
             ready: function () {
-                if (this.ready === 2) {
+                if (this.ready === 3) {
                     this.calculateTotalProfit();
                 }
             }
@@ -372,6 +382,9 @@
                 let totalCosts   =  this.getTotalCost(sale) + ( sale.product.buy_price * rate * sale.products_quantity);
                 let totalIncome  =  (sale.sell_price * sale.products_quantity ) ;
                 let percentage   =  this.client.percentage / 100 ;
+                if(sale.for_new_client){
+                    percentage = 7/100 ;
+                }
                 let bonus        =  (totalIncome - totalCosts) * percentage ;
 
                 return Math.round(bonus * 100) / 100;
@@ -393,14 +406,15 @@
                 axios.get('/api/currency/rate').then( (response) => {
                     this.USD_rate = response.data.usd_rate;
                     this.EUR_rate = response.data.eur_rate;
+                    this.ready++;
                 });
             }
         },
         mounted() {
+            this.getCurrenciesRate();
             this.getSalesList();
             this.getProducts();
             this.getCurrentClient();
-            this.getCurrenciesRate();
         }
     }
 </script>
@@ -450,5 +464,44 @@
         width: 25px;
     }
 
+    .btn-checkbox{
+        background: lightgrey;
+        border:grey;
+        color:white;
+        white-space: nowrap;
+        outline: none!important;
+    }
+    .btn-checkbox:hover{
+        background: lightgrey;
+        outline: none!important;
+    }
+    .btn-checkbox:focus{
+        outline: none!important;
+    }
+
+    .btn-checkbox.active{
+        background: lightgreen;
+        outline: none!important;
+    }
+
+    .btn-checkbox:active {
+        outline: none!important;
+    }
+
+    .green-circle{
+        height: 15px;
+        width: 15px;
+        background-color: greenyellow;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .orange-circle{
+        height: 15px;
+        width: 15px;
+        background-color: lightgrey;
+        border-radius: 50%;
+        display: inline-block;
+    }
 
 </style>

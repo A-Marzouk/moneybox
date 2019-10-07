@@ -25,6 +25,7 @@ class Sale extends Model
         'products_quantity',
         'sell_price',
         'bonus',
+        'for_new_client',
         'product_id',
         'client_id',
     ];

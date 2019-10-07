@@ -29,6 +29,7 @@ class SalesController extends Controller
             'product_id' => 'required|max:191',
             'client_id' =>  'required|max:191',
             'bonus' =>  'required|max:191',
+            'for_new_client' =>  'max:191',
         ]);
 
         // sell price should be bigger than buy_price
