@@ -44,6 +44,7 @@ Route::post('/managers/delete','ClientsController@deleteManager')->name('delete.
 
 Route::get('/admin/excel/actions', 'AdminsController@showExcelActionPage')->name('admin.excel');
 Route::get('/admin/export/products', 'ProductsController@export')->name('admin.products.export');
+Route::get('/admin/export/clients', 'ClientsController@export')->name('admin.clients.export');
 Route::post('/admin/import/products', 'ProductsController@import')->name('admin.products.import');
 
 Route::get('/client/export/sales/{client_id}', 'SalesController@export')->name('client.sales.export');
