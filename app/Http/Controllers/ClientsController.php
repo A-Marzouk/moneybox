@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\classes\Notification;
 use App\Client;
+use App\Exports\ClientsExport;
+use App\Product;
+use App\Sale;
 use App\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientsController extends Controller
 {
@@ -100,7 +105,11 @@ class ClientsController extends Controller
        return User::destroy($request->manager_id);
     }
 
-
+    public function export()
+    {
+        Notification::productsAction('All Clients import');
+        return Excel::download(new ClientsExport(),'managers_list.xlsx');
+    }
 
 
 }
