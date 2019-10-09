@@ -92,8 +92,8 @@
                             <a href="javascript:void(0)" class="btn btn-danger btn-sm" @click="addNewSale = false ">Отменить</a>
                         </td>
                     </tr>
-                    <tr v-for="(sale, index) in sales" :key="index">
-                        <template v-if="sale.product !== null">
+                    <tr v-for="(sale, index) in sales" :key="index" v-if="sale.product !== null">
+
                             <td>{{index +1}}</td>
                             <td>{{sale.product.name}}</td>
                             <td>{{sale.products_quantity}}</td>
@@ -116,10 +116,6 @@
                                 <span v-else class="orange-circle">
                                 </span>
                             </td>
-                        </template>
-                        <template v-else>
-                            Product has been deleted
-                        </template>
                         <!--<td>-->
                             <!--<a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>-->
                         <!--</td>-->
