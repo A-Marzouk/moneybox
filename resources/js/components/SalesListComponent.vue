@@ -323,6 +323,7 @@
                     'products_quantity': '',
                     'sell_price': '',
                     'client_id': '',
+                    'for_new_client': false,
                     'costs' : [
                         {
                             label:'Transport',
