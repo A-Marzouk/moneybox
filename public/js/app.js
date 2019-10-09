@@ -2039,6 +2039,7 @@ __webpack_require__.r(__webpack_exports__);
         'products_quantity': '',
         'sell_price': '',
         'client_id': '',
+        'for_new_client': false,
         'costs': [{
           label: 'Transport',
           cost: 0

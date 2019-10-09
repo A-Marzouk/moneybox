@@ -6,6 +6,7 @@ use App\classes\Notification;
 use App\Client;
 use App\Cost;
 use App\Exports\SalesExport;
+use danielme85\CConverter\Currency;
 use App\Product;
 use App\Sale;
 use Illuminate\Http\Request;
@@ -35,9 +36,24 @@ class SalesController extends Controller
         // sell price should be bigger than buy_price
         $product = Product::where('id',$request->product_id)->first();
 
-        if($request->sell_price < $product->buy_price){
+        $currency  = new Currency();
+        $usd_rate = $currency->convert('USD', $to = 'UAH', 1 , $decimals = 4);
+        $eur_rate = $currency->convert('EUR', $to = 'UAH', 1 , $decimals = 4);
+
+        $buy_price = $product->buy_price ;
+
+        if($product->currency === 'USD'){
+            $buy_price = $product->buy_price * $usd_rate  ;
+        }
+
+        if($product->currency === 'EUR'){
+            $buy_price = $product->buy_price * $eur_rate  ;
+        }
+
+
+        if($request->sell_price < $buy_price){
             $error = \Illuminate\Validation\ValidationException::withMessages([
-                'ErrorInPrice' => ['Sell price can not be less than buy price.'],
+                'ErrorInPrice' => ['Цена продажи не может быть меньше цены покупки..'],
             ]);
             throw $error;
         }
@@ -45,10 +61,21 @@ class SalesController extends Controller
 
         if($request->products_quantity > $product->quantity){
             $error = \Illuminate\Validation\ValidationException::withMessages([
-                'ErrorInQuantity' => ['Not enough products.'],
+                'ErrorInQuantity' => ['Недостаточно продуктов.'],
             ]);
             throw $error;
         }
+
+
+        if(isset($request->costs)){
+            if($request->bonus < 0){
+                $error = \Illuminate\Validation\ValidationException::withMessages([
+                    'ErrorInPrice' => ['Высокие расходы.'],
+                ]);
+                throw $error;
+            }
+        }
+
 
 
 
@@ -63,7 +90,6 @@ class SalesController extends Controller
         $sale['client']  = $sale->client;
 
         // create costs
-
         if(isset($request->costs)){
             foreach ($request->costs as $cost){
                 if($cost['cost'] > 0){
@@ -78,8 +104,6 @@ class SalesController extends Controller
 
 
         $sale['costs']   = $sale->costs;
-
-
         return $sale ;
     }
 
