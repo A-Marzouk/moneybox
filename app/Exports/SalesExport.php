@@ -20,13 +20,22 @@ class SalesExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $sales = Sale::select('product_id','products_quantity','sell_price','bonus')->where('client_id',$this->client_id)->get();
+        $sales = Sale::select('product_id','products_quantity','sell_price','bonus','id')->with('costs')->where('client_id',$this->client_id)->get();
         foreach ($sales as &$sale){
             $product = Product::where('id', $sale['product_id'])->first() ;
             if(!isset($product->name)){
                 continue ;
             }
+
+            $totalCosts = 0 ;
+            foreach ($sale->costs as $cost){
+                $totalCosts += $cost->cost ;
+            }
+
             $sale['product_id'] = $product->name ;
+            $sale['id'] = $product->supplier ;
+            $sale['buy_price'] = $product->buy_price . ' | ' . $product->currency ;
+            $sale['total_costs'] = $totalCosts ;
         }
         return $sales ;
     }
@@ -38,6 +47,9 @@ class SalesExport implements FromCollection, WithHeadings
             'Количество',
             'Цена продажи',
             'Бонус',
+            'Производтель',
+            'себестоимость',
+            'Доп. расходы',
         ];
     }
 

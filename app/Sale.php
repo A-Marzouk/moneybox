@@ -38,7 +38,6 @@ class Sale extends Model
     public function setClientID()
     {
         $this->attributes['client_id'] = currentClient()->id;
-        return $this;
     }
 
     public function client(){
