@@ -33,8 +33,6 @@ class Upload
         $guesser = new MimeTypeExtensionGuesser ;
         $format  = $guesser->guess($_FILES[$name]['type']);
 
-         $format ;
-
         // check file type :
         if(!in_array($format,$formats)){
             $uploadOk = 0 ;

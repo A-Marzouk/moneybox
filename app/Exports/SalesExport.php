@@ -23,6 +23,9 @@ class SalesExport implements FromCollection, WithHeadings
         $sales = Sale::select('product_id','products_quantity','sell_price','bonus')->where('client_id',$this->client_id)->get();
         foreach ($sales as &$sale){
             $product = Product::where('id', $sale['product_id'])->first() ;
+            if(!isset($product->name)){
+                continue ;
+            }
             $sale['product_id'] = $product->name ;
         }
         return $sales ;
