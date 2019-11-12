@@ -48,8 +48,13 @@ class SalesExport implements FromCollection, WithHeadings
             }
 
             $sale['product_id'] = $product->name ;
-            $sale['id'] = $product->supplier ;
-            $sale['buy_price'] = $buy_price ;
+
+
+            if(currentUser()->hasRole('admin')){
+                $sale['buy_price'] = $buy_price ;
+            }
+
+            $sale['supplier'] = $product->supplier ;
             $sale['total_costs'] = $totalCosts ;
         }
         return $sales ;
@@ -57,15 +62,31 @@ class SalesExport implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        return [
+        $headings =  [
             'Продукт',
             'Количество',
             'Цена продажи',
             'Бонус',
+            'ID',
             'Производтель',
-            'себестоимость',
             'Доп. расходы',
         ];
+
+        if(currentUser()->hasRole('admin')){
+           return  [
+               'Продукт',
+               'Количество',
+               'Цена продажи',
+               'Бонус',
+               'ID',
+               'себестоимость',
+               'Производтель',
+               'Доп. расходы',
+           ];
+        }else{
+            return $headings ;
+        }
+
     }
 
     public function columnFormats(): array
