@@ -21,6 +21,7 @@
                     <tr>
                         <th>#</th>
                         <th>Товар</th>
+                        <th>Поставщик</th>
                         <th>Количество</th>
                         <th>Цена продажи</th>
                         <th>Другие расходы</th>
@@ -37,10 +38,11 @@
                             <select v-model="newSale.product" id="" class="custom-select">
                                 <option selected disabled>Select product</option>
                                 <option v-for="(product,index) in orderedProducts" :key="index + 'A'" :value="product" v-show="product.quantity > 0">
-                                    {{product.name}} (Кол. {{product.quantity}})
+                                    {{product.name}} (Кол. {{product.quantity}})  - {{product.supplier}}
                                 </option>
                             </select>
                         </td>
+                        <td>&nbsp;</td>
                         <td>
                             <input type="number" min="0" max="999999" v-model="newSale.products_quantity" class="form-control">
                         </td>
@@ -96,6 +98,7 @@
 
                             <td>{{index +1}}</td>
                             <td>{{sale.product.name}}</td>
+                            <td>{{sale.product.supplier}}</td>
                             <td>{{sale.products_quantity}}</td>
                             <td>{{sale.sell_price}} {{client.currency}}</td>
                             <td>

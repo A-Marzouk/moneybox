@@ -1892,6 +1892,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -38873,7 +38876,9 @@ var render = function() {
                                     _vm._s(product.name) +
                                     " (Кол. " +
                                     _vm._s(product.quantity) +
-                                    ")\n                            "
+                                    ")  - " +
+                                    _vm._s(product.supplier) +
+                                    "\n                            "
                                 )
                               ]
                             )
@@ -38882,6 +38887,8 @@ var render = function() {
                         2
                       )
                     ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(" ")]),
                     _vm._v(" "),
                     _c("td", [
                       _c("input", {
@@ -39170,6 +39177,8 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(sale.product.name))]),
                         _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.product.supplier))]),
+                        _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(sale.products_quantity))]),
                         _vm._v(" "),
                         _c("td", [
@@ -39361,6 +39370,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
         _c("th", [_vm._v("Товар")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Поставщик")]),
         _vm._v(" "),
         _c("th", [_vm._v("Количество")]),
         _vm._v(" "),
