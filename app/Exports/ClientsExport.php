@@ -16,9 +16,12 @@ class ClientsExport implements FromCollection, WithHeadings
     public function collection()
     {
         // this should return array of objects :
-        $clients = Client::all('id','plan','percentage');
+        $clients = Client::all('id','plan','percentage','user_id');
         foreach ($clients as &$client){
-            $client['name']  = $client->user->name ;
+            if(!$client->user){
+                continue;
+            }
+            $client['user_id']  = $client->user->name ;
             $client['email'] = $client->user->email ;
             $client['sales'] = URL::to('/'). '/client/export/sales/'.$client->id;
             $client['sales_link'] = URL::to('/'). '/client/export/sales/'.$client->id;

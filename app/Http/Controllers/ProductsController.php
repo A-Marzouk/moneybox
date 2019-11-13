@@ -36,10 +36,12 @@ class ProductsController extends Controller
         $currency  = new Currency();
 
         foreach ($products as &$product) {
-            if($product['currency'] !== 'UAH'){
+            if($product['currency'] === 'USD' || $product['currency'] === 'EUR' ){
                 $product['buy_price_uah'] = $currency->convert($product['currency'], $to = 'UAH', $product['buy_price'] , $decimals = 2);
-            }else{
+            }elseif($product['currency'] === 'UAH'){
                 $product['buy_price_uah'] = $product['buy_price'] ;
+            }else{
+                $product['buy_price_uah'] = $product['buy_price'];
             }
         }
 
