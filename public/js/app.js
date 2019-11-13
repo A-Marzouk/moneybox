@@ -2598,6 +2598,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2626,7 +2637,9 @@ __webpack_require__.r(__webpack_exports__);
       currency: 'UAH',
       currentCurrency: 'UAH',
       USD_rate: 0,
-      EUR_rate: 0
+      EUR_rate: 0,
+      currentPage: 1,
+      lastPage: ''
     };
   },
   computed: {},
@@ -2634,8 +2647,9 @@ __webpack_require__.r(__webpack_exports__);
     getProducts: function getProducts() {
       var _this = this;
 
-      axios.get('/api/get-products').then(function (response) {
-        _this.products = response.data;
+      axios.get('/api/get-products?page=' + this.currentPage).then(function (response) {
+        _this.products = response.data.data;
+        _this.lastPage = response.data.last_page;
 
         _this.sortProductsByName();
 
@@ -2646,6 +2660,26 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    nextPage: function nextPage() {
+      if (this.currentPage <= this.lastPage) {
+        this.currentPage++;
+        this.getProducts();
+      }
+    },
+    previousPage: function previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.getProducts();
+      }
+    },
+    goFirstPage: function goFirstPage() {
+      this.currentPage = 1;
+      this.getProducts();
+    },
+    goLastPage: function goLastPage() {
+      this.currentPage = this.lastPage;
+      this.getProducts();
     },
     addProduct: function addProduct() {
       var _this2 = this;
@@ -40262,6 +40296,58 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
+    _c("div", { staticClass: "m-3" }, [
+      _c("span", [
+        _vm._v(
+          " Page  : " +
+            _vm._s(_vm.currentPage) +
+            " | All : " +
+            _vm._s(_vm.lastPage) +
+            " "
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-sm btn-primary",
+          attrs: { href: "javascript:void(0)" },
+          on: { click: _vm.goFirstPage }
+        },
+        [_vm._v("First")]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-sm btn-primary",
+          attrs: { href: "javascript:void(0)" },
+          on: { click: _vm.previousPage }
+        },
+        [_vm._v("Prev")]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-sm btn-primary",
+          attrs: { href: "javascript:void(0)" },
+          on: { click: _vm.nextPage }
+        },
+        [_vm._v("Next")]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-sm btn-primary",
+          attrs: { href: "javascript:void(0)" },
+          on: { click: _vm.goLastPage }
+        },
+        [_vm._v("Last")]
+      )
+    ]),
+    _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
       _vm._m(1),
       _vm._v(" "),
@@ -40509,7 +40595,9 @@ var render = function() {
           _vm._v(" "),
           _vm._l(_vm.products, function(product, index) {
             return _c("tr", { key: index }, [
-              _c("td", [_vm._v(_vm._s(index + 1))]),
+              _c("td", [
+                _vm._v(_vm._s(index + 1 + (_vm.currentPage - 1) * 10 * 2))
+              ]),
               _vm._v(" "),
               _c("td", [
                 _c(

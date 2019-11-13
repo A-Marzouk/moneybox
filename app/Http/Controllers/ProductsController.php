@@ -32,7 +32,7 @@ class ProductsController extends Controller
      */
     public function getProducts()
     {
-        $products = Product::all()->toArray();
+        $products = Product::paginate(20);
         $currency  = new Currency();
 
         foreach ($products as &$product) {

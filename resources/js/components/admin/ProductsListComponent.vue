@@ -43,6 +43,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="m-3">
+            <span> Page  : {{currentPage}} | All : {{lastPage}} </span>
+            <a href="javascript:void(0)" class="btn btn-sm btn-primary" @click="goFirstPage">First</a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-primary" @click="previousPage">Prev</a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-primary" @click="nextPage">Next</a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-primary" @click="goLastPage">Last</a>
+        </div>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -99,7 +108,7 @@
                 </td>
             </tr>
                 <tr v-for="(product, index) in products" :key="index">
-                    <td>{{index+1}}</td>
+                    <td>{{index + 1 + ((currentPage-1)*10 * 2 )}}</td>
                     <td>
                         <div v-show="!isEdited(product.id)">
                             {{product.name}}
@@ -186,6 +195,8 @@
 
             </tbody>
         </table>
+
+
     </div>
 </template>
 
@@ -219,6 +230,8 @@
                 currentCurrency:'UAH',
                 USD_rate:0,
                 EUR_rate:0,
+                currentPage: 1,
+                lastPage: ''
             }
         },
         computed:{
@@ -226,9 +239,10 @@
         },
         methods:{
             getProducts(){
-                axios.get('/api/get-products')
+                axios.get('/api/get-products?page=' + this.currentPage)
                     .then( (response) => {
-                        this.products = response.data ;
+                        this.products = response.data.data ;
+                        this.lastPage = response.data.last_page;
                         this.sortProductsByName();
                         $.each(products, (i) => {
                             products[i].edited = false ;
@@ -238,6 +252,26 @@
                     .catch( (error) => {
                         console.log(error);
                     });
+            },
+            nextPage(){
+                if(this.currentPage <= this.lastPage){
+                    this.currentPage ++ ;
+                    this.getProducts();
+                }
+            },
+            previousPage(){
+                if( this.currentPage > 1){
+                    this.currentPage -- ;
+                    this.getProducts();
+                }
+            },
+            goFirstPage(){
+                this.currentPage  = 1;
+                this.getProducts();
+            },
+            goLastPage(){
+                this.currentPage  = this.lastPage;
+                this.getProducts();
             },
             addProduct(){
                 axios.post('/products/add',this.newProduct)
