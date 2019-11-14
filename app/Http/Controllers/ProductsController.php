@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\classes\Upload;
 use App\Imports\ProductsImport;
+use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductsController extends Controller
@@ -33,6 +34,10 @@ class ProductsController extends Controller
     public function getProducts()
     {
         $products = Product::paginate(20);
+        $limit = Input::get('limit');
+        if(isset($limit)){
+            $products = Product::paginate($limit);
+        }
         $currency  = new Currency();
 
         foreach ($products as &$product) {

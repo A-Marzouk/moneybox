@@ -1716,6 +1716,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 //
 //
 //
@@ -1928,7 +1936,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       addNewSale: false,
       paymentsBox: false,
-      errors: {}
+      errors: {},
+      currentPage: 1,
+      lastPage: ''
     };
   },
   computed: {
@@ -1957,8 +1967,17 @@ __webpack_require__.r(__webpack_exports__);
     getProducts: function getProducts() {
       var _this2 = this;
 
-      axios.get('/api/get-products').then(function (response) {
-        _this2.products = response.data;
+      axios.get('/api/get-products?limit=20&&page=' + this.currentPage).then(function (response) {
+        var _this2$products;
+
+        _this2.lastPage = response.data.last_page;
+        _this2.currentPage++;
+
+        (_this2$products = _this2.products).push.apply(_this2$products, _toConsumableArray(response.data.data));
+
+        if (_this2.currentPage !== _this2.lastPage) {
+          _this2.getProducts();
+        }
       })["catch"](function (error) {
         console.log(error);
       });

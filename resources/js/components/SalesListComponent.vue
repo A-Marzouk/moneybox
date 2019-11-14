@@ -216,6 +216,8 @@
                 addNewSale: false,
                 paymentsBox: false,
                 errors: {},
+                currentPage: 1,
+                lastPage: '',
             }
         },
         computed:{
@@ -244,9 +246,14 @@
             },
             getProducts() {
                 axios
-                    .get('/api/get-products')
+                    .get('/api/get-products?limit=20&&page=' + this.currentPage)
                     .then((response) => {
-                        this.products = response.data;
+                        this.lastPage = response.data.last_page ;
+                        this.currentPage++;
+                        this.products.push(...response.data.data);
+                        if(this.currentPage !== this.lastPage){
+                            this.getProducts();
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
