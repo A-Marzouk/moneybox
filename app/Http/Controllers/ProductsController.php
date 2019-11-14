@@ -36,7 +36,7 @@ class ProductsController extends Controller
         $products = Product::orderBy('name','asc')->paginate(20);
         $limit = Input::get('limit');
         if(isset($limit)){
-            $products = Product::paginate($limit);
+            $products = Product::orderBy('name','asc')->paginate(20);
         }
         $currency  = new Currency();
 
