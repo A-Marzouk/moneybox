@@ -38,7 +38,7 @@
                             <select v-model="newSale.product" id="" class="custom-select">
                                 <option selected disabled>Select product</option>
                                 <option v-for="(product,index) in orderedProducts" :key="index + 'A'" :value="product" v-show="product.quantity > 0">
-                                    {{product.name}} (Кол. {{product.quantity}})  - {{product.supplier}}
+                                    {{product.name}} (Кол. {{product.quantity}})  - {{product.supplier}} - {{product.date}}
                                 </option>
                             </select>
                         </td>

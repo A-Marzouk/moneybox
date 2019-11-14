@@ -38931,6 +38931,8 @@ var render = function() {
                                     _vm._s(product.quantity) +
                                     ")  - " +
                                     _vm._s(product.supplier) +
+                                    " - " +
+                                    _vm._s(product.date) +
                                     "\n                            "
                                 )
                               ]
