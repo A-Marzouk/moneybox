@@ -33,7 +33,7 @@ class ProductsController extends Controller
      */
     public function getProducts()
     {
-        $products = Product::paginate(20);
+        $products = Product::orderBy('name','asc')->paginate(20);
         $limit = Input::get('limit');
         if(isset($limit)){
             $products = Product::paginate($limit);
