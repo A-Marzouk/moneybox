@@ -2107,6 +2107,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }, stepTime);
     },
     calculateSingleBonus: function calculateSingleBonus(sale) {
+      if (!sale.product) {
+        return 0;
+      }
+
       var rate = 1.00;
 
       if (sale.product.currency === 'USD') {

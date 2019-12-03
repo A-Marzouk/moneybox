@@ -380,6 +380,9 @@
                 }, stepTime);
             },
             calculateSingleBonus(sale) {
+                if(!sale.product){
+                    return 0;
+                }
                 let rate = 1.00 ;
                 if(sale.product.currency === 'USD'){
                     rate = this.USD_rate;

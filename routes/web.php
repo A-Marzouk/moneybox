@@ -30,6 +30,7 @@ Route::get('/home','HomeController@index')
     ->name('home');
 
 Route::post('/sales/add','SalesController@addSale')->name('add.sale');
+Route::post('/sales/edit','SalesController@editSale')->name('edit.sale');
 Route::post('/sales/delete','SalesController@deleteSale')->name('delete.sale');
 
 Route::post('/products/add','ProductsController@addProduct')->name('add.product');

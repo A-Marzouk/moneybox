@@ -107,6 +107,11 @@ class SalesController extends Controller
         return $sale ;
     }
 
+
+    public function editSale(Request $request){
+        return $request;
+    }
+
     public function deleteSale(Request $request){
         return Sale::destroy($request->sale_id);
     }
