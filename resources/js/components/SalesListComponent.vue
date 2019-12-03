@@ -27,6 +27,8 @@
                         <th>Другие расходы</th>
                         <th>Бонус</th>
                         <th>Новый клиент</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -97,10 +99,27 @@
                     <tr v-for="(sale, index) in sales" :key="index" v-if="sale.product !== null">
 
                             <td>{{index +1}}</td>
-                            <td>{{sale.product.name}}</td>
+
+
+                            <td>
+                                <div>{{sale.product.name}}</div>
+                            </td>
                             <td>{{sale.product.supplier}}</td>
-                            <td>{{sale.products_quantity}}</td>
-                            <td>{{sale.sell_price}} {{client.currency}}</td>
+                            <td>
+
+                                <div v-if="editedSale.id === sale.id">
+                                    <input type="number" min="0" max="999999" v-model="new_quantity" class="form-control">
+                                </div>
+                                <div v-else>   {{sale.products_quantity}}</div>
+
+                            </td>
+                            <td>
+                                <div v-if="editedSale.id === sale.id">
+                                    <input type="number" min="0" max="999999" step="any" v-model="new_sell_price"
+                                           class="form-control">
+                                </div>
+                                <div v-else> {{sale.sell_price}} {{client.currency}}</div>
+                            </td>
                             <td>
 
                                 <a v-if="sale.costs.length > 0" href="javascript:void(0)" data-toggle="modal" :data-target="'#costsModal_' + sale.id">
@@ -119,9 +138,25 @@
                                 <span v-else class="orange-circle">
                                 </span>
                             </td>
-                        <!--<td>-->
-                            <!--<a href="javascript:void(0)" class="btn btn-dark btn-sm" @click="deleteSale(sale.id)">X</a>-->
-                        <!--</td>-->
+
+                            <td>
+                                <a href="javascript:void(0)" @click="toggleEditedSale(sale)" v-show="editedSale.id != sale.id">
+                                    <img src="/images/edit.svg" alt="edit" style="width: 14px;">
+                                </a>
+                                <div v-show="editedSale.id == sale.id">
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-danger" @click="toggleEditedSale(sale)" >
+                                        Cancel
+                                    </a>
+                                    <a href="javascript:void(0)"  class="btn btn-sm btn-success" @click="editSale">
+                                        Save
+                                    </a>
+                                </div>
+                            </td>
+
+                            <td>
+                                <a href="javascript:void(0)" @click="deleteSale(sale.id)">X</a>
+                            </td>
+
                     </tr>
 
                     </tbody>
@@ -174,6 +209,13 @@
             </div>
         </div>
 
+        <div class="changesSavedText d-none" id="changesSaved">
+            <span class="alert alert-success">
+                Сохранено
+            </span>
+        </div>
+
+
     </div>
 </template>
 
@@ -218,6 +260,9 @@
                 errors: {},
                 currentPage: 1,
                 lastPage: '',
+                editedSale:{},
+                new_quantity : '',
+                new_sell_price :'',
             }
         },
         computed:{
@@ -314,6 +359,38 @@
                         this.errors = error.response.data.errors;
                     });
             },
+            toggleEditedSale(sale){
+                if(this.editedSale.id == sale.id){
+                    // toggle
+                    this.editedSale = {};
+                }else{
+                    this.new_sell_price = sale.sell_price;
+                    this.new_quantity = sale.products_quantity;
+                    this.editedSale = sale ;
+                }
+            },
+            editSale(){
+                this.editedSale.products_quantity = this.new_quantity;
+                this.editedSale.sell_price = this.new_sell_price;
+
+                axios.post('/sales/edit', this.editedSale)
+                    .then((response) => {
+                        if (response.data.status === 'success') {
+                            $('#changesSaved').fadeIn('slow');
+                            $('#changesSaved').removeClass('d-none');
+                            setTimeout(function () {
+                                $('#changesSaved').fadeOut();
+                            },2000);
+                            this.errors = {} ;
+                        }
+                        this.calculateTotalProfit();
+                        this.editedSale = {};
+                    })
+                    .catch((error) => {
+                        console.log(error.response.data.errors);
+                        this.errors = error.response.data.errors;
+                    });
+            },
             showOtherPaymentsBox(){
                 this.paymentsBox = true ;
             },
@@ -348,6 +425,9 @@
 
             },
             deleteSale(sale_id) {
+                if (!confirm('Вы уверены, что хотите удалить этот sale ?')){
+                    return;
+                }
                 axios.post('/sales/delete', {'sale_id': sale_id})
                     .then((response) => {
                         let sales = this.sales;
@@ -512,6 +592,15 @@
         background-color: lightgrey;
         border-radius: 50%;
         display: inline-block;
+    }
+
+    .changesSavedText {
+        border-radius: 5px 5px 0 0 !important;
+        position: fixed;
+        height: 38px;
+        bottom: 38px;
+        left: 32px;
+        width: 173px;
     }
 
 </style>

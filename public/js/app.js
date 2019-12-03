@@ -1903,6 +1903,48 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1938,7 +1980,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       paymentsBox: false,
       errors: {},
       currentPage: 1,
-      lastPage: ''
+      lastPage: '',
+      editedSale: {},
+      new_quantity: '',
+      new_sell_price: ''
     };
   },
   computed: {
@@ -2042,6 +2087,39 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         _this5.errors = error.response.data.errors;
       });
     },
+    toggleEditedSale: function toggleEditedSale(sale) {
+      if (this.editedSale.id == sale.id) {
+        // toggle
+        this.editedSale = {};
+      } else {
+        this.new_sell_price = sale.sell_price;
+        this.new_quantity = sale.products_quantity;
+        this.editedSale = sale;
+      }
+    },
+    editSale: function editSale() {
+      var _this6 = this;
+
+      this.editedSale.products_quantity = this.new_quantity;
+      this.editedSale.sell_price = this.new_sell_price;
+      axios.post('/sales/edit', this.editedSale).then(function (response) {
+        if (response.data.status === 'success') {
+          $('#changesSaved').fadeIn('slow');
+          $('#changesSaved').removeClass('d-none');
+          setTimeout(function () {
+            $('#changesSaved').fadeOut();
+          }, 2000);
+          _this6.errors = {};
+        }
+
+        _this6.calculateTotalProfit();
+
+        _this6.editedSale = {};
+      })["catch"](function (error) {
+        console.log(error.response.data.errors);
+        _this6.errors = error.response.data.errors;
+      });
+    },
     showOtherPaymentsBox: function showOtherPaymentsBox() {
       this.paymentsBox = true;
     },
@@ -2071,17 +2149,21 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       };
     },
     deleteSale: function deleteSale(sale_id) {
-      var _this6 = this;
+      var _this7 = this;
+
+      if (!confirm('Вы уверены, что хотите удалить этот sale ?')) {
+        return;
+      }
 
       axios.post('/sales/delete', {
         'sale_id': sale_id
       }).then(function (response) {
-        var sales = _this6.sales;
+        var sales = _this7.sales;
         $.each(sales, function (i) {
           if (sales[i].id === sale_id) {
             sales.splice(i, 1);
 
-            _this6.calculateTotalProfit();
+            _this7.calculateTotalProfit();
 
             return false;
           }
@@ -2089,7 +2171,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       })["catch"](function (error) {});
     },
     animateValue: function animateValue(id, start, end, duration) {
-      var _this7 = this;
+      var _this8 = this;
 
       var range = end - start;
       var current = start;
@@ -2102,7 +2184,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         if (current >= end) {
           clearInterval(timer);
-          obj.innerHTML = _this7.totalProfit.toFixed(2);
+          obj.innerHTML = _this8.totalProfit.toFixed(2);
         }
       }, stepTime);
     },
@@ -2143,12 +2225,12 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.paymentsBox = false;
     },
     getCurrenciesRate: function getCurrenciesRate() {
-      var _this8 = this;
+      var _this9 = this;
 
       axios.get('/api/currency/rate').then(function (response) {
-        _this8.USD_rate = response.data.usd_rate;
-        _this8.EUR_rate = response.data.eur_rate;
-        _this8.ready++;
+        _this9.USD_rate = response.data.usd_rate;
+        _this9.EUR_rate = response.data.eur_rate;
+        _this9.ready++;
       });
     }
   },
@@ -7376,7 +7458,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border: 1px solid lightgray;\n  border-radius: 10px;\n  padding: 20px;\n  margin-top: 30px;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}\n.box-popup[data-v-a05a3f04] {\n  width: 250px;\n  background: white;\n  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  position: absolute;\n  margin-top: 5px;\n  margin-bottom: 30px;\n  z-index: 2;\n}\n.box-popup .container[data-v-a05a3f04] {\n  padding: 10px;\n}\n.box-popup input[data-v-a05a3f04] {\n  height: 30px;\n}\n.box-popup .row[data-v-a05a3f04] {\n  padding-top: 5px;\n}\n.addCostBtn[data-v-a05a3f04] {\n  height: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 25px;\n}\n.btn-checkbox[data-v-a05a3f04] {\n  background: lightgrey;\n  border: grey;\n  color: white;\n  white-space: nowrap;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:hover {\n  background: lightgrey;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:focus {\n  outline: none !important;\n}\n.btn-checkbox.active[data-v-a05a3f04] {\n  background: lightgreen;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:active {\n  outline: none !important;\n}\n.green-circle[data-v-a05a3f04] {\n  height: 15px;\n  width: 15px;\n  background-color: greenyellow;\n  border-radius: 50%;\n  display: inline-block;\n}\n.orange-circle[data-v-a05a3f04] {\n  height: 15px;\n  width: 15px;\n  background-color: lightgrey;\n  border-radius: 50%;\n  display: inline-block;\n}", ""]);
+exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border: 1px solid lightgray;\n  border-radius: 10px;\n  padding: 20px;\n  margin-top: 30px;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}\n.box-popup[data-v-a05a3f04] {\n  width: 250px;\n  background: white;\n  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  position: absolute;\n  margin-top: 5px;\n  margin-bottom: 30px;\n  z-index: 2;\n}\n.box-popup .container[data-v-a05a3f04] {\n  padding: 10px;\n}\n.box-popup input[data-v-a05a3f04] {\n  height: 30px;\n}\n.box-popup .row[data-v-a05a3f04] {\n  padding-top: 5px;\n}\n.addCostBtn[data-v-a05a3f04] {\n  height: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 25px;\n}\n.btn-checkbox[data-v-a05a3f04] {\n  background: lightgrey;\n  border: grey;\n  color: white;\n  white-space: nowrap;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:hover {\n  background: lightgrey;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:focus {\n  outline: none !important;\n}\n.btn-checkbox.active[data-v-a05a3f04] {\n  background: lightgreen;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:active {\n  outline: none !important;\n}\n.green-circle[data-v-a05a3f04] {\n  height: 15px;\n  width: 15px;\n  background-color: greenyellow;\n  border-radius: 50%;\n  display: inline-block;\n}\n.orange-circle[data-v-a05a3f04] {\n  height: 15px;\n  width: 15px;\n  background-color: lightgrey;\n  border-radius: 50%;\n  display: inline-block;\n}\n.changesSavedText[data-v-a05a3f04] {\n  border-radius: 5px 5px 0 0 !important;\n  position: fixed;\n  height: 38px;\n  bottom: 38px;\n  left: 32px;\n  width: 173px;\n}", ""]);
 
 // exports
 
@@ -39385,18 +39467,84 @@ var render = function() {
                     ? _c("tr", { key: index }, [
                         _c("td", [_vm._v(_vm._s(index + 1))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(sale.product.name))]),
+                        _c("td", [
+                          _c("div", [_vm._v(_vm._s(sale.product.name))])
+                        ]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(sale.product.supplier))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(sale.products_quantity))]),
+                        _c("td", [
+                          _vm.editedSale.id === sale.id
+                            ? _c("div", [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.new_quantity,
+                                      expression: "new_quantity"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "number",
+                                    min: "0",
+                                    max: "999999"
+                                  },
+                                  domProps: { value: _vm.new_quantity },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.new_quantity = $event.target.value
+                                    }
+                                  }
+                                })
+                              ])
+                            : _c("div", [
+                                _vm._v("   " + _vm._s(sale.products_quantity))
+                              ])
+                        ]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(
-                            _vm._s(sale.sell_price) +
-                              " " +
-                              _vm._s(_vm.client.currency)
-                          )
+                          _vm.editedSale.id === sale.id
+                            ? _c("div", [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.new_sell_price,
+                                      expression: "new_sell_price"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "number",
+                                    min: "0",
+                                    max: "999999",
+                                    step: "any"
+                                  },
+                                  domProps: { value: _vm.new_sell_price },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.new_sell_price = $event.target.value
+                                    }
+                                  }
+                                })
+                              ])
+                            : _c("div", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(sale.sell_price) +
+                                    " " +
+                                    _vm._s(_vm.client.currency)
+                                )
+                              ])
                         ]),
                         _vm._v(" "),
                         _c("td", [
@@ -39439,7 +39587,97 @@ var render = function() {
                               ? _c("span", { staticClass: "green-circle" })
                               : _c("span", { staticClass: "orange-circle" })
                           ]
-                        )
+                        ),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "a",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.editedSale.id != sale.id,
+                                  expression: "editedSale.id != sale.id"
+                                }
+                              ],
+                              attrs: { href: "javascript:void(0)" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.toggleEditedSale(sale)
+                                }
+                              }
+                            },
+                            [
+                              _c("img", {
+                                staticStyle: { width: "14px" },
+                                attrs: { src: "/images/edit.svg", alt: "edit" }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.editedSale.id == sale.id,
+                                  expression: "editedSale.id == sale.id"
+                                }
+                              ]
+                            },
+                            [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "btn btn-sm btn-danger",
+                                  attrs: { href: "javascript:void(0)" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.toggleEditedSale(sale)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    Cancel\n                                "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "btn btn-sm btn-success",
+                                  attrs: { href: "javascript:void(0)" },
+                                  on: { click: _vm.editSale }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    Save\n                                "
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "javascript:void(0)" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteSale(sale.id)
+                                }
+                              }
+                            },
+                            [_vm._v("X")]
+                          )
+                        ])
                       ])
                     : _vm._e()
                 })
@@ -39565,7 +39803,9 @@ var render = function() {
             ]
           )
         ])
-      })
+      }),
+      _vm._v(" "),
+      _vm._m(3)
     ],
     2
   )
@@ -39591,7 +39831,11 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Бонус")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Новый клиент")])
+        _c("th", [_vm._v("Новый клиент")]),
+        _vm._v(" "),
+        _c("th", [_vm._v(" ")]),
+        _vm._v(" "),
+        _c("th", [_vm._v(" ")])
       ])
     ])
   },
@@ -39634,6 +39878,20 @@ var staticRenderFns = [
         [_vm._v("Close")]
       )
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "changesSavedText d-none", attrs: { id: "changesSaved" } },
+      [
+        _c("span", { staticClass: "alert alert-success" }, [
+          _vm._v("\n            Сохранено\n        ")
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true
