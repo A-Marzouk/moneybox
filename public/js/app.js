@@ -1945,6 +1945,13 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1983,7 +1990,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       lastPage: '',
       editedSale: {},
       new_quantity: '',
-      new_sell_price: ''
+      new_sell_price: '',
+      new_for_new_client: ''
     };
   },
   computed: {
@@ -2094,6 +2102,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       } else {
         this.new_sell_price = sale.sell_price;
         this.new_quantity = sale.products_quantity;
+        this.new_for_new_client = sale.for_new_client;
         this.editedSale = sale;
       }
     },
@@ -2102,6 +2111,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       this.editedSale.products_quantity = this.new_quantity;
       this.editedSale.sell_price = this.new_sell_price;
+      this.editedSale.for_new_client = this.new_for_new_client;
       axios.post('/sales/edit', this.editedSale).then(function (response) {
         if (response.data.status === 'success') {
           $('#changesSaved').fadeIn('slow');
@@ -39589,7 +39599,7 @@ var render = function() {
                                 _vm._v(
                                   "\n                             " +
                                     _vm._s(_vm.getTotalCost(sale)) +
-                                    "\n                        "
+                                    "\n                            "
                                 )
                               ])
                         ]),
@@ -39602,9 +39612,33 @@ var render = function() {
                           "td",
                           { staticClass: "d-flex justify-content-center" },
                           [
-                            sale.for_new_client
-                              ? _c("span", { staticClass: "green-circle" })
-                              : _c("span", { staticClass: "orange-circle" })
+                            _vm.editedSale.id === sale.id
+                              ? _c("div", [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "btn btn-checkbox mr-2 btn-sm",
+                                      class: { active: _vm.new_for_new_client },
+                                      attrs: { href: "javascript:void(0)" },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.new_for_new_client = !_vm.new_for_new_client
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Новый клиент")]
+                                  )
+                                ])
+                              : _c("div", [
+                                  sale.for_new_client
+                                    ? _c("span", {
+                                        staticClass: "green-circle"
+                                      })
+                                    : _c("span", {
+                                        staticClass: "orange-circle"
+                                      })
+                                ])
                           ]
                         ),
                         _vm._v(" "),

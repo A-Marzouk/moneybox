@@ -128,15 +128,22 @@
 
                                 <span v-else>
                                  {{getTotalCost(sale)}}
-                            </span>
+                                </span>
 
                             </td>
                             <td>{{calculateSingleBonus(sale)}}</td>
                             <td class="d-flex justify-content-center">
+
+                                <div v-if="editedSale.id === sale.id">
+                                    <a href="javascript:void(0)" class="btn btn-checkbox mr-2 btn-sm" :class="{active : new_for_new_client}" @click="new_for_new_client = !new_for_new_client">Новый клиент</a>
+                                </div>
+                                <div v-else>
                                 <span v-if="sale.for_new_client" class="green-circle">
                                 </span>
-                                <span v-else class="orange-circle">
+                                    <span v-else class="orange-circle">
                                 </span>
+
+                                </div>
                             </td>
 
                             <td>
@@ -263,6 +270,7 @@
                 editedSale:{},
                 new_quantity : '',
                 new_sell_price :'',
+                new_for_new_client : '',
             }
         },
         computed:{
@@ -366,12 +374,14 @@
                 }else{
                     this.new_sell_price = sale.sell_price;
                     this.new_quantity = sale.products_quantity;
+                    this.new_for_new_client = sale.for_new_client;
                     this.editedSale = sale ;
                 }
             },
             editSale(){
                 this.editedSale.products_quantity = this.new_quantity;
                 this.editedSale.sell_price = this.new_sell_price;
+                this.editedSale.for_new_client= this.new_for_new_client;
 
                 axios.post('/sales/edit', this.editedSale)
                     .then((response) => {
