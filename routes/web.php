@@ -40,6 +40,10 @@ Route::post('/managers/add','ClientsController@addManager')->name('add.manager')
 Route::post('/managers/update','ClientsController@updateManager')->name('update.manager');
 Route::post('/managers/delete','ClientsController@deleteManager')->name('delete.manager');
 
+
+Route::get('/edit/profile','ClientsController@showEditProfilePage')->name('edit.profile');
+Route::post('/edit/profile/submit','ClientsController@editPortfolio')->name('edit.profile.submit');
+
 // excel
 
 Route::get('/admin/excel/actions', 'AdminsController@showExcelActionPage')->name('admin.excel');

@@ -2813,6 +2813,108 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/client/editPortfolioComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/client/editPortfolioComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "editPortfolioComponent",
+  props: ['user'],
+  data: function data() {
+    return {
+      errors: [],
+      formData: {
+        current_password: '',
+        password: '',
+        password_confirmation: ''
+      }
+    };
+  },
+  methods: {
+    submitForm: function submitForm() {
+      var _this = this;
+
+      this.clearErrors();
+      axios.post('/edit/profile/submit', this.formData).then(function (response) {
+        console.log(response.data);
+
+        if (response.data.status === 'success') {
+          $('#changesSaved').fadeIn('slow');
+          $('#changesSaved').removeClass('d-none');
+          setTimeout(function () {
+            $('#changesSaved').fadeOut();
+          }, 2000);
+        }
+      })["catch"](function (error) {
+        _this.isLoading = false;
+
+        if (_typeof(error.response.data) === 'object') {
+          _this.errors = error.response.data.errors;
+        } else {
+          _this.errors = ['Something went wrong. Please try again.'];
+        }
+      });
+    },
+    clearErrors: function clearErrors() {
+      var _this2 = this;
+
+      $.each(this.errors, function (error) {
+        _this2.errors[error] = '';
+      });
+    }
+  },
+  mounted: function mounted() {
+    console.log('mounted');
+    console.log(this.user);
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/dist/js/bootstrap.js":
 /*!*****************************************************!*\
   !*** ./node_modules/bootstrap/dist/js/bootstrap.js ***!
@@ -7271,6 +7373,25 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 // module
 exports.push([module.i, ".moneybox[data-v-a05a3f04] {\n  border: 1px solid lightgray;\n  border-radius: 10px;\n  padding: 20px;\n  margin-top: 30px;\n}\n#totalProfit[data-v-a05a3f04] {\n  color: #38c172;\n  font-size: 20px;\n  font-weight: bold;\n}\n.box-popup[data-v-a05a3f04] {\n  width: 250px;\n  background: white;\n  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  position: absolute;\n  margin-top: 5px;\n  margin-bottom: 30px;\n  z-index: 2;\n}\n.box-popup .container[data-v-a05a3f04] {\n  padding: 10px;\n}\n.box-popup input[data-v-a05a3f04] {\n  height: 30px;\n}\n.box-popup .row[data-v-a05a3f04] {\n  padding-top: 5px;\n}\n.addCostBtn[data-v-a05a3f04] {\n  height: 25px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 25px;\n}\n.btn-checkbox[data-v-a05a3f04] {\n  background: lightgrey;\n  border: grey;\n  color: white;\n  white-space: nowrap;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:hover {\n  background: lightgrey;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:focus {\n  outline: none !important;\n}\n.btn-checkbox.active[data-v-a05a3f04] {\n  background: lightgreen;\n  outline: none !important;\n}\n.btn-checkbox[data-v-a05a3f04]:active {\n  outline: none !important;\n}\n.green-circle[data-v-a05a3f04] {\n  height: 15px;\n  width: 15px;\n  background-color: greenyellow;\n  border-radius: 50%;\n  display: inline-block;\n}\n.orange-circle[data-v-a05a3f04] {\n  height: 15px;\n  width: 15px;\n  background-color: lightgrey;\n  border-radius: 50%;\n  display: inline-block;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.error[data-v-0aea3170] {\n    color: red;\n}\n.changesSavedText[data-v-0aea3170] {\n    border-radius: 5px 5px 0 0 !important;\n    position: fixed;\n    height: 38px;\n    bottom: 38px;\n    left: 32px;\n    width: 173px;\n}\n\n", ""]);
 
 // exports
 
@@ -38153,6 +38274,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -41186,6 +41337,151 @@ var staticRenderFns = [
         _c("th", [_vm._v("Действия")])
       ])
     ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/client/editPortfolioComponent.vue?vue&type=template&id=0aea3170&scoped=true&":
+/*!********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/client/editPortfolioComponent.vue?vue&type=template&id=0aea3170&scoped=true& ***!
+  \********************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("h2", [_vm._v("Изменить пароль")]),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group" }, [
+      _c("label", [_vm._v("Текущий пароль")]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.formData.current_password,
+            expression: "formData.current_password"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "password", placeholder: "Текущий пароль" },
+        domProps: { value: _vm.formData.current_password },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.formData, "current_password", $event.target.value)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _vm.errors.current_password
+        ? _c("div", { staticClass: "error" }, [
+            _vm._v(
+              "\n            " +
+                _vm._s(_vm.errors.current_password[0]) +
+                "\n        "
+            )
+          ])
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group" }, [
+      _c("label", [_vm._v("Новый пароль")]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.formData.password,
+            expression: "formData.password"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "password", placeholder: "Новый пароль" },
+        domProps: { value: _vm.formData.password },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.formData, "password", $event.target.value)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _vm.errors.password
+        ? _c("div", { staticClass: "error" }, [
+            _vm._v(
+              "\n            " + _vm._s(_vm.errors.password[0]) + "\n        "
+            )
+          ])
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-group" }, [
+      _c("label", [_vm._v("Повторить пароль")]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.formData.password_confirmation,
+            expression: "formData.password_confirmation"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "password", placeholder: "Повторить пароль" },
+        domProps: { value: _vm.formData.password_confirmation },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.formData, "password_confirmation", $event.target.value)
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c(
+      "button",
+      { staticClass: "btn btn-primary", on: { click: _vm.submitForm } },
+      [_vm._v("Сохранить")]
+    ),
+    _vm._v(" "),
+    _vm._m(0)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "changesSavedText d-none", attrs: { id: "changesSaved" } },
+      [
+        _c("span", { staticClass: "alert alert-success" }, [
+          _vm._v("\n            Пароль изменен\n        ")
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -53359,6 +53655,7 @@ Vue.component('products-list', __webpack_require__(/*! ./components/admin/Produc
 Vue.component('managers-list', __webpack_require__(/*! ./components/admin/ManagersListComponent.vue */ "./resources/js/components/admin/ManagersListComponent.vue")["default"]);
 Vue.component('sales-list', __webpack_require__(/*! ./components/SalesListComponent.vue */ "./resources/js/components/SalesListComponent.vue")["default"]);
 Vue.component('add-sale', __webpack_require__(/*! ./components/AddSaleComponent.vue */ "./resources/js/components/AddSaleComponent.vue")["default"]);
+Vue.component('edit-client-portfolio', __webpack_require__(/*! ./components/client/editPortfolioComponent.vue */ "./resources/js/components/client/editPortfolioComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -53368,6 +53665,12 @@ Vue.component('add-sale', __webpack_require__(/*! ./components/AddSaleComponent.
 if ($("#productsList").length !== 0) {
   var productsList = new Vue({
     el: '#productsList'
+  });
+}
+
+if ($("#editPortfolioComponent").length !== 0) {
+  var editPortfolioComponent = new Vue({
+    el: '#editPortfolioComponent'
   });
 }
 
@@ -53732,6 +54035,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProductsListComponent_vue_vue_type_template_id_13c903a0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProductsListComponent_vue_vue_type_template_id_13c903a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/client/editPortfolioComponent.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/client/editPortfolioComponent.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _editPortfolioComponent_vue_vue_type_template_id_0aea3170_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editPortfolioComponent.vue?vue&type=template&id=0aea3170&scoped=true& */ "./resources/js/components/client/editPortfolioComponent.vue?vue&type=template&id=0aea3170&scoped=true&");
+/* harmony import */ var _editPortfolioComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./editPortfolioComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/client/editPortfolioComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _editPortfolioComponent_vue_vue_type_style_index_0_id_0aea3170_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css& */ "./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _editPortfolioComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _editPortfolioComponent_vue_vue_type_template_id_0aea3170_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _editPortfolioComponent_vue_vue_type_template_id_0aea3170_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "0aea3170",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/client/editPortfolioComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/client/editPortfolioComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/client/editPortfolioComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./editPortfolioComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/client/editPortfolioComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css&":
+/*!****************************************************************************************************************************!*\
+  !*** ./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css& ***!
+  \****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_style_index_0_id_0aea3170_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/client/editPortfolioComponent.vue?vue&type=style&index=0&id=0aea3170&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_style_index_0_id_0aea3170_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_style_index_0_id_0aea3170_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_style_index_0_id_0aea3170_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_style_index_0_id_0aea3170_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_style_index_0_id_0aea3170_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/client/editPortfolioComponent.vue?vue&type=template&id=0aea3170&scoped=true&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/components/client/editPortfolioComponent.vue?vue&type=template&id=0aea3170&scoped=true& ***!
+  \**************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_template_id_0aea3170_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./editPortfolioComponent.vue?vue&type=template&id=0aea3170&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/client/editPortfolioComponent.vue?vue&type=template&id=0aea3170&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_template_id_0aea3170_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_editPortfolioComponent_vue_vue_type_template_id_0aea3170_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

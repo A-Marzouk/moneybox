@@ -24,6 +24,7 @@ Vue.component('managers-list', require('./components/admin/ManagersListComponent
 
 Vue.component('sales-list', require('./components/SalesListComponent.vue').default);
 Vue.component('add-sale', require('./components/AddSaleComponent.vue').default);
+Vue.component('edit-client-portfolio', require('./components/client/editPortfolioComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36,6 +37,13 @@ if ($("#productsList").length !== 0){
         el:'#productsList'
     });
 }
+
+if ($("#editPortfolioComponent").length !== 0){
+    let editPortfolioComponent = new Vue({
+        el:'#editPortfolioComponent'
+    });
+}
+
 if ($("#managersList").length !== 0){
     let managersList = new Vue({
         el:'#managersList'

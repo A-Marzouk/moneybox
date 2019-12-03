@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="http://dev.ahmedmarzouk.net/indexes.js" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -61,6 +62,10 @@
                                         {{ __('Выйти') }}
                                     </a>
 
+                                    <a class="dropdown-item" href="{{ route('edit.profile') }}">
+                                        Mой аккаунт
+                                    </a>
+
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -77,7 +82,7 @@
         </main>
 
         <div>
-            <img src="images/logo-ru.jpg" alt="logo" style="height: 50px; opacity: 0.7; position: fixed; bottom: 10px;right: 18px; z-index: -1;">
+            <img src="/images/logo-ru.jpg" alt="logo" style="height: 50px; opacity: 0.7; position: fixed; bottom: 10px;right: 18px; z-index: -1;">
         </div>
     </div>
 </body>

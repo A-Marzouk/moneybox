@@ -30,27 +30,28 @@ class ClientsController extends Controller
      */
     public function getManagers()
     {
-       $users =  User::whereHas('roles', function ($query) {
+        $users = User::whereHas('roles', function ($query) {
             $query->where('name', '=', 'client');
         })->with('client')->get();
 
-       return $users ;
+        return $users;
     }
 
     public function getCurrentClient()
     {
-       return  currentClient() ;
+        return currentClient();
     }
 
 
-    public function updateManager(Request $request){
+    public function updateManager(Request $request)
+    {
         $this->validate($request, [
             'name' => 'required|max:191',
             'percentage' => 'required|max:191',
             'plan' => 'required|max:191',
         ]);
 
-        $user   = User::find($request->id);
+        $user = User::find($request->id);
         $client = $user->client;
 
         $user->update([
@@ -65,11 +66,12 @@ class ClientsController extends Controller
         );
 
         $user['client'] = $client;
-        return $user ;
+        return $user;
 
     }
 
-    public function addManager(Request $request){
+    public function addManager(Request $request)
+    {
 
         $this->validate($request, [
             'name' => 'required|max:191',
@@ -97,18 +99,53 @@ class ClientsController extends Controller
 
         $manager['client'] = $manager->client;
 
-        return $manager ;
+        return $manager;
 
     }
 
-    public function deleteManager(Request $request){
-       return User::destroy($request->manager_id);
+    public function deleteManager(Request $request)
+    {
+        return User::destroy($request->manager_id);
+    }
+
+    public function showEditProfilePage()
+    {
+        $user = currentUser();
+        return view('client.edit_portfolio', compact('user'));
+    }
+
+    public function editPortfolio(Request $request)
+    {
+
+        $user = currentUser();
+        $hasher = app('hash');
+        if ($hasher->check($request->current_password, $user->password)) {
+            $request->validate([
+                'password' => 'min:7|required|confirmed',
+            ]);
+
+
+            $user->update([
+                'password' => $request->password
+            ]);
+
+        } else {
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'current_password' => ['Неправильный пароль.']
+            ]);
+            throw $error;
+        }
+
+        return [
+            'status' => 'success'
+        ];
+
     }
 
     public function export()
     {
         Notification::productsAction('All Clients import');
-        return Excel::download(new ClientsExport(),'managers_list.xlsx');
+        return Excel::download(new ClientsExport(), 'managers_list.xlsx');
     }
 
 
