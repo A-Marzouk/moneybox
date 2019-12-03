@@ -2206,7 +2206,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var percentage = this.client.percentage / 100;
 
       if (sale.for_new_client) {
-        percentage = 7 / 100;
+        percentage = this.client.percentage_new_client / 100;
       }
 
       var bonus = (totalIncome - totalCosts) * percentage;
@@ -2374,6 +2374,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2383,12 +2397,14 @@ __webpack_require__.r(__webpack_exports__);
         'email': '',
         'password': '',
         'percentage': '',
+        'percentage_new_client': '',
         'plan': ''
       },
       editedManager: {
         'id': '',
         'name': '',
         'percentage': '',
+        'percentage_new_client': '',
         'plan': ''
       },
       addNewManager: false,
@@ -2432,6 +2448,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editedManager.name = manager.name;
       this.editedManager.plan = manager.client.plan;
       this.editedManager.percentage = manager.client.percentage;
+      this.editedManager.percentage_new_client = manager.client.percentage_new_client;
     },
     saveEditedManager: function saveEditedManager(manager) {
       var _this3 = this;
@@ -2469,6 +2486,7 @@ __webpack_require__.r(__webpack_exports__);
         'name': '',
         'plan': '',
         'percentage': '',
+        'percentage_new_client': '',
         'password': '',
         'email': ''
       };
@@ -2478,6 +2496,7 @@ __webpack_require__.r(__webpack_exports__);
         'id': '',
         'name': '',
         'percentage': '',
+        'percentage_new_client': '',
         'plan': ''
       };
     },
@@ -40116,6 +40135,77 @@ var render = function() {
                   [
                     _vm._v(
                       "\n                        " +
+                        _vm._s(manager.client.percentage_new_client) +
+                        " %\n                    "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.isEdited(manager.id),
+                        expression: "isEdited(manager.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editedManager.percentage_new_client,
+                          expression: "editedManager.percentage_new_client"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "number",
+                        min: "0",
+                        max: "99",
+                        step: "any"
+                      },
+                      domProps: {
+                        value: _vm.editedManager.percentage_new_client
+                      },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editedManager,
+                            "percentage_new_client",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isEdited(manager.id),
+                        expression: "!isEdited(manager.id)"
+                      }
+                    ]
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
                         _vm._s(manager.client.plan) +
                         "\n                    "
                     )
@@ -40436,6 +40526,34 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
+                      value: _vm.newManager.percentage_new_client,
+                      expression: "newManager.percentage_new_client"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "number", min: "0", max: "99", step: "any" },
+                  domProps: { value: _vm.newManager.percentage_new_client },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.newManager,
+                        "percentage_new_client",
+                        $event.target.value
+                      )
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
                       value: _vm.newManager.plan,
                       expression: "newManager.plan"
                     }
@@ -40552,6 +40670,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Имя")]),
         _vm._v(" "),
         _c("th", [_vm._v("Процент")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Процент (Н. клиент)")]),
         _vm._v(" "),
         _c("th", [_vm._v("План")]),
         _vm._v(" "),

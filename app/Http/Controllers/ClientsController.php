@@ -48,6 +48,7 @@ class ClientsController extends Controller
         $this->validate($request, [
             'name' => 'required|max:191',
             'percentage' => 'required|max:191',
+            'percentage_new_client' => 'max:191',
             'plan' => 'required|max:191',
         ]);
 
@@ -61,6 +62,7 @@ class ClientsController extends Controller
         $client->update(
             [
                 'percentage' => $request->percentage,
+                'percentage_new_client' => $request->percentage_new_client,
                 'plan' => $request->plan
             ]
         );
@@ -78,6 +80,7 @@ class ClientsController extends Controller
             'email' => 'required|max:191|email|unique:users',
             'password' => 'required|max:191|min:6',
             'percentage' => 'required|max:191',
+            'percentage_new_client' => 'max:191',
             'plan' => 'required|max:191',
         ]);
 
@@ -92,6 +95,7 @@ class ClientsController extends Controller
             ],
             'client' => [
                 'percentage' => $request->percentage,
+                'percentage_new_client' => $request->percentage_new_client,
                 'plan' => $request->plan,
                 'currency' => 'UAH',
             ],

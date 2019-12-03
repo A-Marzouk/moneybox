@@ -20,6 +20,7 @@ class Client extends Model
     protected $fillable = [
         'name',
         'percentage',
+        'percentage_new_client',
         'plan'
     ];
 

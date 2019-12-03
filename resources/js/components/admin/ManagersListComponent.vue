@@ -19,6 +19,7 @@
                     <th>#</th>
                     <th>Имя</th>
                     <th>Процент</th>
+                    <th>Процент (Н. клиент)</th>
                     <th>План</th>
                     <th>Эл. адрес</th>
                     <th>Пароль</th>
@@ -45,6 +46,16 @@
                             <input type="number" min="0" max="99" step="any" v-model="editedManager.percentage" class="form-control">
                         </div>
                     </td>
+
+                    <td>
+                        <div  v-show="!isEdited(manager.id)">
+                            {{manager.client.percentage_new_client}} %
+                        </div>
+                        <div  v-show="isEdited(manager.id)">
+                            <input type="number" min="0" max="99" step="any" v-model="editedManager.percentage_new_client" class="form-control">
+                        </div>
+                    </td>
+
                     <td>
                         <div  v-show="!isEdited(manager.id)">
                             {{manager.client.plan}}
@@ -101,6 +112,9 @@
                         <input type="number" min="0" max="99" step="any" v-model="newManager.percentage" class="form-control">
                     </td>
                     <td>
+                        <input type="number" min="0" max="99" step="any" v-model="newManager.percentage_new_client" class="form-control">
+                    </td>
+                    <td>
                         <input type="number" min="0" max="999999" step="any" v-model="newManager.plan" class="form-control">
                     </td>
                     <td>
@@ -129,12 +143,14 @@
                     'email': '',
                     'password': '',
                     'percentage': '',
+                    'percentage_new_client': '',
                     'plan': '',
                 },
                 editedManager:{
                     'id': '',
                     'name': '',
                     'percentage': '',
+                    'percentage_new_client': '',
                     'plan': '',
                 },
                 addNewManager:false,
@@ -175,6 +191,7 @@
                 this.editedManager.name       = manager.name;
                 this.editedManager.plan       = manager.client.plan;
                 this.editedManager.percentage = manager.client.percentage;
+                this.editedManager.percentage_new_client = manager.client.percentage_new_client;
             },
             saveEditedManager(manager){
                 axios.post('/managers/update',manager)
@@ -209,6 +226,7 @@
                     'name':'',
                     'plan':'',
                     'percentage':'',
+                    'percentage_new_client':'',
                     'password':'',
                     'email':''
                 };
@@ -218,6 +236,7 @@
                     'id': '',
                     'name': '',
                     'percentage': '',
+                    'percentage_new_client': '',
                     'plan': '',
                 };
             },

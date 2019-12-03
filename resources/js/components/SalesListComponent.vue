@@ -473,7 +473,7 @@
                 let totalIncome  =  (sale.sell_price * sale.products_quantity ) ;
                 let percentage   =  this.client.percentage / 100 ;
                 if(sale.for_new_client){
-                    percentage = 7/100 ;
+                    percentage   =  this.client.percentage_new_client / 100 ;
                 }
                 let bonus        =  (totalIncome - totalCosts) * percentage ;
 
