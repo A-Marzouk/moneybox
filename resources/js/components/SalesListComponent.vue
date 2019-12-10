@@ -20,6 +20,7 @@
                     <thead>
                     <tr>
                         <th>#</th>
+                        <th>Дата и Время</th>
                         <th>Товар</th>
                         <th>Поставщик</th>
                         <th>Количество</th>
@@ -35,6 +36,9 @@
                     <tr v-show="addNewSale">
                         <td>
                             {{this.sales.length + 1}}
+                        </td>
+                        <td>
+                            Дата
                         </td>
                         <td>
                             <select v-model="newSale.product" id="" class="custom-select">
@@ -99,7 +103,9 @@
                     <tr v-for="(sale, index) in sales" :key="index" v-if="sale.product !== null">
 
                             <td>{{index +1}}</td>
-
+                            <td>
+                                {{sale.created_at}}
+                            </td>
 
                             <td>
                                 <div>{{sale.product.name}}</div>

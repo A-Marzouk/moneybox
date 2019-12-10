@@ -1952,6 +1952,12 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -39134,6 +39140,12 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("td", [
+                      _vm._v(
+                        "\n                        Дата\n                    "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
                       _c(
                         "select",
                         {
@@ -39495,6 +39507,14 @@ var render = function() {
                   return sale.product !== null
                     ? _c("tr", { key: index }, [
                         _c("td", [_vm._v(_vm._s(index + 1))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(sale.created_at) +
+                              "\n                        "
+                          )
+                        ]),
                         _vm._v(" "),
                         _c("td", [
                           _c("div", [_vm._v(_vm._s(sale.product.name))])
@@ -39871,6 +39891,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Дата и Время")]),
         _vm._v(" "),
         _c("th", [_vm._v("Товар")]),
         _vm._v(" "),
