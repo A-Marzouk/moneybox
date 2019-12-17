@@ -26,6 +26,7 @@ class SalesController extends Controller
     public function addSale(Request $request){
         $this->validate($request, [
             'products_quantity' => 'required|max:191',
+            'created_at' => 'required',
             'sell_price' => 'required|max:191',
             'product_id' => 'required|max:191',
             'client_id' =>  'required|max:191',
@@ -116,10 +117,12 @@ class SalesController extends Controller
             'client_id' =>  'required|max:191',
             'bonus' =>  'required|max:191',
             'for_new_client' =>  'max:191',
+            'created_at' =>  'required',
         ]);
 
         // sell price should be bigger than buy_price
         $product = Product::where('id',$request->product_id)->first();
+        $sale = Sale::where('id',$request->id)->first();
 
         $currency  = new Currency();
         $usd_rate = $currency->convert('USD', $to = 'UAH', 1 , $decimals = 4);
@@ -144,7 +147,15 @@ class SalesController extends Controller
         }
 
 
-        if($request->products_quantity > $product->quantity){
+        // old quantity of sale products
+        // current quality of sale products
+        // quantity of product it self
+
+        $newSaleProductsQuantity     = $request->products_quantity ;
+        $oldSaleProductsQuantity     = $sale->products_quantity ;
+        $currentProductsQuantity     = $product->quantity;
+
+        if($currentProductsQuantity - ($newSaleProductsQuantity - $oldSaleProductsQuantity) < 0){
             $error = \Illuminate\Validation\ValidationException::withMessages([
                 'ErrorInQuantity' => ['Недостаточно продуктов.'],
             ]);
@@ -163,12 +174,12 @@ class SalesController extends Controller
 
 
 
-        $sale = Sale::where('id',$request->id)->first();
         $sale->update($request->all());
         // update products quantity :
 
+
         $product->update([
-            'quantity' => $product->quantity - $sale->products_quantity
+            'quantity' => $currentProductsQuantity - ($newSaleProductsQuantity - $oldSaleProductsQuantity)
         ]);
 
         $sale['product'] = $sale->product;

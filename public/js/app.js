@@ -1958,6 +1958,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SalesList",
   data: function data() {
@@ -1975,6 +1979,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         'product': {},
         'products_quantity': '',
         'sell_price': '',
+        'created_at': '',
         'client_id': '',
         'for_new_client': false,
         'costs': [{
@@ -1996,6 +2001,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       lastPage: '',
       editedSale: {},
       new_quantity: '',
+      new_date: '',
       new_sell_price: '',
       new_for_new_client: ''
     };
@@ -2107,6 +2113,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         this.editedSale = {};
       } else {
         this.new_sell_price = sale.sell_price;
+        this.new_date = sale.created_at;
         this.new_quantity = sale.products_quantity;
         this.new_for_new_client = sale.for_new_client;
         this.editedSale = sale;
@@ -2116,6 +2123,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var _this6 = this;
 
       this.editedSale.products_quantity = this.new_quantity;
+      this.editedSale.created_at = this.new_date;
       this.editedSale.sell_price = this.new_sell_price;
       this.editedSale.for_new_client = this.new_for_new_client;
       axios.post('/sales/edit', this.editedSale).then(function (response) {
@@ -39140,9 +39148,31 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("td", [
-                      _vm._v(
-                        "\n                        Дата\n                    "
-                      )
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.newSale.created_at,
+                            expression: "newSale.created_at"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "date" },
+                        domProps: { value: _vm.newSale.created_at },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.newSale,
+                              "created_at",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
                     ]),
                     _vm._v(" "),
                     _c("td", [
@@ -39509,11 +39539,41 @@ var render = function() {
                         _c("td", [_vm._v(_vm._s(index + 1))]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(sale.created_at) +
-                              "\n                        "
-                          )
+                          _vm.editedSale.id === sale.id
+                            ? _c("div", [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.new_date,
+                                      expression: "new_date"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: { type: "date" },
+                                  domProps: { value: _vm.new_date },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.new_date = $event.target.value
+                                    }
+                                  }
+                                })
+                              ])
+                            : _c(
+                                "div",
+                                { staticStyle: { "white-space": "nowrap" } },
+                                [
+                                  _vm._v(
+                                    "   " +
+                                      _vm._s(sale.created_at.split(" ")[0]) +
+                                      " "
+                                  )
+                                ]
+                              )
                         ]),
                         _vm._v(" "),
                         _c("td", [
@@ -39892,7 +39952,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("#")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Дата и Время")]),
+        _c("th", [_vm._v("Дата")]),
         _vm._v(" "),
         _c("th", [_vm._v("Товар")]),
         _vm._v(" "),

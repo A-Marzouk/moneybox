@@ -28,6 +28,7 @@ class Sale extends Model
         'for_new_client',
         'product_id',
         'client_id',
+        'created_at',
     ];
 
     /**

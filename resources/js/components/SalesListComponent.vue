@@ -20,7 +20,7 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Дата и Время</th>
+                        <th>Дата</th>
                         <th>Товар</th>
                         <th>Поставщик</th>
                         <th>Количество</th>
@@ -38,7 +38,7 @@
                             {{this.sales.length + 1}}
                         </td>
                         <td>
-                            Дата
+                            <input type="date" v-model="newSale.created_at" class="form-control">
                         </td>
                         <td>
                             <select v-model="newSale.product" id="" class="custom-select">
@@ -104,7 +104,11 @@
 
                             <td>{{index +1}}</td>
                             <td>
-                                {{sale.created_at}}
+
+                                <div v-if="editedSale.id === sale.id">
+                                    <input type="date" v-model="new_date" class="form-control">
+                                </div>
+                                <div v-else style="white-space: nowrap;">   {{sale.created_at.split(' ')[0]}} </div>
                             </td>
 
                             <td>
@@ -250,6 +254,7 @@
                     'product': {},
                     'products_quantity': '',
                     'sell_price': '',
+                    'created_at': '',
                     'client_id': '',
                     'for_new_client':false,
                     'costs' : [
@@ -273,8 +278,10 @@
                 errors: {},
                 currentPage: 1,
                 lastPage: '',
-                editedSale:{},
+                editedSale:{
+                },
                 new_quantity : '',
+                new_date : '',
                 new_sell_price :'',
                 new_for_new_client : '',
             }
@@ -379,6 +386,7 @@
                     this.editedSale = {};
                 }else{
                     this.new_sell_price = sale.sell_price;
+                    this.new_date = sale.created_at ;
                     this.new_quantity = sale.products_quantity;
                     this.new_for_new_client = sale.for_new_client;
                     this.editedSale = sale ;
@@ -386,6 +394,7 @@
             },
             editSale(){
                 this.editedSale.products_quantity = this.new_quantity;
+                this.editedSale.created_at = this.new_date;
                 this.editedSale.sell_price = this.new_sell_price;
                 this.editedSale.for_new_client= this.new_for_new_client;
 
