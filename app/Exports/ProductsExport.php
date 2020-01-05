@@ -18,6 +18,7 @@ class ProductsExport implements FromCollection, WithHeadings
             'quantity',
             'currency',
             'buy_price',
+            'buy_price_uah',
             'id'
         );
     }
@@ -31,6 +32,7 @@ class ProductsExport implements FromCollection, WithHeadings
             'quantity',
             'currency',
             'price',
+            'price_uah',
             'id'
         ];
     }

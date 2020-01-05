@@ -27,6 +27,7 @@ class Product extends Model
         'quantity',
         'currency',
         'buy_price',
+        'buy_price_uah',
         'date',
         'supplier',
     ];

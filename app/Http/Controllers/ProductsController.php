@@ -41,13 +41,20 @@ class ProductsController extends Controller
         $currency  = new Currency();
 
         foreach ($products as &$product) {
-            if($product['currency'] === 'USD' || $product['currency'] === 'EUR' ){
-                $product['buy_price_uah'] = $currency->convert($product['currency'], $to = 'UAH', $product['buy_price'] , $decimals = 2);
-            }elseif($product['currency'] === 'UAH'){
-                $product['buy_price_uah'] = $product['buy_price'] ;
-            }else{
-                $product['buy_price_uah'] = $product['buy_price'];
+            if ($product->buy_price_uah == null){
+                if($product['currency'] === 'USD' || $product['currency'] === 'EUR' ){
+                    $product['buy_price_uah'] = $currency->convert($product['currency'], $to = 'UAH', $product['buy_price'] , $decimals = 2);
+                }elseif($product['currency'] === 'UAH'){
+                    $product['buy_price_uah'] = $product['buy_price'] ;
+                }else{
+                    $product['buy_price_uah'] = $product['buy_price'];
+                }
+
+                $product->update([
+                    'buy_price_uah' =>  $product['buy_price_uah']
+                ]);
             }
+
         }
 
         return $products;
@@ -72,6 +79,10 @@ class ProductsController extends Controller
         }else{
             $product['buy_price_uah'] = $product['buy_price'] ;
         }
+
+        $product->update([
+            'buy_price_uah' =>  $product['buy_price_uah']
+        ]);
 
         return $product ;
 
