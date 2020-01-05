@@ -21,7 +21,7 @@ class SalesExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $sales = Sale::select('product_id','products_quantity','sell_price','bonus','id')->with('costs')->where('client_id',$this->client_id)->get();
+        $sales = Sale::select('product_id','created_at','products_quantity','sell_price','bonus','id')->with('costs')->where('client_id',$this->client_id)->get();
         foreach ($sales as &$sale){
             $product = Product::where('id', $sale['product_id'])->first() ;
             if(!isset($product->name)){
@@ -64,6 +64,7 @@ class SalesExport implements FromCollection, WithHeadings
     {
         $headings =  [
             'Продукт',
+            'Дата',
             'Количество',
             'Цена продажи',
             'Бонус',
@@ -75,6 +76,7 @@ class SalesExport implements FromCollection, WithHeadings
         if(currentUser()->hasRole('admin')){
            return  [
                'Продукт',
+               'Дата',
                'Количество',
                'Цена продажи',
                'Бонус',
