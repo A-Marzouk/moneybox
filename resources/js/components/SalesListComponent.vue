@@ -488,13 +488,7 @@
                 if(!sale.product){
                     return 0;
                 }
-                let rate = 1.00 ;
-                if(sale.product.currency === 'USD'){
-                    rate = this.USD_rate;
-                }else if(sale.product.currency === 'EUR'){
-                    rate = this.EUR_rate;
-                }
-                let totalCosts   =  this.getTotalCost(sale) + ( sale.product.buy_price * rate * sale.products_quantity);
+                let totalCosts   =  this.getTotalCost(sale) + ( sale.product.buy_price_uah * sale.products_quantity);
                 let totalIncome  =  (sale.sell_price * sale.products_quantity ) ;
                 let percentage   =  this.client.percentage / 100 ;
                 if(sale.for_new_client){

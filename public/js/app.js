@@ -2217,15 +2217,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return 0;
       }
 
-      var rate = 1.00;
-
-      if (sale.product.currency === 'USD') {
-        rate = this.USD_rate;
-      } else if (sale.product.currency === 'EUR') {
-        rate = this.EUR_rate;
-      }
-
-      var totalCosts = this.getTotalCost(sale) + sale.product.buy_price * rate * sale.products_quantity;
+      var totalCosts = this.getTotalCost(sale) + sale.product.buy_price_uah * sale.products_quantity;
       var totalIncome = sale.sell_price * sale.products_quantity;
       var percentage = this.client.percentage / 100;
 
