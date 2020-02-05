@@ -98,6 +98,11 @@ class ProductsController extends Controller
             $product['buy_price_uah'] = $product['buy_price'] ;
         }
 
+        $product->update([
+            'buy_price_uah' =>  $product['buy_price_uah']
+        ]);
+
+
         return $product ;
 
     }
