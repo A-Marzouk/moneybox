@@ -37,8 +37,10 @@ class ProductsImport implements ToModel, WithHeadingRow
 
         $currency  = new Currency();
 
-        if($product->currency !== 'UAH' && $product->buy_price_uah == null){
-            $product->buy_price_uah  = $currency->convert($product->currency, $to = 'UAH', $product->buy_price , $decimals = 2);
+        if($product->currency !== 'UAH'){
+            if(!$product->buy_price_uah){
+                $product->buy_price_uah  = $currency->convert($product->currency, $to = 'UAH', $product->buy_price , $decimals = 2);
+            }
         }else{
             $product->buy_price_uah = $product->buy_price ;
         }
